@@ -1,23 +1,23 @@
 import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
+import theme from "../../theme";
 /*  FOR TEXTFIELD CSS */
 const CssTextField = styled(TextField)({
   "& label.Mui-focused": {
     color: "white",
   },
   "& .MuiInput-underline:after": {
-    borderBottomColor: "white",
+    borderBottomColor: theme.palette.secondary.light,
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white",
+      borderColor: theme.palette.secondary.light,
     },
     "&:hover fieldset": {
-      borderColor: "white",
+      borderColor: theme.palette.secondary.light,
     },
     "&.Mui-focused fieldset": {
-      borderColor: "white",
+      borderColor: theme.palette.secondary.light,
     },
   },
   input: {
@@ -37,6 +37,7 @@ const Search = () => {
         InputLabelProps={{
           style: { color: "#fff" },
         }}
+        sx={{ width: "100%" }}
       />
     </>
   );

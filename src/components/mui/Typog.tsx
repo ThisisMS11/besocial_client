@@ -4,7 +4,7 @@ const Typog = () => {
   return (
     <div>
       {/* gutterBottom adds margin to the Typography based on the kind of variant used */}
-      <Typography variant="h2" gutterBottom>
+      <Typography variant="h2" gutterBottom fontWeight="bold">
         Hello this is Mohit saini
       </Typography>
     </div>

@@ -1,20 +1,14 @@
 import Grid from "@mui/material/Grid";
 import logo from "../../assets/logo.png";
-import useStyles from "../styles/SideBar";
+import { useStyles } from "../styles/SideBar";
 import { Typography } from "@mui/material";
 import Search from "./Search";
 import MyCommunity from "./MyCommunity";
+import RecentChats from "./RecentChats";
+import Divider from "@mui/material/Divider";
 
 const SideBar = () => {
-  const style1 = {
-    border: "solid 1px red",
-    width: "fit-content",
-    padding: "2rem",
-    height: "100vh",
-  };
-
   const itemstyle = {
-    border: "solid 1px green",
     height: "25%",
   };
 
@@ -24,7 +18,7 @@ const SideBar = () => {
     <>
       <Grid
         container
-        sx={style1}
+        className={classes.SideBar}
         direction={"column"}
         justifyContent="space-between"
       >
@@ -36,12 +30,16 @@ const SideBar = () => {
         <Grid item sx={itemstyle} className={classes.search} md={2}>
           <Search />
         </Grid>
+        <Divider sx={{ backgroundColor: "grey" }} />
 
         <Grid item sx={itemstyle} md={4}>
           <MyCommunity />
         </Grid>
+
+        <Divider sx={{ backgroundColor: "grey", margin: "18px 0px" }} />
+
         <Grid item sx={itemstyle} md={4}>
-          Recent Chats
+          <RecentChats />
         </Grid>
       </Grid>
     </>
