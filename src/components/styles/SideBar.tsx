@@ -2,7 +2,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import theme from "../../theme";
 const useStyles = makeStyles({
   SideBar: {
-    width: "24% !important",
     padding: "1rem",
     height: "100vh",
     backgroundColor:"#1e1f23"

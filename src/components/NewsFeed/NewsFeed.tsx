@@ -1,7 +1,11 @@
-import React from "react";
+import PostMaker from "./PostMaker";
 
 const NewsFeed = () => {
-  return <div>NewsFeed</div>;
+  return (
+    <div>
+      <PostMaker />
+    </div>
+  );
 };
 
 export default NewsFeed;
