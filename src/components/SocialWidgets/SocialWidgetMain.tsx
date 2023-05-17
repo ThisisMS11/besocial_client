@@ -1,6 +1,9 @@
 import { Box } from "@mui/material";
 import { useStyles } from "../styles/RightStuff";
 import Grid from '@mui/material/Grid';
+import Trending from "./Trending";
+import JoinCommunity from "./JoinCommunity";
+import Friends from "./Friends";
 // import EmojiPicker from 'emoji-picker-react';
 
 const SocialWidgetMain = () => {
@@ -8,15 +11,15 @@ const SocialWidgetMain = () => {
   const classes = useStyles();
 
   return <Box>
-    <Grid container spacing={2}>
-      <Grid item xs={8}>
-        Today's Trending
+    <Grid container direction="column" sx={{padding:1}}>
+      <Grid item xs={4}>
+        <Trending />
       </Grid>
       <Grid item xs={4}>
-        Join Community
+        <JoinCommunity />
       </Grid>
       <Grid item xs={4}>
-        My friends
+        <Friends />
       </Grid>
     </Grid>
   </Box>

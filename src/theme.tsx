@@ -17,7 +17,8 @@ const theme = createTheme({
     MyBackgroundColors: {
       bg1:"#ffffff",
       bg2:"#1e1f23",
-      bg3:"#26262e"
+      bg3:"#26262e",
+      bg4:"#282a2f"
     },
   },
 });

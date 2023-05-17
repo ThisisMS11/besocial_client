@@ -16,6 +16,7 @@ declare module "@mui/material/styles" {
       bg1: string;
       bg2: string;
       bg3: string;
+      bg4: string;
     };
   }
   interface PaletteOptions {
@@ -23,6 +24,7 @@ declare module "@mui/material/styles" {
       bg1: string;
       bg2: string;
       bg3: string;
+      bg4: string;
     };
   }
 }
@@ -43,7 +45,7 @@ function App() {
           <Grid item md={7} className={classes.PostGrid} >
             <NewsFeed />
           </Grid>
-          <Grid item md={1} >
+          <Grid item md={2} >
             <SocialWidgetMain/>
           </Grid>
         </Grid>
