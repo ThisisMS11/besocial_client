@@ -3,13 +3,17 @@ import jwt_decode from "jwt-decode";
 import Typog from "./components/mui/Typog";
 import Buttons from "./components/mui/Buttons";
 import theme from "./theme";
-import SideBar from "./components/SideBar/SideBar";
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import Login from "./components/Authentication/Login";
+import DashBoard from "./components/DashBoard";
 
-import { ThemeProvider, CssBaseline, Grid, Box } from "@mui/material";
-import NewsFeed from "./components/NewsFeed/NewsFeed";
-import { useStyles } from "./components/styles/Home";
-import SocialWidgetMain from "./components/SocialWidgets/SocialWidgetMain";
+import { Route, Routes } from 'react-router'
 
+/* Authentication Imports */
+import { AuthRequireLogin } from "./auth/authrequire";
+import Register from "./components/Authentication/Register";
+
+/* overiding palette Schema */
 declare module "@mui/material/styles" {
   interface Palette {
     MyBackgroundColors: {
@@ -31,25 +35,16 @@ declare module "@mui/material/styles" {
 
 function App() {
 
-  const classes=useStyles();
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box sx={{ position: 'relative',borderRadius:4 }}>
 
-        <Grid container spacing={1}>
-          <Grid item md={3} >
-            <SideBar />
-          </Grid>
-          <Grid item md={7} className={classes.PostGrid} >
-            <NewsFeed />
-          </Grid>
-          <Grid item md={2} >
-            <SocialWidgetMain/>
-          </Grid>
-        </Grid>
-      </Box>
+      <CssBaseline />
+      <Routes>
+        <Route path="/" element={<><DashBoard /></>} />
+        <Route path="/login" element={<><Login /></>} />
+        <Route path="/register" element={<><Register /></>} />
+      </Routes>
 
     </ThemeProvider>
   );
