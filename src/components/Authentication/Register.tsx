@@ -40,13 +40,12 @@ const Register = () => {
         setNewuserinfo({ ...newuserinfo, [e.target.name]: e.target.value })
     }
 
-    const [files, setFiles] = useState<any[]>([]);
+    const [files, setFiles] = useState<any[]>();
 
 
     /* Handle the Sign Up procedure */
     const handleRegister = async () => {
         /* Registration form data */
-        console.log("Hello Mohit");
         const Userform = new FormData();
         if (newuserinfo.username)
             Userform.append('username', newuserinfo.username)
@@ -59,14 +58,16 @@ const Register = () => {
             Userform.append('profilePic', files[0].file);
         }
 
-        for (const [key, value] of Userform.entries()) {
-            console.log(`${key}: ${value}`);
-        }
+        // for (const [key, value] of Userform.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
 
         /* Making Axios Call */
-        const RegisterRes = await axios(`${process.env.URL_LOCAL}`)
+        // const RequestUrl: string = (process.env.REACT_APP_URL_LOCAL as string) || "http://localhost:5173";
 
-
+        const RegisterRes = await axios.post(`http://localhost:1983/api/v1/user/register`, Userform);
+        console.log('Registration Response :', RegisterRes.data);
+        
     }
 
 
