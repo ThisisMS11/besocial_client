@@ -56,6 +56,7 @@ const Login = () => {
     }, [isMounted, toaster]);
 
 
+
     return (
         <div className='bg-AuthBackground font-sans font-light'>
 
@@ -70,7 +71,9 @@ const Login = () => {
 
 
 
+
                             <form onSubmit={handleLogin} >
+
 
                                 <div className="mb-6  border-white">
                                     <div className="text-white text-left ml-4 text-xl mb-[0.8rem]">
@@ -81,6 +84,7 @@ const Login = () => {
                                         className="form-control block xl:w-96 px-4 py-2 text-xl font-normal text-white bg-AuthInput bg-clip-padding rounded-full transition ease-in-out m-0  focus:bg-gray-800 focus:outline-none border-none"
 
                                         placeholder="Email"
+
                                         value={userinfo.email}
                                         onChange={handleOnChange}
                                         name='email'

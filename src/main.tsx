@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from "./auth/auth.tsx";
 import { ToastProvider } from "./components/context/ToastNotifcation.tsx";
 
+
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <ToastProvider>
             <App />
           </ToastProvider>
+
         </GoogleOAuthProvider>
       </AuthProvider>
     </BrowserRouter>

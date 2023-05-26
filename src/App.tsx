@@ -6,6 +6,7 @@ import theme from "./theme";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import Login from "./components/Authentication/Login";
 import DashBoard from "./components/DashBoard";
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router'

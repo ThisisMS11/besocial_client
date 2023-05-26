@@ -31,6 +31,7 @@ const Register = () => {
     //Custom hook for user authentication
 
     const auth = useAuth();
+  
     const [newuserinfo, setNewuserinfo] = useState({ username: "", email: "", password: "", confirmpassword: "" });
     const [stateSignUp, setStateSignUp] = useState(true);
 
@@ -220,17 +221,23 @@ const Register = () => {
 
                                         </Grid>
 
+
                                         <Grid item md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
                                             <div>
                                                 <div>
                                                     <FilePond
                                                         files={files}
+
                                                         onupdatefiles={setFiles}
+
                                                         allowMultiple={false}
                                                         maxFiles={1}
                                                         name="files"
                                                         labelIdle='Drag & Drop your profile photo or <span class="filepond--label-action">Browse</span>'
+
                                                         className={classes.FilePond}
+
                                                     />
                                                 </div>
 
@@ -242,12 +249,15 @@ const Register = () => {
 
                                     </Grid>
 
+
+
                                     <div className="text-center lg:text-left">
                                         <button
                                             type="submit"
                                             className="inline-block px-7 py-3 bg-AuthButton text-white font-medium text-sm leading-snug uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out " disabled={stateSignUp}
 
                                             onClick={handleRegister}
+
                                         >
                                             Signup
                                         </button>

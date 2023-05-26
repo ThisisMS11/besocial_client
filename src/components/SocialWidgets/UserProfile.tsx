@@ -9,9 +9,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '../context/ToastNotifcation';
 
 
+
 export default function UserProfile() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+  
     const auth = useAuth();
     const navigate = useNavigate();
     const toaster = useToast();
@@ -33,7 +35,7 @@ export default function UserProfile() {
         toaster?.successnotify("Logout Successfull");
         navigate('/')
     }
-
+    
     const classes = useStyles();
     return (
         <div>
@@ -57,12 +59,14 @@ export default function UserProfile() {
                 }}
                 className={classes.Menu}
             >
+
                 <Link to='/userprofile'>
                     <MenuItem onClick={handleClose} className={classes.menuItem}>Profile</MenuItem>
                 </Link>
 
                 <MenuItem onClick={handleClose} className={classes.menuItem}>My account</MenuItem>
                 <MenuItem onClick={handlelogout} className={classes.menuItem}>Logout</MenuItem>
+
             </Menu>
         </div>
     );
