@@ -1,20 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import { useAuth } from '../../auth/auth'
 import Grid from '@mui/material/Grid';
-
+import { useStyles } from '../styles/Register';
+import axios from 'axios';
 /*Import React FilePond */
 import { FilePond, registerPlugin } from 'react-filepond'
 
-// Import FilePond styles
+/* Import FilePond styles */
 import 'filepond/dist/filepond.min.css'
-
-/* 
-Import the Image EXIF Orientation and Image Preview plugins
-Note: These need to be installed separately
-npm i filepond-plugin-image-preview filepond-plugin-image-exif-orientation --save`
-*/
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import FilePondPluginImageResize from 'filepond-plugin-image-resize';
@@ -22,47 +16,69 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
 
 import { useValidators } from './validators'
+import { useToast } from '../context/ToastNotifcation';
 
 // Register the plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginImageResize)
 
 const Register = () => {
+
     const navigate = useNavigate();
+    const classes = useStyles();
+    const toaster = useToast();
+
 
     //Custom hook for user authentication
 
     const auth = useAuth();
-    const [newuserinfo, setNewuserinfo] = useState({ username: "", email: "", password: "", confirmpassword: "", image: "" });
+  
+    const [newuserinfo, setNewuserinfo] = useState({ username: "", email: "", password: "", confirmpassword: "" });
     const [stateSignUp, setStateSignUp] = useState(true);
 
+    /* Form Validators */
     let { usernamevalid, usernameChecker,
         emailvalid, emailChecker,
         passwordvalid, passwordChecker,
         cpasswordvalid, setCpasswordvalid } = useValidators();
 
 
-
-
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewuserinfo({ ...newuserinfo, [e.target.name]: e.target.value })
     }
 
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState<any[]>();
 
-    // const imageupload = () => {
 
-    //     // converting file matadata into base64 encoding.
-    //     const file = files[0].file;
+    /* Handle the Sign Up procedure */
+    const handleRegister = async () => {
+        /* Registration form data */
+        const Userform = new FormData();
+        if (newuserinfo.username)
+            Userform.append('username', newuserinfo.username)
+        if (newuserinfo.email)
+            Userform.append('email', newuserinfo.email);
+        if (newuserinfo.password)
+            Userform.append('password', newuserinfo.password);
 
-    //     const reader = new FileReader();
+        if (files) {
+            Userform.append('profilePic', files[0].file);
+        }
 
-    //     if (file) {
-    //         reader.readAsDataURL(file);
-    //         reader.onloadend = () => {
-    //             setNewuserinfo({ ...newuserinfo, image: reader.result })
-    //         }
-    //     }
-    // }
+        // for (const [key, value] of Userform.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
+
+        /* Making Axios Call */
+        // const RequestUrl: string = (process.env.REACT_APP_URL_LOCAL as string) || "http://localhost:5173";
+
+        const RegisterRes = await axios.post(`http://localhost:1983/api/v1/user/register`, Userform);
+        console.log('Registration Response :', RegisterRes.data);
+
+        // if (RegisterRes.data.success) {
+            
+        // }
+
+    }
 
 
     useEffect(() => {
@@ -110,10 +126,10 @@ const Register = () => {
                         <div
                             className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-fit w-2/3 g-6 flex-col rounded-2xl text-white bg-AuthForm px-4"
                         >
-                            <h1 className='text-center font-light mt-2 text-3xl  border-red-400 '>Signup</h1>
+                            <h1 className='text-center font-light mt-2 text-3xl  border-red-400 ' >Signup</h1>
 
                             <div className="mb-0 md:mb-0   mx-auto p-8 w-full">
-                                
+
                                 <div>
 
 
@@ -205,16 +221,23 @@ const Register = () => {
 
                                         </Grid>
 
-                                        <Grid item md={6} >
+
+                                        <Grid item md={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
                                             <div>
                                                 <div>
                                                     <FilePond
                                                         files={files}
-                                                        // onupdatefiles={setFiles}
+
+                                                        onupdatefiles={setFiles}
+
                                                         allowMultiple={false}
                                                         maxFiles={1}
                                                         name="files"
                                                         labelIdle='Drag & Drop your profile photo or <span class="filepond--label-action">Browse</span>'
+
+                                                        className={classes.FilePond}
+
                                                     />
                                                 </div>
 
@@ -228,13 +251,12 @@ const Register = () => {
 
 
 
-
-
-
                                     <div className="text-center lg:text-left">
                                         <button
                                             type="submit"
                                             className="inline-block px-7 py-3 bg-AuthButton text-white font-medium text-sm leading-snug uppercase rounded-full shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out " disabled={stateSignUp}
+
+                                            onClick={handleRegister}
 
                                         >
                                             Signup

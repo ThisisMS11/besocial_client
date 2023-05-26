@@ -1,9 +1,60 @@
-import { useState } from 'react'
+import axios from 'axios';
+import { useEffect, useState } from 'react'
+import { useToast } from '../context/ToastNotifcation';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/auth';
 
 const Login = () => {
-    const [email, setEmail] = useState('')
-    
-    const [password, setPassword] = useState('')
+    const [userinfo, setUserinfo] = useState({ email: "", password: "" });
+    const toaster = useToast();
+    const navigate = useNavigate();
+    const auth = useAuth();
+
+    const handleLogin = async (e: any) => {
+        e.preventDefault();
+        try {
+            const loginResponse = await axios.post('http://localhost:1983/api/v1/user/login', userinfo);
+            // console.log(loginResponse.data);
+
+            if (loginResponse.data.success) {
+                toaster?.successnotify("Login Successful");
+                localStorage.setItem('token', loginResponse.data.token);
+
+                navigate('/');
+            }
+        } catch (error) {
+            console.log('An error occurred:', error);
+        }
+    }
+
+    const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setUserinfo({ ...userinfo, [e.target.name]: e.target.value })
+    }
+
+    const [isMounted, setIsMounted] = useState(false);
+
+    /* This is to avoid double rendering of dashboard component */
+    useEffect(() => {
+        setIsMounted(true); // Set the mounted flag to true when the component mounts
+
+        return () => {
+            setIsMounted(false); // Set the mounted flag to false when the component unmounts
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isMounted) {
+            // Check if the component is mounted before triggering the toast notification
+
+            /* If user is already logged in then just redirect to the dashboard */
+
+            if (localStorage.getItem('token') && toaster) {
+                toaster.warnnotify("User already LoggedIn");
+                navigate('/');
+            }
+        }
+    }, [isMounted, toaster]);
+
 
 
     return (
@@ -20,7 +71,9 @@ const Login = () => {
 
 
 
-                            <form  >
+
+                            <form onSubmit={handleLogin} >
+
 
                                 <div className="mb-6  border-white">
                                     <div className="text-white text-left ml-4 text-xl mb-[0.8rem]">
@@ -31,8 +84,10 @@ const Login = () => {
                                         className="form-control block xl:w-96 px-4 py-2 text-xl font-normal text-white bg-AuthInput bg-clip-padding rounded-full transition ease-in-out m-0  focus:bg-gray-800 focus:outline-none border-none"
 
                                         placeholder="Email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+
+                                        value={userinfo.email}
+                                        onChange={handleOnChange}
+                                        name='email'
                                         type="email"
 
                                     />
@@ -46,8 +101,9 @@ const Login = () => {
                                         className="form-control block xl:w-96 px-4 py-2 text-xl font-normal text-white bg-AuthInput bg-clip-padding  transition ease-in-out m-0  focus:bg-gray-800 focus:outline-none rounded-full border-none"
 
                                         placeholder="Password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={userinfo.password}
+                                        name="password"
+                                        onChange={handleOnChange}
                                         type="password" />
                                 </div>
 

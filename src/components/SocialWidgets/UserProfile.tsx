@@ -4,10 +4,20 @@ import MenuItem from '@mui/material/MenuItem';
 import { Avatar, IconButton } from '@mui/material';
 import useStyles from '../styles/UserProfile';
 import Userprofile from '../styles/strict/Userprofile.css'
+import { useAuth } from '../../auth/auth';
+import { Link, useNavigate } from 'react-router-dom';
+import { useToast } from '../context/ToastNotifcation';
+
+
 
 export default function UserProfile() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+  
+    const auth = useAuth();
+    const navigate = useNavigate();
+    const toaster = useToast();
+
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -15,6 +25,17 @@ export default function UserProfile() {
         setAnchorEl(null);
     };
 
+    // React.useEffect(() => {
+    //     console.log(auth.user);
+    // }, [])
+
+    const handlelogout = () => {
+        handleClose();
+        localStorage.removeItem('token');
+        toaster?.successnotify("Logout Successfull");
+        navigate('/')
+    }
+    
     const classes = useStyles();
     return (
         <div>
@@ -24,7 +45,7 @@ export default function UserProfile() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}>
-                <Avatar />
+                <Avatar alt="image not found" src={auth.user?.profilePicUrl as string} />
             </IconButton>
 
 
@@ -38,9 +59,14 @@ export default function UserProfile() {
                 }}
                 className={classes.Menu}
             >
-                <MenuItem onClick={handleClose} className={classes.menuItem}>Profile</MenuItem>
+
+                <Link to='/userprofile'>
+                    <MenuItem onClick={handleClose} className={classes.menuItem}>Profile</MenuItem>
+                </Link>
+
                 <MenuItem onClick={handleClose} className={classes.menuItem}>My account</MenuItem>
-                <MenuItem onClick={handleClose} className={classes.menuItem}>Logout</MenuItem>
+                <MenuItem onClick={handlelogout} className={classes.menuItem}>Logout</MenuItem>
+
             </Menu>
         </div>
     );
