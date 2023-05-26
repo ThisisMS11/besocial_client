@@ -16,13 +16,18 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
 
 import { useValidators } from './validators'
+import { useToast } from '../context/ToastNotifcation';
 
 // Register the plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginImageResize)
 
 const Register = () => {
+
     const navigate = useNavigate();
     const classes = useStyles();
+    const toaster = useToast();
+
+
     //Custom hook for user authentication
 
     const auth = useAuth();
@@ -67,7 +72,11 @@ const Register = () => {
 
         const RegisterRes = await axios.post(`http://localhost:1983/api/v1/user/register`, Userform);
         console.log('Registration Response :', RegisterRes.data);
-        
+
+        // if (RegisterRes.data.success) {
+            
+        // }
+
     }
 
 

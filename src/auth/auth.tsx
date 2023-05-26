@@ -3,7 +3,8 @@ import { useContext, createContext, useState, ReactNode } from "react";
 /* User Interface */
 interface User {
     userid: String,
-    token: String
+    loggedIn: boolean,
+    profilePicUrl: String
 }
 
 interface AuthContextValue {
