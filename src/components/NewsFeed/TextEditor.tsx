@@ -16,6 +16,7 @@ import 'filepond/dist/filepond.min.css'
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import axios from 'axios';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 
@@ -59,55 +60,82 @@ const TextEditor = () => {
     const [content, setContent] = React.useState('');
 
     /* //! Solve this type using typescript. */
-    const [files, setFiles] = useState<Array<any>>([])
-
-    const [uploadedfilesdata, setUploadedfilesdata] = useState<String[]>([]);
-
+    const [files, setFiles] = useState<File[] | null>(null);
 
     const handleContentChange = (event: any) => {
         setContent(event.target.value);
     };
 
 
-    const handleSubmit = () => {
-        // console.log('files: ', files);
 
-        /*By using Promise.all and files.map, we create an array of promises. Each promise represents the file encoding process for a specific file. By using Promise.all, we ensure that all promises are resolved before proceeding. */
+    const handleSubmit = async () => {
 
-        Promise.all(
-            files.map((file) => {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    const fileObject = file.file;
+        let i: number = 0;
+        let v: number = 0;
 
-                    if (fileObject) {
-                        reader.readAsDataURL(fileObject);
-                        reader.onloadend = () => {
-                            const base64String = reader.result as string;
-                            resolve({ [fileObject.name]: base64String });
-                        };
-                        reader.onerror = () => {
-                            reject(new Error('Failed to read the file.'));
-                        };
-                    } else {
-                        reject(new Error('Invalid file.'));
-                    }
-                });
-            })
-        ).then((fileDataArray) => {
-            const updatedData = Object.assign({}, ...fileDataArray);
-            setUploadedfilesdata((prevData) => ({ ...prevData, ...updatedData }));
-        })
-            .catch((error) => {
-                console.error('Error occurred while reading files:', error);
+        /* images data */
+        const Formimages = new FormData();
+        const FormVideos = new FormData();
+
+        if (files) {
+
+            /* for images seperation */
+            files.forEach((file: any) => {
+                file = file.source;
+                if (file.type === 'image/jpeg' || file.type === 'image/png') {
+                    Formimages.append('file', file);
+                    i++;
+                }
             });
 
-        setContent('');
-    };
+            /* for videos seperation */
+            files.forEach((file: any) => {
+                file = file.source;
+                if (file.type === 'video/mp4' || file.type === 'video/ogg') {
+                    FormVideos.append('file', file);
+                    v++;
+                }
+            });
+        }
 
-    const showuploadedfiles = () => {
-        /* uploaded files data is going to be here */
-        console.log('uploaded files base 64 encoding:', uploadedfilesdata);
+        const token = localStorage.getItem('token');
+
+        try {
+
+            /* Creating Post record first */
+            const post = await axios.post(`http://localhost:1983/api/v1/post/`, { PostString: content }, {
+                headers: {
+                    'authorisation': `Bearer ${token}`
+                }
+            })
+
+            /* if images exists */
+            if (i > 0 && post) {
+
+                const imageuploadRes = await axios.post(`http://localhost:1983/api/v1/post/uploadImages/${post.data.data.id}`, Formimages, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'authorisation': `Bearer ${token}`
+                    }
+                })
+                console.log('Image upload response : ', imageuploadRes.data);
+            }
+
+            /* if videos exists */
+            if (v > 0 && post) {
+                const videoUplodRes = await axios.post(`http://localhost:1983/api/v1/post/uploadVideos/${post.data.data.id}`, FormVideos, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        'authorisation': `Bearer ${token}`
+                    }
+                })
+                console.log('Videos upload response : ', videoUplodRes.data);
+            }
+
+        } catch (error) {
+            console.log('upload error : ', error);
+        }
+
     };
 
 
@@ -130,7 +158,7 @@ const TextEditor = () => {
                         <Button variant="contained" color="primary" onClick={handleSubmit} >
                             Post
                         </Button>
-                        <Button variant="contained" color="primary" onClick={showuploadedfiles} >
+                        <Button variant="contained" color="primary" onClick={handleSubmit} >
                             Save Draft
                         </Button>
 
@@ -139,7 +167,7 @@ const TextEditor = () => {
                 <Grid item xs={5} >
 
                     <FilePond
-                        files={files}
+                        files={files as any}
                         onupdatefiles={setFiles}
                         allowMultiple={true}
                         maxFiles={3}
