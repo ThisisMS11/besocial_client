@@ -7,7 +7,7 @@ const generateFakeData = () => {
   const data = [];
   for (let i = 0; i < 30; i++) {
     const name = faker.person.fullName();
-    const imageUrl = faker.image.nature(1234,1234, true);
+    const imageUrl = faker.image.nature(1234, 1234, true);
     const PostContent = faker.lorem.sentence(25);
 
     const obj = {
@@ -23,15 +23,15 @@ const generateFakeData = () => {
 };
 
 const NewsFeed = () => {
-   /* Fake Data */
-   const demoPosts: PostProps[] = generateFakeData();
+  /* Fake Data */
+  const demoPosts: PostProps[] = generateFakeData();
 
   return (
     <div>
       <PostMaker />
 
-      {demoPosts.map((e)=>{
-        return <Post name={e.name} imageUrl={e.imageUrl} PostContent={e.PostContent}/>
+      {demoPosts.map((e) => {
+        return <Post name={e.name} imageUrl={e.imageUrl} PostContent={e.PostContent} />
       })}
     </div>
   );

@@ -19,6 +19,7 @@ import { useAuth } from "./auth/auth";
 import axios from "axios";
 import UserProfile from "./components/SocialWidgets/UserProfile/UserProfile";
 import Spinner from "./components/utils/Spinner";
+import { NewsFeed } from "./components";
 
 /* overiding palette Schema */
 declare module "@mui/material/styles" {
@@ -89,8 +90,8 @@ function App() {
       <Spinner />
 
       <Routes>
-        <Route path="/" element={<AuthRequireLogin><DashBoard /></AuthRequireLogin>} />
-        <Route path="/userprofile" element={<AuthRequireLogin><UserProfile /></AuthRequireLogin>} />
+        <Route path="/" element={<AuthRequireLogin><DashBoard childComponent={<NewsFeed />} /></AuthRequireLogin>} />
+        <Route path="/userprofile" element={<AuthRequireLogin><DashBoard childComponent={<UserProfile />} /></AuthRequireLogin>} />
         <Route path="/login" element={<><Login /></>} />
         <Route path="/register" element={<><Register /></>} />
       </Routes>

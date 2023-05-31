@@ -10,7 +10,7 @@ import CommentBox from "./CommentBox/CommentBox";
 
 import PostProps from "./PropTypes/PostProps";
 
-const Post: React.FC<PostProps>= ({name,imageUrl,PostContent}) => {
+const Post: React.FC<PostProps> = ({ name, imageUrl, PostContent }) => {
 
   const classes = useStyles();
   return (

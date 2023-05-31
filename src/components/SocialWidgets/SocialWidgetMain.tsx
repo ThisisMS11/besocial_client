@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Trending from "./Trending";
 import JoinCommunity from "./JoinCommunity";
 import Friends from "./Friends";
-import UserProfile from "./UserProfile";
+import UserProfile from "./UserProfileMenu";
 // import EmojiPicker from 'emoji-picker-react';
 
 const SocialWidgetMain = () => {

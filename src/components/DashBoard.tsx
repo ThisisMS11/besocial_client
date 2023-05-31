@@ -1,14 +1,14 @@
 import { Grid, Box } from "@mui/material";
-import NewsFeed from "./NewsFeed/NewsFeed";
-import SocialWidgetMain from "./SocialWidgets/SocialWidgetMain";
-import SideBar from './SideBar/SideBar';
+import { SideBar, SocialWidgetMain, NewsFeed, useAuth, useUtils, useToast } from ".";
 import { useStyles } from './styles/Home';
-import { useToast } from "./context/ToastNotifcation";
-import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../auth/auth";
-import { useUtils } from "./context/Utils";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
-const DashBoard = () => {
+
+interface ParentComponentProps {
+    childComponent: ReactNode;
+}
+
+const DashBoard: React.FC<ParentComponentProps> = ({ childComponent }) => {
     const classes = useStyles();
     const toaster = useToast();
     const [isMounted, setIsMounted] = useState(false); // Track if the component is mounted
@@ -25,7 +25,7 @@ const DashBoard = () => {
                     <SideBar />
                 </Grid>
                 <Grid item md={7} className={classes.PostGrid} >
-                    <NewsFeed />
+                    {childComponent}
                 </Grid>
                 <Grid item md={2} >
                     <SocialWidgetMain />

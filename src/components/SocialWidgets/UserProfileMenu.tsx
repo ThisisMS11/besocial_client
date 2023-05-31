@@ -13,7 +13,7 @@ import { useToast } from '../context/ToastNotifcation';
 export default function UserProfile() {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-  
+
     const auth = useAuth();
     const navigate = useNavigate();
     const toaster = useToast();
@@ -35,7 +35,7 @@ export default function UserProfile() {
         toaster?.successnotify("Logout Successfull");
         navigate('/')
     }
-    
+
     const classes = useStyles();
     return (
         <div>
