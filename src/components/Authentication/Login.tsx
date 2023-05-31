@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useToast } from '../context/ToastNotifcation';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/auth';
+import { useUtils } from '../context/Utils';
 
 const Login = () => {
     const [userinfo, setUserinfo] = useState({ email: "", password: "" });
@@ -10,8 +11,11 @@ const Login = () => {
     const navigate = useNavigate();
     const auth = useAuth();
 
+    const utils = useUtils();
+
     const handleLogin = async (e: any) => {
         e.preventDefault();
+        utils?.setLoading(true);
         try {
             const loginResponse = await axios.post('http://localhost:1983/api/v1/user/login', userinfo);
             // console.log(loginResponse.data);
@@ -20,18 +24,23 @@ const Login = () => {
                 toaster?.successnotify("Login Successful");
                 localStorage.setItem('token', loginResponse.data.token);
 
+
                 navigate('/');
             }
-        } catch (error) {
+
+        } catch (error: any) {
+            if (error)
+                toaster?.errornotify(error.message);
             console.log('An error occurred:', error);
         }
+        utils?.setLoading(false);
     }
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserinfo({ ...userinfo, [e.target.name]: e.target.value })
     }
 
-    const [isMounted, setIsMounted] = useState(false);
+    const [isMounted, setIsMounted] = useState<Boolean>(false);
 
     /* This is to avoid double rendering of dashboard component */
     useEffect(() => {

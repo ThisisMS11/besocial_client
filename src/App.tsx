@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useAuth } from "./auth/auth";
 import axios from "axios";
 import UserProfile from "./components/SocialWidgets/UserProfile/UserProfile";
+import Spinner from "./components/utils/Spinner";
 
 /* overiding palette Schema */
 declare module "@mui/material/styles" {
@@ -84,6 +85,8 @@ function App() {
         autoClose={1500}
         theme="dark"
       />
+
+      <Spinner />
 
       <Routes>
         <Route path="/" element={<AuthRequireLogin><DashBoard /></AuthRequireLogin>} />

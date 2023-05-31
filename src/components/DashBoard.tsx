@@ -6,6 +6,7 @@ import { useStyles } from './styles/Home';
 import { useToast } from "./context/ToastNotifcation";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../auth/auth";
+import { useUtils } from "./context/Utils";
 
 const DashBoard = () => {
     const classes = useStyles();
@@ -13,23 +14,9 @@ const DashBoard = () => {
     const [isMounted, setIsMounted] = useState(false); // Track if the component is mounted
     const auth = useAuth();
 
-    /* This is to avoid double rendering of dashboard component */
-    useEffect(() => {
-        setIsMounted(true); // Set the mounted flag to true when the component mounts
+    const utils = useUtils();
 
-        console.log(auth.user);
 
-        return () => {
-            setIsMounted(false); // Set the mounted flag to false when the component unmounts
-        };
-    }, []);
-
-    useEffect(() => {
-        if (isMounted) {
-            // Check if the component is mounted before triggering the toast notification
-            // toaster?.successnotify("Happy morning");
-        }
-    }, [isMounted, toaster]);
 
     return (
         <Box sx={{ position: 'relative', borderRadius: 4 }}>

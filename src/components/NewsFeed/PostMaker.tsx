@@ -5,7 +5,8 @@ import image from "../../assets/fakeimages/5.jpg";
 import Button from "@mui/material/Button";
 import CreateIcon from "@mui/icons-material/Create";
 import SendIcon from "@mui/icons-material/Send";
-import PostModal from "./PostModal";
+// import PostModal from "./PostModal";
+import { PostModal } from "..";
 import { useRef } from "react";
 
 const PostMaker: React.FC = () => {
