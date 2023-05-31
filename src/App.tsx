@@ -3,7 +3,7 @@ import jwt_decode from "jwt-decode";
 import Typog from "./components/mui/Typog";
 import Buttons from "./components/mui/Buttons";
 import theme from "./theme";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider, CssBaseline, Button } from "@mui/material";
 import Login from "./components/Authentication/Login";
 import DashBoard from "./components/DashBoard";
 
@@ -14,12 +14,12 @@ import { Route, Routes } from 'react-router'
 /* Authentication Imports */
 import { AuthRequireLogin } from "./auth/authrequire";
 import Register from "./components/Authentication/Register";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "./auth/auth";
 import axios from "axios";
 import UserProfile from "./components/SocialWidgets/UserProfile/UserProfile";
 import Spinner from "./components/utils/Spinner";
-import { NewsFeed } from "./components";
+import { MyAlert, NewsFeed } from "./components";
 
 /* overiding palette Schema */
 declare module "@mui/material/styles" {
@@ -89,6 +89,8 @@ function App() {
 
       <Spinner />
 
+      <MyAlert />
+
       <Routes>
         <Route path="/" element={<AuthRequireLogin><DashBoard childComponent={<NewsFeed />} /></AuthRequireLogin>} />
         <Route path="/userprofile" element={<AuthRequireLogin><DashBoard childComponent={<UserProfile />} /></AuthRequireLogin>} />
@@ -96,7 +98,7 @@ function App() {
         <Route path="/register" element={<><Register /></>} />
       </Routes>
 
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
 

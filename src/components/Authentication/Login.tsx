@@ -1,15 +1,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
-import { useToast } from '../context/ToastNotifcation';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../auth/auth';
-import { useUtils } from '../context/Utils';
+
+import { useUtils, useToast } from '..'
 
 const Login = () => {
     const [userinfo, setUserinfo] = useState({ email: "", password: "" });
     const toaster = useToast();
     const navigate = useNavigate();
-    const auth = useAuth();
 
     const utils = useUtils();
 
@@ -23,7 +21,6 @@ const Login = () => {
             if (loginResponse.data.success) {
                 toaster?.successnotify("Login Successful");
                 localStorage.setItem('token', loginResponse.data.token);
-
 
                 navigate('/');
             }

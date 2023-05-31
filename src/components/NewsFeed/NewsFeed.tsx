@@ -7,7 +7,7 @@ const generateFakeData = () => {
   const data = [];
   for (let i = 0; i < 30; i++) {
     const name = faker.person.fullName();
-    const imageUrl = faker.image.nature(1234, 1234, true);
+    const imageUrl = faker.image.urlLoremFlickr({ category: 'nature' });
     const PostContent = faker.lorem.sentence(25);
 
     const obj = {

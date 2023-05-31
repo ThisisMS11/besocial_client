@@ -11,6 +11,9 @@ export { default as MyUser } from '../components/SocialWidgets/UserProfile/MyUse
 export { default as ProfileOverview } from '../components/SocialWidgets/UserProfile/ProfileOverview';
 export { default as UserProfile } from '../components/SocialWidgets/UserProfile/UserProfile';
 
+/* Utils */
+export { default as MyAlert } from '../components/utils/MyAlert';
+
 
 
 /* Context Exports */

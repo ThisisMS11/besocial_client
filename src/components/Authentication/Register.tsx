@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../auth/auth'
 import Grid from '@mui/material/Grid';
 import { useStyles } from '../styles/Register';
 import axios from 'axios';
@@ -16,10 +15,10 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
 
 import { useValidators } from './validators'
-import { useToast } from '../context/ToastNotifcation';
+import { useUtils, useToast, useAuth } from '..';
 
 // Register the plugins
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginImageResize)
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginImageResize);
 
 const Register = () => {
 
@@ -31,7 +30,8 @@ const Register = () => {
     //Custom hook for user authentication
 
     const auth = useAuth();
-  
+    const utils = useUtils();
+
     const [newuserinfo, setNewuserinfo] = useState({ username: "", email: "", password: "", confirmpassword: "" });
     const [stateSignUp, setStateSignUp] = useState(true);
 
@@ -64,20 +64,20 @@ const Register = () => {
             Userform.append('profilePic', files[0].file);
         }
 
-        // for (const [key, value] of Userform.entries()) {
-        //     console.log(`${key}: ${value}`);
-        // }
-
         /* Making Axios Call */
         // const RequestUrl: string = (process.env.REACT_APP_URL_LOCAL as string) || "http://localhost:5173";
+
+        utils?.setLoading(true);
 
         const RegisterRes = await axios.post(`http://localhost:1983/api/v1/user/register`, Userform);
         console.log('Registration Response :', RegisterRes.data);
 
-        // if (RegisterRes.data.success) {
-            
-        // }
-
+        if (RegisterRes.data.success) {
+            utils?.setAlertState(true);
+            utils?.setAlertmessage("Please check your email for verification");
+            utils?.setSeverity("success");
+            utils?.setLoading(false);
+        }
     }
 
 

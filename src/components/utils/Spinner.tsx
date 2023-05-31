@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 const Spinner = () => {
 
     const utils = useUtils();
-    
+
     return (
         <>
             {utils?.loading ?
