@@ -7,6 +7,11 @@ export { default as Post } from '../components/NewsFeed/Post';
 
 /* UserProfie */
 export { default as UserInfo } from '../components/SocialWidgets/UserProfile/UserInfo';
+export { default as MyUser } from '../components/SocialWidgets/UserProfile/MyUser';
+export { default as ProfileOverview } from '../components/SocialWidgets/UserProfile/ProfileOverview';
+export { default as UserProfile } from '../components/SocialWidgets/UserProfile/UserProfile';
+
+
 
 /* Context Exports */
 export { useAuth } from '../auth/auth';

@@ -39,8 +39,19 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
+/* User info as props */
+interface MyComponentProps {
+    userId: string;
+    username: string;
+    email: string;
+    createdAt: string;
+}
 
-export default function ProfileOverview() {
+
+export default function ProfileOverview(props: MyComponentProps) {
+
+    let { userId, username, email, createdAt } = props;
+
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -103,7 +114,7 @@ export default function ProfileOverview() {
             </TabPanel>
 
             <TabPanel value={value} index={3}>
-                <UserInfo />
+                <UserInfo username={username} email={email} createdAt={createdAt} />
             </TabPanel>
         </Box>
 
