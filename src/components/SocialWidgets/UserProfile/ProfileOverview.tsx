@@ -12,6 +12,9 @@ import theme from '../../../theme';
 import { faker } from '@faker-js/faker';
 import PostProps from "../../NewsFeed/PropTypes/PostProps";
 import { Post, UserInfo } from '../..';
+import axios from 'axios';
+import { useUtils } from '../..';
+import { useAuth } from '../..';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -41,16 +44,16 @@ function TabPanel(props: TabPanelProps) {
 
 /* User info as props */
 interface MyComponentProps {
-    userId: string;
     username: string;
     email: string;
     createdAt: string;
+    userposts: any[] | null;
 }
 
 
 export default function ProfileOverview(props: MyComponentProps) {
 
-    let { userId, username, email, createdAt } = props;
+    let { username, email, createdAt, userposts } = props;
 
     const [value, setValue] = React.useState(0);
 
@@ -58,32 +61,11 @@ export default function ProfileOverview(props: MyComponentProps) {
         setValue(newValue);
     };
 
-
-    /* Fake User posts */
-    const generateFakeData = () => {
-        const data = [];
-        for (let i = 0; i < 2; i++) {
-            const name = faker.person.fullName();
-            const imageUrl = faker.image.urlLoremFlickr({ category: 'nature' });
-            const PostContent = faker.lorem.sentence(25);
-
-            const obj = {
-                name,
-                imageUrl,
-                PostContent,
-            };
-
-            data.push(obj);
-        }
-
-        return data;
-    };
-
-    const demoPosts: PostProps[] = generateFakeData();
-
-
     return (
-        <Box >
+
+
+        <Box>
+
             <Tabs value={value} onChange={handleChange} aria-label="icon label tabs example" centered sx={{ backgroundColor: theme.palette.MyBackgroundColors.bg2 }}>
                 <Tooltip title='timeline' >
                     <Tab icon={<TimelineIcon />} />
@@ -100,9 +82,11 @@ export default function ProfileOverview(props: MyComponentProps) {
                 </Tooltip>
             </Tabs>
 
+            {/* corresponding  tab panels starts  */}
+
             <TabPanel value={value} index={0}>
-                {demoPosts.map((e) => {
-                    return (<Post imageUrl={e.imageUrl} name={e.name} PostContent={e.PostContent} />)
+                {userposts && userposts.map((e) => {
+                    return <Post user={e.user} images={e.photos} PostContent={e.PostString} />
                 })}
 
             </TabPanel>
@@ -116,7 +100,12 @@ export default function ProfileOverview(props: MyComponentProps) {
             <TabPanel value={value} index={3}>
                 <UserInfo username={username} email={email} createdAt={createdAt} />
             </TabPanel>
-        </Box>
+
+            {/* corresponding  tab panels ends  */}
+
+
+
+        </Box >
 
     );
 }

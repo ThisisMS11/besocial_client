@@ -9,24 +9,40 @@ const UserProfile = () => {
     const utils = useUtils();
 
     const [userinfo, setUserinfo] = useState<any | null>(null);
+    const [userposts, setUserposts] = useState<any[] | null>([]);
 
     useEffect(() => {
         /* axios call to fetch userinfo using token */
         async function fetchUserInfo() {
-            utils?.setLoading(true);
+
             const token = localStorage.getItem('token');
 
+            utils?.setLoading(true);
             if (token) {
-
                 const config = {
                     headers: {
                         'authorisation': `Bearer ${token}`
                     }
                 }
+                /* for fetching user information */
                 await axios.get('http://localhost:1983/api/v1/user/', config).then((response) => {
                     setUserinfo(response.data.data);
                 }).catch((error) => {
                     console.log('axios error : ', error);
+                })
+
+
+                /* for fetching user posts */
+                await axios(`http://localhost:1983/api/v1/user/posts`, {
+                    headers: {
+                        'authorisation': `Bearer ${token}`
+                    }
+                }).then((response) => {
+                    if (response.data.success) {
+                        setUserposts(response.data.data)
+                    }
+                }).catch((error) => {
+                    console.log(error);
                 })
 
             }
@@ -49,7 +65,7 @@ const UserProfile = () => {
 
                     {/* i will send userid and other userinfo as prop to this and based on the tab requirement i'll make the successive api calls in the efficient manner */}
 
-                    <ProfileOverview userId={userinfo._id} username={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} />
+                    <ProfileOverview username={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} userposts={userposts} />
                 </>
             )}
 

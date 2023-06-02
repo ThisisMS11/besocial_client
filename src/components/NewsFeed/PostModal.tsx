@@ -16,21 +16,21 @@ const style = {
     bgcolor: theme.palette.MyBackgroundColors.bg2,
     border: '2px solid #000',
     boxShadow: 24,
-    padding:4,
-    color:'black',
-    borderRadius:4
+    padding: 4,
+    color: 'black',
+    borderRadius: 4
 };
 
-const PostModal:React.FC<MyComponentProps>  = ({ openModalref }) => {
+const PostModal: React.FC<MyComponentProps> = ({ openModalref }) => {
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState<boolean>(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
 
     return (
         <div>
-            <Button onClick={handleOpen} ref={openModalref} sx={{display:'none'}}>Open modal</Button>
+            <Button onClick={handleOpen} ref={openModalref} sx={{ display: 'none' }}>Open modal</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -38,7 +38,7 @@ const PostModal:React.FC<MyComponentProps>  = ({ openModalref }) => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <TextEditor/>
+                    <TextEditor setOpen={setOpen} />
                 </Box>
             </Modal>
         </div>

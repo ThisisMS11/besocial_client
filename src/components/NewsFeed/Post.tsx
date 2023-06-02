@@ -12,28 +12,16 @@ import PostProps from "./PropTypes/PostProps";
 
 import Carousel from 'react-material-ui-carousel';
 
-
-const Post: React.FC<PostProps> = ({ name, images, PostContent }) => {
+const Post: React.FC<PostProps> = ({ images, PostContent, user }) => {
 
   const classes = useStyles();
-
-  var items = [
-    {
-      name: "Random Name #1",
-      description: "Probably the most random thing you have ever seen!"
-    },
-    {
-      name: "Random Name #2",
-      description: "Hello World!"
-    }
-  ]
 
   return (
     <Box className={classes.Post}>
       <Box sx={{ display: "flex", padding: 2, alignItems: "center" }}>
-        <Avatar src={images[0].imageUrl}> </Avatar>
+        <Avatar src={user.profilePic.url}> </Avatar>
         <Box sx={{ marginLeft: 2 }}>
-          <Typography>{name}</Typography>
+          <Typography>{user.name}</Typography>
           <Typography
             fontWeight="light"
             color="text.secondary"
@@ -52,19 +40,16 @@ const Post: React.FC<PostProps> = ({ name, images, PostContent }) => {
 
       {/* Media Box */}
 
-      <Box sx={{ height: 'fit-content' }}>
+      {images && <Box sx={{ height: 'fit-content' }}>
         <Carousel>
           {images.map((e: any) => {
-
             return (<>
-              <img src={e.imageUrl} alt="image not found" className='w-1/2 object-fill mx-auto' />
+              <img src={e.url} alt="image not found" className='w-1/2 object-fill mx-auto' />
             </>)
           })}
 
         </Carousel>
-      </Box>
-
-
+      </Box>}
 
 
 

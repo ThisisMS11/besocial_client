@@ -1,6 +1,6 @@
 interface MyComponentProps {
-    name: string
     images: any
+    user: any
     PostContent: string
 }
 

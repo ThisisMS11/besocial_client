@@ -2,7 +2,9 @@ import Post from "./Post";
 import PostMaker from "./PostMaker";
 import { faker } from '@faker-js/faker';
 import PostProps from "./PropTypes/PostProps";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useUtils } from "..";
 
 
 const generateFakeData = () => {
@@ -31,16 +33,58 @@ const generateFakeData = () => {
   return data;
 };
 
+
+
 const NewsFeed = () => {
   /* Fake Data */
   const demoPosts: PostProps[] = generateFakeData();
+
+  /* fetching the posts now */
+  const [posts, setPosts] = useState([]);
+
+  const utils = useUtils();
+
+
+  useEffect(() => {
+
+    async function fetchPosts() {
+
+      utils?.setLoading(true);
+      const token = localStorage.getItem('token');
+      await axios.get(`http://localhost:1983/api/v1/post/`, {
+        headers: {
+          'authorisation': `Bearer ${token}`
+        }
+      })
+        .then((response) => {
+          setPosts(response.data.posts);
+        }).catch((error) => {
+          console.log(error);
+        })
+      utils?.setLoading(false);
+    }
+
+    fetchPosts();
+  }, [])
+
+
+  if (!posts) {
+    return <div>loading...</div>
+  }
+
 
   return (
     <div>
       <PostMaker />
 
-      {demoPosts.map((e) => {
+      {/* {posts && demoPosts.map((e) => {
         return <Post name={e.name} images={e.images} PostContent={e.PostContent} />
+      })} */}
+
+
+      {/* for api call */}
+      {posts && posts.map((e: any) => {
+        return <Post images={e.photos} PostContent={e.PostString} user={e.user} />
       })}
     </div>
   );

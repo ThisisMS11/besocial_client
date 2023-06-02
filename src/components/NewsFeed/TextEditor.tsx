@@ -8,6 +8,8 @@ import { IconButton } from '@mui/material';
 import theme from "../../theme";
 import Grid from '@mui/material/Grid';
 
+import { useUtils } from '..';
+
 /* FilePond Imports */
 // Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond'
@@ -17,6 +19,7 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import axios from 'axios';
+import { SettingsPowerRounded } from '@mui/icons-material';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 
@@ -55,7 +58,11 @@ const CssTextField = styled(TextField)({
     },
 });
 
-const TextEditor = () => {
+interface MyComponentProps {
+    setOpen: (state: boolean) => void;
+}
+
+const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     const classes = useStyles();
     const [content, setContent] = React.useState('');
 
@@ -66,7 +73,7 @@ const TextEditor = () => {
         setContent(event.target.value);
     };
 
-
+    const utils = useUtils();
 
     const handleSubmit = async () => {
 
@@ -102,6 +109,11 @@ const TextEditor = () => {
 
         try {
 
+            utils?.setLoading(true);
+
+            /* Closing the Modal */
+            setOpen(false);
+
             /* Creating Post record first */
             const post = await axios.post(`http://localhost:1983/api/v1/post/`, { PostString: content }, {
                 headers: {
@@ -132,9 +144,13 @@ const TextEditor = () => {
                 console.log('Videos upload response : ', videoUplodRes.data);
             }
 
-        } catch (error) {
+            utils?.successnotify("Post Successfully Added");
+        } catch (error: any) {
             console.log('upload error : ', error);
+            utils?.errornotify(error.message);
         }
+
+        utils?.setLoading(false);
 
     };
 

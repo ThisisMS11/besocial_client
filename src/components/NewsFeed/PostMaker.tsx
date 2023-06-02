@@ -29,25 +29,6 @@ const PostMaker: React.FC = () => {
           <Box className={classes.whatonmind} onClick={handleClick}>What's on Your mind ?</Box>
         </Box>
 
-        {/* <Box>
-          <Box sx={{ marginTop: "10px" }}>
-            <Button
-              variant="outlined"
-              startIcon={<CreateIcon />}
-              sx={{ marginLeft: "4px" }}
-            >
-              Draft
-            </Button>
-            <Button
-              variant="outlined"
-              endIcon={<SendIcon />}
-              sx={{ marginLeft: "4px" }}
-            >
-              Post
-            </Button>
-          </Box>
-        </Box> */}
-
         <PostModal openModalref={openModalref} />
       </Box>
     </div>

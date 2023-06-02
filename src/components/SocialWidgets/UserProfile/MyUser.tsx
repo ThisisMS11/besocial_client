@@ -4,7 +4,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import React from "react";
 import axios from "axios";
 import { useUtils } from "../..";
-import { UtilsProvider } from "../../context/Utils";
 
 interface MyComponentProps {
     username: string;
