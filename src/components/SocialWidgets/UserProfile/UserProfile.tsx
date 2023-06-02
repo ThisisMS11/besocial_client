@@ -25,7 +25,7 @@ const UserProfile = () => {
                     }
                 }
                 /* for fetching user information */
-                await axios.get('http://localhost:1983/api/v1/user/', config).then((response) => {
+                await axios.get(`http://localhost:1983/api/v1/user/`, config).then((response) => {
                     setUserinfo(response.data.data);
                 }).catch((error) => {
                     console.log('axios error : ', error);
