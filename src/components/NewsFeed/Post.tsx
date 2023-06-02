@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, IconButton, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid, IconButton, Paper, Typography } from "@mui/material";
 import { useStyles } from "../styles/NewsFeed";
 import image from "../../assets/fakeimages/7.jpg";
 
@@ -10,13 +10,28 @@ import CommentBox from "./CommentBox/CommentBox";
 
 import PostProps from "./PropTypes/PostProps";
 
-const Post: React.FC<PostProps> = ({ name, imageUrl, PostContent }) => {
+import Carousel from 'react-material-ui-carousel';
+
+
+const Post: React.FC<PostProps> = ({ name, images, PostContent }) => {
 
   const classes = useStyles();
+
+  var items = [
+    {
+      name: "Random Name #1",
+      description: "Probably the most random thing you have ever seen!"
+    },
+    {
+      name: "Random Name #2",
+      description: "Hello World!"
+    }
+  ]
+
   return (
     <Box className={classes.Post}>
       <Box sx={{ display: "flex", padding: 2, alignItems: "center" }}>
-        <Avatar src={imageUrl}> </Avatar>
+        <Avatar src={images[0].imageUrl}> </Avatar>
         <Box sx={{ marginLeft: 2 }}>
           <Typography>{name}</Typography>
           <Typography
@@ -36,13 +51,22 @@ const Post: React.FC<PostProps> = ({ name, imageUrl, PostContent }) => {
       </Box>
 
       {/* Media Box */}
-      <Box className={classes.Media}>
-        <img
-          src={imageUrl}
-          alt="Image not found"
-          className={classes.mediaContent}
-        />
+
+      <Box sx={{ height: 'fit-content' }}>
+        <Carousel>
+          {images.map((e: any) => {
+
+            return (<>
+              <img src={e.imageUrl} alt="image not found" className='w-1/2 object-fill mx-auto' />
+            </>)
+          })}
+
+        </Carousel>
       </Box>
+
+
+
+
 
       {/* Engagement Panel */}
 

@@ -1,7 +1,7 @@
 interface MyComponentProps {
-    name: string;
-    imageUrl: string;
-    PostContent: string;
+    name: string
+    images: any
+    PostContent: string
 }
 
 export default MyComponentProps;

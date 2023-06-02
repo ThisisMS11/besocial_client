@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   Post: {
     backgroundColor: "#1e1f23",
     margin: "10px 30px",
-    height: "fit-content",
+    // height: "fit-content",
     borderRadius: 20,
   },
 
@@ -46,9 +46,9 @@ const useStyles = makeStyles({
 
   EngagementPanel: {},
 
-  CommentsAccordion:{
-    border:'solid 2px red',
-    color:theme.palette.MyBackgroundColors.bg2
+  CommentsAccordion: {
+    border: 'solid 2px red',
+    color: theme.palette.MyBackgroundColors.bg2
   }
 });
 

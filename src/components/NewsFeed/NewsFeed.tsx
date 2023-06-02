@@ -3,16 +3,25 @@ import PostMaker from "./PostMaker";
 import { faker } from '@faker-js/faker';
 import PostProps from "./PropTypes/PostProps";
 
+
+
 const generateFakeData = () => {
-  const data = [];
-  for (let i = 0; i < 30; i++) {
+  const data: PostProps | [] = [];
+  for (let i = 0; i < 1; i++) {
     const name = faker.person.fullName();
-    const imageUrl = faker.image.urlLoremFlickr({ category: 'nature' });
+
+    const fakerimages: any = [];
+
+    for (let i = 0; i < 5; ++i) {
+      const imageUrl = faker.image.urlLoremFlickr({ category: 'nature' });
+      fakerimages.push({ imageUrl: imageUrl });
+    }
+
     const PostContent = faker.lorem.sentence(25);
 
     const obj = {
       name,
-      imageUrl,
+      images: fakerimages,
       PostContent,
     };
 
@@ -31,7 +40,7 @@ const NewsFeed = () => {
       <PostMaker />
 
       {demoPosts.map((e) => {
-        return <Post name={e.name} imageUrl={e.imageUrl} PostContent={e.PostContent} />
+        return <Post name={e.name} images={e.images} PostContent={e.PostContent} />
       })}
     </div>
   );
