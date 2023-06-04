@@ -86,7 +86,7 @@ export default function ProfileOverview(props: MyComponentProps) {
 
             <TabPanel value={value} index={0}>
                 {userposts && userposts.map((e) => {
-                    return <Post user={e.user} images={e.photos} PostContent={e.PostString} likes={e.likes} postId={e.postId} />
+                    return <Post user={e.user} images={e.photos} PostContent={e.PostString} likes={e.likes} postId={e.postId} createdAt={createdAt} />
                 })}
 
             </TabPanel>

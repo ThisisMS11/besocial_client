@@ -19,7 +19,7 @@ import axios from "axios";
 
 import { useUtils } from "..";
 
-const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId }) => {
+const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, createdAt, comments }) => {
 
   const classes = useStyles();
   const utils = useUtils();
@@ -78,7 +78,13 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId })
     } else {
       setLikestate(false);
     }
+
   }, [altlikes])
+
+  useEffect(() => {
+    console.log(comments);
+  }, [])
+
 
 
 
@@ -94,7 +100,7 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId })
             color="text.secondary"
             variant="subtitle2"
           >
-            12 mins ago
+            {utils?.getTimeDifference(createdAt).date + " " + utils?.getTimeDifference(createdAt).time}
           </Typography>
         </Box>
       </Box>
@@ -164,7 +170,7 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId })
         </Grid>
 
         <Box>
-          <CommentBox />
+          <CommentBox postId={postId} comments={comments} />
         </Box>
       </Box>
     </Box>

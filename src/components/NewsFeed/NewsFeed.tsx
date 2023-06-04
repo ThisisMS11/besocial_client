@@ -16,6 +16,7 @@ const NewsFeed = () => {
 
   useEffect(() => {
 
+    /* fetching all posts */
     async function fetchPosts() {
 
       utils?.setLoading(true);
@@ -26,6 +27,7 @@ const NewsFeed = () => {
         }
       })
         .then((response) => {
+          console.log(response.data.posts[0].comments);
           setPosts(response.data.posts);
         }).catch((error) => {
           console.log(error);
@@ -47,8 +49,8 @@ const NewsFeed = () => {
       <PostMaker />
 
       {/* for api call */}
-      {posts.length > 0 ? posts.map((e: any) => {
-        return <Post images={e.photos} PostContent={e.PostString} user={e.user} likes={e.likes} postId={e.id} />
+      {posts.length > 0 ? posts.map((post: any) => {
+        return <Post images={post.photos} PostContent={post.PostString} user={post.user} likes={post.likes} postId={post.id} createdAt={post.createdAt} comments={post.comments} />
       }) : <div>No Posts found </div>}
     </div>
   );

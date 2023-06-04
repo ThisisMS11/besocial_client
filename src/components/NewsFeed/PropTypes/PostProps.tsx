@@ -4,6 +4,8 @@ interface MyComponentProps {
     PostContent: string
     likes:any
     postId:string
+    createdAt:string
+    comments:any
 }
 
 export default MyComponentProps;

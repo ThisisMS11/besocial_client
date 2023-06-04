@@ -1,6 +1,5 @@
 import Comment from "./Comment";
 import CommentTxtEditor from "./CommentTxtEditor";
-import { faker } from '@faker-js/faker';
 import CommentProps from '../PropTypes/CommentProps'
 import { Box } from "@mui/material";
 import Accordion from '@mui/material/Accordion';
@@ -9,39 +8,30 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useStyles } from "../../styles/NewsFeed";
+import { useEffect } from "react";
 
-const generateFakeData = () => {
-  const data = [];
-  for (let i = 0; i < 3; i++) {
-    const name = faker.person.fullName();
-    const imageUrl = faker.image.avatar();
-    const commentContent = faker.lorem.sentence(25);
 
-    const obj = {
-      name,
-      imageUrl,
-      commentContent,
-    };
+interface MyComponentProps {
+  postId: string;
+  comments: any;
+}
 
-    data.push(obj);
-  }
-
-  return data;
-};
-
-const CommentBox = () => {
+const CommentBox: React.FC<MyComponentProps> = ({ postId, comments }) => {
   /* Fake Data */
-  const demoComments: CommentProps[] = generateFakeData();
   const classes = useStyles();
+
 
   return (
     <>
-      <CommentTxtEditor />
+      {/* textfield component to create comment  */}
+      <CommentTxtEditor postId={postId} />
 
+
+      {/* Accordion to show comments */}
       <Accordion sx={{ backgroundColor: '#1e1f23' }}>
 
         <AccordionSummary
-          expandIcon={<ExpandMoreIcon sx={{color:'white'}}/>}
+          expandIcon={<ExpandMoreIcon sx={{ color: 'white' }} />}
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
@@ -49,12 +39,10 @@ const CommentBox = () => {
         </AccordionSummary>
 
         <AccordionDetails>
-          {demoComments.map((e) => {
-            return <Box sx={{ marginTop: '0px' }}><Comment name={e.name} imageUrl={e.imageUrl} commentContent={e.commentContent} /> </Box>
+          {comments[0].content.map((comment: any) => {
+            return <Box sx={{ marginTop: '0px' }}><Comment name={comment.user.name} imageUrl={comment.user.profilePic.url} commentContent={comment.comment} /> </Box>
           })}
         </AccordionDetails>
-
-
 
       </Accordion>
 

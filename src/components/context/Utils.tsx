@@ -16,6 +16,7 @@ interface AuthContextValue {
     successnotify: (message: string) => void;
     errornotify: (message: string) => void;
     warnnotify: (message: string) => void;
+    getTimeDifference: (timeString: string) => any;
 }
 
 
@@ -37,12 +38,25 @@ export const UtilsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const warnnotify = (message: string) => toast.warn(message);
 
 
+    function getTimeDifference(timeString: string): any {
+        const targetTime: any = new Date(timeString).toLocaleString();
+
+        console.log(targetTime);
+
+        const date = targetTime.split(',')[0];
+        const time = targetTime.split(',')[1].trim();
+
+        return { date, time };
+    }
+
+
+
     let value = {
         loading, setLoading,
         alertState, setAlertState,
         alertmessage, setAlertmessage,
         severity, setSeverity,
-        successnotify, errornotify, warnnotify
+        successnotify, errornotify, warnnotify, getTimeDifference
     }
 
     return (
