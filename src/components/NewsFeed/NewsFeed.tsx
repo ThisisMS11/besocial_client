@@ -18,7 +18,7 @@ const NewsFeed = () => {
     utils?.setLoading(false);
   }
 
-  if (error) utils?.errornotify(error.message)
+  if (error) console.log(error)
 
   return (
     <div>

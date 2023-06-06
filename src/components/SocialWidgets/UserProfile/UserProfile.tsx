@@ -1,71 +1,49 @@
-import { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import theme from "../../../theme";
-import axios from "axios";
-import { useUtils, MyUser, ProfileOverview } from '../..';
-
+import { useQuery, QueryStatus } from "@tanstack/react-query";
+import { useUtils, MyUser, ProfileOverview, fetchUserInfo, fetchUserPosts } from '../..';
+import { User, PostProp } from '../../types'
 
 const UserProfile = () => {
     const utils = useUtils();
 
-    const [userinfo, setUserinfo] = useState<any | null>(null);
-    const [userposts, setUserposts] = useState<any[] | null>([]);
+    const { status: status1, error: error1, data: userinfo }: {
+        status: QueryStatus
+        error: Error | null
+        data: User | undefined
+    } = useQuery({
+        queryKey: ["alluserinfo"],
+        queryFn: fetchUserInfo
+    })
 
-    useEffect(() => {
-        /* axios call to fetch userinfo using token */
-        async function fetchUserInfo() {
+    const { status: status2, error: error2, data: userposts }: {
+        status: QueryStatus
+        error: Error | null
+        data: PostProp[] | undefined
+    } = useQuery({
+        queryKey: ["alluserposts"],
+        queryFn: fetchUserPosts
+    })
 
-            const token = localStorage.getItem('token');
-
-            utils?.setLoading(true);
-            if (token) {
-                const config = {
-                    headers: {
-                        'authorisation': `Bearer ${token}`
-                    }
-                }
-                /* for fetching user information */
-                await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/`, config).then((response) => {
-                    setUserinfo(response.data.data);
-                }).catch((error) => {
-                    console.log('axios error : ', error);
-                })
-
-
-                /* for fetching user posts */
-                await axios(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/posts`, {
-                    headers: {
-                        'authorisation': `Bearer ${token}`
-                    }
-                }).then((response) => {
-                    if (response.data.success) {
-                        setUserposts(response.data.data)
-                    }
-                }).catch((error) => {
-                    console.log(error);
-                })
-
-            }
-            utils?.setLoading(false);
-        }
-
-        fetchUserInfo();
-    }, [])
-
-
-    if (utils?.loading) {
+    if (status1 == 'loading' || status2 == 'loading') {
+        utils?.setLoading(true);
         return <div>Loading...</div>;
+    } else {
+        utils?.setLoading(false);
     }
+
+    if (error1) console.log(error1)
+    if (error2) console.log(error2)
 
     return (
         <Box className="h-full" sx={{ backgroundColor: theme.palette.MyBackgroundColors.bg2, padding: 2, borderRadius: '10px', marginTop: 1 }}>
-            {userinfo && (
+            {userinfo && userposts && (
                 <>
-                    <MyUser username={userinfo.name} profilePic={userinfo.profilePic} isVerified={userinfo.isVerified} unVerifiedEmail={userinfo.unVerfiedEmail} />
+                    <MyUser name={userinfo.name} profilePic={userinfo.profilePic} isVerified={userinfo.isVerified} unVerfiedEmail={userinfo.unVerfiedEmail} />
 
                     {/* i will send userid and other userinfo as prop to this and based on the tab requirement i'll make the successive api calls in the efficient manner */}
 
-                    <ProfileOverview username={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} userposts={userposts} />
+                    <ProfileOverview name={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} userposts={userposts} />
                 </>
             )}
 

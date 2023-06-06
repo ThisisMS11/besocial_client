@@ -1,6 +1,7 @@
 import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 import { Typography } from '@mui/material';
+import { User } from '../../types';
 
 const Item = styled(Paper)(({ theme }) => ({
     ...theme.typography.body2,
@@ -8,23 +9,17 @@ const Item = styled(Paper)(({ theme }) => ({
     padding: 4
 }));
 
-interface MyComponentProps {
-    username: string;
-    email: string;
-    createdAt: string;
-}
 
+const UserInfo = (props: User) => {
 
-const UserInfo = (props: MyComponentProps) => {
-
-    let { username, email, createdAt } = props;
+    let { name, email, createdAt } = props;
 
     return (
         <>
 
             <Item elevation={2} sx={{ margin: '10px 0px' }}>
                 <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>Name </Typography>
-                <Typography variant="h6" >{username}</Typography>
+                <Typography variant="h6" >{name}</Typography>
             </Item>
 
             <Item elevation={2} sx={{ margin: '10px 0px' }}>
@@ -34,7 +29,7 @@ const UserInfo = (props: MyComponentProps) => {
 
             <Item elevation={2} sx={{ margin: '10px 0px' }}>
                 <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>Joined </Typography>
-                <Typography variant="h6" >{createdAt.split('T')[0]}</Typography>
+                <Typography variant="h6" >{createdAt ? createdAt.split('T')[0] : 'date not available'}</Typography>
             </Item>
 
         </>

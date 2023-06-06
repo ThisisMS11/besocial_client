@@ -4,19 +4,9 @@ import CheckIcon from '@mui/icons-material/Check';
 import React from "react";
 import axios from "axios";
 import { useUtils } from "../..";
+import { User } from '../../types'
 
-interface MyComponentProps {
-    username: string;
-    profilePic: {
-        url: string;
-        public_id: string;
-    };
-    isVerified: boolean;
-    unVerifiedEmail: string | undefined;
-}
-
-
-const MyUser: React.FC<MyComponentProps> = ({ username, profilePic, isVerified, unVerifiedEmail }) => {
+const MyUser: React.FC<User> = ({ name, profilePic, isVerified, unVerfiedEmail }) => {
 
     const utils = useUtils();
 
@@ -26,13 +16,13 @@ const MyUser: React.FC<MyComponentProps> = ({ username, profilePic, isVerified, 
         utils?.setLoading(true);
 
         await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/resendEmailVerification`, {
-            email: unVerifiedEmail
+            email: unVerfiedEmail
         }).then((response) => {
 
             if (response.data.success) {
                 utils?.setAlertState(true);
                 utils?.setSeverity("success");
-                utils?.setAlertmessage(`Verfication link has been sent to ${unVerifiedEmail} please check !`);
+                utils?.setAlertmessage(`Verfication link has been sent to ${unVerfiedEmail} please check !`);
 
                 utils?.setLoading(false);
             }
@@ -45,9 +35,9 @@ const MyUser: React.FC<MyComponentProps> = ({ username, profilePic, isVerified, 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Avatar sx={{ width: 100, height: 100 }} src={profilePic.url} />
+                <Avatar sx={{ width: 100, height: 100 }} src={profilePic ? profilePic.url : 'https://res.cloudinary.com/cloudinarymohit/image/upload/v1685034293/Screenshot_from_2023-05-25_22-34-21_nb2suf.png'} />
                 <Typography sx={{ padding: 4 }} variant="h5" fontStyle="bold">
-                    {username}
+                    {name}
                 </Typography>
             </Box>
 

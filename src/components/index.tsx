@@ -26,6 +26,7 @@ export { useToast } from './context/ToastNotifcation';
 /* api exports */
 export { getSearchUsers } from './api/Sidebar'
 export { fetchPosts } from './api/NewsFeed'
+export { fetchUserInfo, fetchUserPosts } from './api/UserProfile'
 
 
 

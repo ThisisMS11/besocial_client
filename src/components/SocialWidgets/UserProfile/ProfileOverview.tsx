@@ -11,6 +11,8 @@ import theme from '../../../theme';
 /* to remove section */
 import { Post, UserInfo } from '../..';
 
+import { PostProp } from '../../types';
+
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
@@ -39,16 +41,16 @@ function TabPanel(props: TabPanelProps) {
 
 /* User info as props */
 interface MyComponentProps {
-    username: string;
-    email: string;
-    createdAt: string;
-    userposts: any[] | null;
+    name: string;
+    email?: string;
+    createdAt?: string;
+    userposts?: PostProp[];
 }
 
 
 export default function ProfileOverview(props: MyComponentProps) {
 
-    let { username, email, createdAt, userposts } = props;
+    let { name, email, createdAt, userposts } = props;
 
     const [value, setValue] = React.useState(0);
 
@@ -94,7 +96,7 @@ export default function ProfileOverview(props: MyComponentProps) {
             </TabPanel>
 
             <TabPanel value={value} index={3}>
-                <UserInfo username={username} email={email} createdAt={createdAt} />
+                <UserInfo name={name} email={email} createdAt={createdAt} />
             </TabPanel>
 
             {/* corresponding  tab panels ends  */}
