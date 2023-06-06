@@ -1,48 +1,24 @@
 import Post from "./Post";
 import PostMaker from "./PostMaker";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useUtils } from "..";
-
-
+import { useUtils, fetchPosts } from "..";
+import { useQuery } from "@tanstack/react-query";
 
 const NewsFeed = () => {
-
-  /* fetching the posts now */
-  const [posts, setPosts] = useState([]);
-
   const utils = useUtils();
 
+  const { status, error, data: posts } = useQuery({
+    queryKey: ["allposts"],
+    queryFn: fetchPosts
+  })
 
-  useEffect(() => {
-
-    /* fetching all posts */
-    async function fetchPosts() {
-
-      utils?.setLoading(true);
-      const token = localStorage.getItem('token');
-      await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/`, {
-        headers: {
-          'authorisation': `Bearer ${token}`
-        }
-      })
-        .then((response) => {
-          console.log(response.data.posts[0].comments);
-          setPosts(response.data.posts);
-        }).catch((error) => {
-          console.log(error);
-        })
-      utils?.setLoading(false);
-    }
-
-    fetchPosts();
-  }, [])
-
-
-  if (!posts) {
+  if (status == 'loading') {
+    utils?.setLoading(true);
     return <div>loading...</div>
+  } else {
+    utils?.setLoading(false);
   }
 
+  if (error) utils?.errornotify(error.message)
 
   return (
     <div>

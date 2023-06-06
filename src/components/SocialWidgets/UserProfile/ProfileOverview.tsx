@@ -9,12 +9,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import theme from '../../../theme';
 
 /* to remove section */
-import { faker } from '@faker-js/faker';
-import PostProps from "../../NewsFeed/PropTypes/PostProps";
 import { Post, UserInfo } from '../..';
-import axios from 'axios';
-import { useUtils } from '../..';
-import { useAuth } from '../..';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -85,8 +80,9 @@ export default function ProfileOverview(props: MyComponentProps) {
             {/* corresponding  tab panels starts  */}
 
             <TabPanel value={value} index={0}>
-                {userposts && userposts.map((e) => {
-                    return <Post user={e.user} images={e.photos} PostContent={e.PostString} likes={e.likes} postId={e.postId} createdAt={createdAt} />
+                {userposts && userposts.map((post) => {
+                    return <Post images={post.photos} PostContent={post.PostString} user={post.user} likes={post.likes} postId={post.id} createdAt={post.createdAt} comments={post.comments} />
+
                 })}
 
             </TabPanel>

@@ -32,7 +32,7 @@ const useStyles = makeStyles({
     margin:'4px 0px',
     padding: "2px",
     cursor: "pointer",
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.MyBackgroundColors.bg4,
     borderRadius: "6px",
     // color: "white",
   }

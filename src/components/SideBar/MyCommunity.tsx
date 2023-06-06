@@ -41,7 +41,7 @@ export default function MyCommunity() {
           />
         </ListItem>
 
-        <Divider variant="inset" component="li" />
+        {/* <Divider variant="inset" component="li" /> */}
 
         <ListItem alignItems="flex-start" className={classes.listitem}>
           <ListItemAvatar>
@@ -63,7 +63,7 @@ export default function MyCommunity() {
             }
           />
         </ListItem>
-        <Divider variant="inset" component="li" />
+        {/* <Divider variant="inset" component="li" /> */}
         <ListItem alignItems="flex-start" className={classes.listitem}>
           <ListItemAvatar>
             <Avatar alt="Travis Howard" src={image3} />
