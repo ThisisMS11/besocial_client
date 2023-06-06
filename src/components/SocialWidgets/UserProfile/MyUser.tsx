@@ -25,7 +25,7 @@ const MyUser: React.FC<MyComponentProps> = ({ username, profilePic, isVerified, 
 
         utils?.setLoading(true);
 
-        await axios.put(`http://localhost:1983/api/v1/user/resendEmailVerification`, {
+        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/resendEmailVerification`, {
             email: unVerifiedEmail
         }).then((response) => {
 

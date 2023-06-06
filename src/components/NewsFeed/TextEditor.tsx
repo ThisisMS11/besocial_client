@@ -115,7 +115,7 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
             setOpen(false);
 
             /* Creating Post record first */
-            const post = await axios.post(`http://localhost:1983/api/v1/post/`, { PostString: content }, {
+            const post = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/`, { PostString: content }, {
                 headers: {
                     'authorisation': `Bearer ${token}`
                 }
@@ -124,7 +124,7 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
             /* if images exists */
             if (i > 0 && post) {
 
-                const imageuploadRes = await axios.post(`http://localhost:1983/api/v1/post/uploadImages/${post.data.data.id}`, Formimages, {
+                const imageuploadRes = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/uploadImages/${post.data.data.id}`, Formimages, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'authorisation': `Bearer ${token}`
@@ -135,7 +135,7 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
 
             /* if videos exists */
             if (v > 0 && post) {
-                const videoUplodRes = await axios.post(`http://localhost:1983/api/v1/post/uploadVideos/${post.data.data.id}`, FormVideos, {
+                const videoUplodRes = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/uploadVideos/${post.data.data.id}`, FormVideos, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         'authorisation': `Bearer ${token}`

@@ -36,7 +36,7 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
     if (likestate) {
       // dislike the post
 
-      await axios.put(`http://localhost:1983/api/v1/post/dislike/${postId}`, {}, {
+      await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/dislike/${postId}`, {}, {
         headers: {
           'authorisation': `Bearer ${token}`
         }
@@ -55,7 +55,7 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
       })
     } else {
       // like the post
-      await axios.put(`http://localhost:1983/api/v1/post/like/${postId}`, {}, {
+      await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/like/${postId}`, {}, {
         headers: {
           'authorisation': `Bearer ${token}`
         }

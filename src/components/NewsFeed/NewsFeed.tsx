@@ -21,7 +21,7 @@ const NewsFeed = () => {
 
       utils?.setLoading(true);
       const token = localStorage.getItem('token');
-      await axios.get(`http://localhost:1983/api/v1/post/`, {
+      await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/`, {
         headers: {
           'authorisation': `Bearer ${token}`
         }

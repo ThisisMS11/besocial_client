@@ -69,7 +69,7 @@ const Register = () => {
 
         utils?.setLoading(true);
 
-        const RegisterRes = await axios.post(`http://localhost:1983/api/v1/user/register`, Userform);
+        const RegisterRes = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/register`, Userform);
         console.log('Registration Response :', RegisterRes.data);
 
         if (RegisterRes.data.success) {

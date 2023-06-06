@@ -62,7 +62,7 @@ const CommentTxtEditor: React.FC<MyComponentProps> = ({ postId }) => {
                     'authorisation': `Bearer ${token}`
                 }
             }
-            await axios.put(`http://localhost:1983/api/v1/post/comment/${postId}`, userComment, config)
+            await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/comment/${postId}`, userComment, config)
                 .then((res) => {
                     if (res.data.success) {
 

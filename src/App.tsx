@@ -21,6 +21,7 @@ import UserProfile from "./components/SocialWidgets/UserProfile/UserProfile";
 import Spinner from "./components/utils/Spinner";
 import { MyAlert, NewsFeed } from "./components";
 
+
 /* overiding palette Schema */
 declare module "@mui/material/styles" {
   interface Palette {
@@ -57,7 +58,7 @@ function App() {
       if (token && !auth.user?.loggedIn) {
         // console.log("it is still calling the api");
 
-        const userinfo = await axios.get(`http://localhost:1983/api/v1/user/`, {
+        const userinfo = await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/`, {
           headers: {
             authorisation: `Bearer ${localStorage.getItem('token')}`
           }

@@ -25,7 +25,7 @@ const UserProfile = () => {
                     }
                 }
                 /* for fetching user information */
-                await axios.get(`http://localhost:1983/api/v1/user/`, config).then((response) => {
+                await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/`, config).then((response) => {
                     setUserinfo(response.data.data);
                 }).catch((error) => {
                     console.log('axios error : ', error);
@@ -33,7 +33,7 @@ const UserProfile = () => {
 
 
                 /* for fetching user posts */
-                await axios(`http://localhost:1983/api/v1/user/posts`, {
+                await axios(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/posts`, {
                     headers: {
                         'authorisation': `Bearer ${token}`
                     }

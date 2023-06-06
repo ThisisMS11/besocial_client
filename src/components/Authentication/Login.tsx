@@ -15,7 +15,7 @@ const Login = () => {
         e.preventDefault();
         utils?.setLoading(true);
         try {
-            const loginResponse = await axios.post('http://localhost:1983/api/v1/user/login', userinfo);
+            const loginResponse = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/login`, userinfo);
             // console.log(loginResponse.data);
 
             if (loginResponse.data.success) {
