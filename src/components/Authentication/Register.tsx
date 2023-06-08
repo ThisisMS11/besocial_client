@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid';
 import { useStyles } from '../styles/Register';
 import axios from 'axios';
@@ -15,21 +14,18 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
 
 import { useValidators } from './validators'
-import { useUtils, useToast, useAuth } from '..';
+import { useUtils } from '..';
 
 // Register the plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginImageResize);
 
 const Register = () => {
 
-    const navigate = useNavigate();
     const classes = useStyles();
-    const toaster = useToast();
 
 
     //Custom hook for user authentication
 
-    const auth = useAuth();
     const utils = useUtils();
 
     const [newuserinfo, setNewuserinfo] = useState({ username: "", email: "", password: "", confirmpassword: "" });

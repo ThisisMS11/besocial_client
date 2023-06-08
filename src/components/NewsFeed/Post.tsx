@@ -1,9 +1,7 @@
-import { Avatar, Box, Button, Grid, IconButton, Paper, Typography } from "@mui/material";
+import { Avatar, Box, Grid, IconButton, Typography } from "@mui/material";
 import { useStyles } from "../styles/NewsFeed";
-import image from "../../assets/fakeimages/7.jpg";
 
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ShareIcon from "@mui/icons-material/Share";
 import CommentIcon from "@mui/icons-material/Comment";

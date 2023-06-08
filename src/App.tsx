@@ -1,9 +1,5 @@
-import { GoogleLogin } from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
-import Typog from "./components/mui/Typog";
-import Buttons from "./components/mui/Buttons";
 import theme from "./theme";
-import { ThemeProvider, CssBaseline, Button } from "@mui/material";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import Login from "./components/Authentication/Login";
 import DashBoard from "./components/DashBoard";
 
@@ -14,7 +10,7 @@ import { Route, Routes } from 'react-router'
 /* Authentication Imports */
 import { AuthRequireLogin } from "./auth/authrequire";
 import Register from "./components/Authentication/Register";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "./auth/auth";
 import axios from "axios";
 import UserProfile from "./components/SocialWidgets/UserProfile/UserProfile";

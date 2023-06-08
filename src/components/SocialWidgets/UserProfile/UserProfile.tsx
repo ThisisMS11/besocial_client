@@ -7,6 +7,7 @@ import { User, PostProp } from '../../types'
 const UserProfile = () => {
     const utils = useUtils();
 
+    /* for fetching user information */
     const { status: status1, error: error1, data: userinfo }: {
         status: QueryStatus
         error: Error | null
@@ -16,6 +17,7 @@ const UserProfile = () => {
         queryFn: fetchUserInfo
     })
 
+    /* for fetching user posts */
     const { status: status2, error: error2, data: userposts }: {
         status: QueryStatus
         error: Error | null

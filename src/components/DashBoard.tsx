@@ -1,7 +1,7 @@
 import { Grid, Box } from "@mui/material";
-import { SideBar, SocialWidgetMain, NewsFeed, useAuth, useUtils, useToast } from ".";
+import { SideBar, SocialWidgetMain } from ".";
 import { useStyles } from './styles/Home';
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode } from "react";
 
 
 interface ParentComponentProps {
@@ -10,14 +10,7 @@ interface ParentComponentProps {
 
 const DashBoard: React.FC<ParentComponentProps> = ({ childComponent }) => {
     const classes = useStyles();
-    const toaster = useToast();
-    const [isMounted, setIsMounted] = useState(false); // Track if the component is mounted
-    const auth = useAuth();
-
-    const utils = useUtils();
-
-
-
+    
     return (
         <Box sx={{ position: 'relative', borderRadius: 4 }}>
             <Grid container spacing={1}>

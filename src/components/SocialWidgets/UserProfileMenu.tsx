@@ -3,7 +3,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { Avatar, IconButton } from '@mui/material';
 import useStyles from '../styles/UserProfile';
-import Userprofile from '../styles/strict/Userprofile.css'
+import '../styles/strict/Userprofile.css'
 import { useAuth } from '../../auth/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '../context/ToastNotifcation';

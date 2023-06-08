@@ -1,6 +1,5 @@
 import './Spinner.css'
 import { useUtils } from '../context/Utils'
-import { useEffect } from 'react';
 
 const Spinner = () => {
 

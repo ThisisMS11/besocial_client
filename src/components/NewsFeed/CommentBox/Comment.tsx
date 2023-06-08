@@ -1,10 +1,7 @@
-import { Avatar, Box, Divider, IconButton, Typography } from "@mui/material";
-import image from "../../../assets/fakeimages/6.jpg";
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
-import ExpandCircleDownOutlinedIcon from '@mui/icons-material/ExpandCircleDownOutlined';
 
 import CommentProps from '../PropTypes/CommentProps'
 

@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import theme from "../../theme";
 import Autocomplete from '@mui/material/Autocomplete';
-import { getSearchUsers, useUtils } from "..";
+import { getSearchUsers } from "..";
 import { useQuery } from "@tanstack/react-query";
 
 /*  FOR TEXTFIELD CSS */
@@ -34,19 +34,17 @@ const CssTextField = styled(TextField)({
 
 const Search = () => {
 
-  const utils = useUtils();
+  // const utils = useUtils();
 
   /* using react query to fetch all users info for search and assigning values to allusers*/
-  const { status, error, data: allusers } = useQuery({
+  const { status, data: allusers } = useQuery({
     queryKey: ["allusers"],
     queryFn: getSearchUsers
   })
 
 
   if (status == 'loading') return <div>loading...</div>
-  if (error) {
-    utils?.errornotify(error.message)
-  }
+
   return (
     <>
       <Autocomplete

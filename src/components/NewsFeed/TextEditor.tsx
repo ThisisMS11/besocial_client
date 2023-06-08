@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
-import { TextField, Button, colors, Box } from '@mui/material';
+import { TextField, Button, Box } from '@mui/material';
 import { styled } from "@mui/material/styles";
-import ImageIcon from '@mui/icons-material/Image';
-import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
-import { IconButton } from '@mui/material';
 import theme from "../../theme";
 import Grid from '@mui/material/Grid';
 
@@ -19,7 +16,6 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import axios from 'axios';
-import { SettingsPowerRounded } from '@mui/icons-material';
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 

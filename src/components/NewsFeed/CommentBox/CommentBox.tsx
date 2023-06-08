@@ -1,14 +1,11 @@
 import Comment from "./Comment";
 import CommentTxtEditor from "./CommentTxtEditor";
-import CommentProps from '../PropTypes/CommentProps'
 import { Box } from "@mui/material";
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useStyles } from "../../styles/NewsFeed";
-import { useEffect } from "react";
 
 
 interface MyComponentProps {
@@ -17,8 +14,6 @@ interface MyComponentProps {
 }
 
 const CommentBox: React.FC<MyComponentProps> = ({ postId, comments }) => {
-  /* Fake Data */
-  const classes = useStyles();
 
 
   return (

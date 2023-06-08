@@ -1,6 +1,4 @@
-import { createTheme, colors } from "@mui/material";
-import { yellow } from "@mui/material/colors";
-const { palette } = createTheme();
+import { createTheme } from "@mui/material";
 
 const theme = createTheme({
   palette: {
