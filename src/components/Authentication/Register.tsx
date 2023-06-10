@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid';
-import { useStyles } from '../styles/Register';
-import axios from 'axios';
+
 /*Import React FilePond */
 import { FilePond, registerPlugin } from 'react-filepond'
-
 /* Import FilePond styles */
 import 'filepond/dist/filepond.min.css'
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
@@ -14,17 +12,13 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 
 
 import { useValidators } from './validators'
-import { useUtils } from '..';
+import { useUtils, RegisterFunc } from '..';
+import { useMutation } from '@tanstack/react-query';
 
 // Register the plugins
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginImageResize);
 
 const Register = () => {
-
-    const classes = useStyles();
-
-
-    //Custom hook for user authentication
 
     const utils = useUtils();
 
@@ -45,6 +39,12 @@ const Register = () => {
     const [files, setFiles] = useState<any[]>();
 
 
+    /* Register Mutation */
+    const RegisterMut = useMutation({
+        mutationFn: (Userform: any) => RegisterFunc(Userform),
+        mutationKey: ["RegisterUser"]
+    })
+
     /* Handle the Sign Up procedure */
     const handleRegister = async () => {
         /* Registration form data */
@@ -60,20 +60,11 @@ const Register = () => {
             Userform.append('profilePic', files[0].file);
         }
 
-        /* Making Axios Call */
-        // const RequestUrl: string = (process.env.REACT_APP_URL_LOCAL as string) || "http://localhost:5173";
-
         utils?.setLoading(true);
 
-        const RegisterRes = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/register`, Userform);
-        console.log('Registration Response :', RegisterRes.data);
+        /*calling the registration mutation here */
+        RegisterMut.mutate(Userform);
 
-        if (RegisterRes.data.success) {
-            utils?.setAlertState(true);
-            utils?.setAlertmessage("Please check your email for verification");
-            utils?.setSeverity("success");
-            utils?.setLoading(false);
-        }
     }
 
 
@@ -108,6 +99,23 @@ const Register = () => {
         }
 
     }, [newuserinfo.username, newuserinfo.email, newuserinfo.password, stateSignUp, newuserinfo.confirmpassword])
+
+    useEffect(() => {
+        const { data, status, error } = RegisterMut;
+
+        if (status === 'success') {
+            utils?.setAlertState(true);
+            utils?.setAlertmessage("Please check your email for verification");
+            utils?.setSeverity("success");
+            utils?.setLoading(false);
+        }
+
+        if (error) {
+            utils?.setLoading(false);
+            utils?.errornotify(error.message);
+        }
+    }, [RegisterMut.status])
+
 
 
 
@@ -232,7 +240,7 @@ const Register = () => {
                                                         name="files"
                                                         labelIdle='Drag & Drop your profile photo or <span class="filepond--label-action">Browse</span>'
 
-                                                        className={classes.FilePond}
+                                                        className='w-[326px]'
 
                                                     />
                                                 </div>

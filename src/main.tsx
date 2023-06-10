@@ -12,6 +12,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 // Create a client
 const queryClient = new QueryClient()
@@ -20,11 +21,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
+
         <AuthProvider>
           <GoogleOAuthProvider clientId="177356393773-5uaija61i27op2j2o88efdhjgv00dod2.apps.googleusercontent.com">
             <UtilsProvider>
               <ToastProvider>
                 <App />
+                <ReactQueryDevtools />
               </ToastProvider>
             </UtilsProvider>
           </GoogleOAuthProvider>

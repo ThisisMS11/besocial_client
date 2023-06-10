@@ -10,6 +10,7 @@ export { default as UserInfo } from '../components/SocialWidgets/UserProfile/Use
 export { default as MyUser } from '../components/SocialWidgets/UserProfile/MyUser';
 export { default as ProfileOverview } from '../components/SocialWidgets/UserProfile/ProfileOverview';
 export { default as UserProfile } from '../components/SocialWidgets/UserProfile/UserProfile';
+export { default as OtherProfile } from '../components/OthersProfile/OtherProfile';
 
 
 
@@ -27,6 +28,9 @@ export { useToast } from './context/ToastNotifcation';
 export { getSearchUsers } from './api/Sidebar'
 export { fetchPosts } from './api/NewsFeed'
 export { fetchUserInfo, fetchUserPosts } from './api/UserProfile'
+export { fetchOtherProfileInfo ,fetchOtherProfilePosts} from './api/Others'
+export { LoginFunc ,RegisterFunc} from './api/Auth'
+
 
 
 

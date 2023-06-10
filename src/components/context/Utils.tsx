@@ -41,8 +41,6 @@ export const UtilsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     function getTimeDifference(timeString: string): any {
         const targetTime: any = new Date(timeString).toLocaleString();
 
-        console.log(targetTime);
-
         const date = targetTime.split(',')[0];
         const time = targetTime.split(',')[1].trim();
 

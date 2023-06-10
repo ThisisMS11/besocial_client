@@ -15,7 +15,7 @@ import { useAuth } from "./auth/auth";
 import axios from "axios";
 import UserProfile from "./components/SocialWidgets/UserProfile/UserProfile";
 import Spinner from "./components/utils/Spinner";
-import { MyAlert, NewsFeed } from "./components";
+import { MyAlert, NewsFeed, OtherProfile } from "./components";
 
 
 /* overiding palette Schema */
@@ -89,8 +89,13 @@ function App() {
       <MyAlert />
 
       <Routes>
+        {/* Dynamic Dashboard  */}
         <Route path="/" element={<AuthRequireLogin><DashBoard childComponent={<NewsFeed />} /></AuthRequireLogin>} />
         <Route path="/userprofile" element={<AuthRequireLogin><DashBoard childComponent={<UserProfile />} /></AuthRequireLogin>} />
+        <Route path="/user/:id" element={<AuthRequireLogin><DashBoard childComponent={<OtherProfile />} /></AuthRequireLogin>} />
+
+        {/* ends  */}
+
         <Route path="/login" element={<><Login /></>} />
         <Route path="/register" element={<><Register /></>} />
       </Routes>

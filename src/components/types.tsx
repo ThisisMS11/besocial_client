@@ -17,7 +17,7 @@ export interface User {
 }
 
 export interface UserInfo {
-    success: string;
+    success: boolean;
     data: User
 }
 
@@ -55,4 +55,12 @@ export interface PostProp {
 export interface PostResponse {
     success: boolean;
     data: PostProp[];
+}
+
+
+
+/* Auth interface */
+export interface LoginType{
+    email:string,
+    password:string
 }

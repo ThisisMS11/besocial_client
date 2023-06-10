@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 import { useUtils } from '..';
 
 /* FilePond Imports */
-// Import React FilePond
 import { FilePond, registerPlugin } from 'react-filepond'
 import 'filepond/dist/filepond.min.css'
 
@@ -103,10 +102,9 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
 
         const token = localStorage.getItem('token');
 
+        utils?.setLoading(true);
+
         try {
-
-            utils?.setLoading(true);
-
             /* Closing the Modal */
             setOpen(false);
 

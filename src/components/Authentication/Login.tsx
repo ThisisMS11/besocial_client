@@ -1,41 +1,39 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-import { useUtils, useToast } from '..'
+import { useUtils, useToast, LoginFunc } from '..'
+import { LoginType } from './../types'
+import { useMutation } from '@tanstack/react-query';
+
 
 const Login = () => {
-    const [userinfo, setUserinfo] = useState({ email: "", password: "" });
+    const [userinfo, setUserinfo] = useState<LoginType>({ email: "", password: "" });
     const toaster = useToast();
     const navigate = useNavigate();
 
     const utils = useUtils();
 
+    /* login mutation is here */
+    const loginMutation = useMutation({
+        mutationFn: (userinfo: LoginType) => LoginFunc(userinfo),
+        mutationKey: ["LoginMutation"]
+    })
+
     const handleLogin = async (e: any) => {
         e.preventDefault();
         utils?.setLoading(true);
-        try {
-            const loginResponse = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/login`, userinfo);
-            // console.log(loginResponse.data);
 
-            if (loginResponse.data.success) {
-                toaster?.successnotify("Login Successful");
-                localStorage.setItem('token', loginResponse.data.token);
-
-                navigate('/');
-            }
-
-        } catch (error: any) {
-            if (error)
-                toaster?.errornotify(error.message);
-            console.log('An error occurred:', error);
-        }
-        utils?.setLoading(false);
+        /* send the user information to mutation */
+        loginMutation.mutate(userinfo);
     }
 
+
+    /* handle input changes */
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserinfo({ ...userinfo, [e.target.name]: e.target.value })
     }
+
+    /* avoid double rendering of dashboard component */ 
 
     const [isMounted, setIsMounted] = useState<Boolean>(false);
 
@@ -50,8 +48,6 @@ const Login = () => {
 
     useEffect(() => {
         if (isMounted) {
-            // Check if the component is mounted before triggering the toast notification
-
             /* If user is already logged in then just redirect to the dashboard */
 
             if (localStorage.getItem('token') && toaster) {
@@ -60,6 +56,26 @@ const Login = () => {
             }
         }
     }, [isMounted, toaster]);
+
+
+
+    /* usemutation is asynchronous in nature */
+    useEffect(() => {
+        const { status, data, error } = loginMutation;
+
+        if (status === 'success') {
+            utils?.successnotify("Login Successful");
+            localStorage.setItem('token', data);
+            utils?.setLoading(false);
+            navigate('/');
+        }
+
+        if (error) {
+            utils?.setLoading(false);
+            const message:string=error.message;
+            utils?.errornotify(message);
+        }
+    }, [loginMutation.status]);
 
 
 

@@ -6,16 +6,15 @@ import { useQuery } from "@tanstack/react-query";
 const NewsFeed = () => {
   const utils = useUtils();
 
+  /* fetching the data using reactQuery */
   const { status, error, data: posts } = useQuery({
     queryKey: ["allposts"],
-    queryFn: fetchPosts
+    queryFn: () => fetchPosts(utils),
+    refetchOnWindowFocus: false
   })
 
   if (status == 'loading') {
-    utils?.setLoading(true);
     return <div>loading...</div>
-  } else {
-    utils?.setLoading(false);
   }
 
   if (error) console.log(error)

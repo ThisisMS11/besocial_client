@@ -34,36 +34,44 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
     if (likestate) {
       // dislike the post
 
-      await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/dislike/${postId}`, {}, {
-        headers: {
-          'authorisation': `Bearer ${token}`
-        }
-      }).then((res) => {
-        if (res.data.success) {
+      try {
+        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/dislike/${postId}`, {}, {
+          headers: {
+            'authorisation': `Bearer ${token}`
+          }
+        }).then((res) => {
+          if (res.data.success) {
 
-          const newlikes = altlikes.filter((e: any) => e._id !== auth.user?.userid);
-          setAltlikes(newlikes);
+            const newlikes = altlikes.filter((e: any) => e._id !== auth.user?.userid);
+            setAltlikes(newlikes);
 
 
-          setLikestate(false);
-          utils?.errornotify("disliked");
-        }
-      }).catch((err) => {
-        console.log('error : ', err);
-      })
-    } else {
-      // like the post
-      await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/like/${postId}`, {}, {
-        headers: {
-          'authorisation': `Bearer ${token}`
-        }
-      }).then((res) => {
-        if (res.data.success) {
-          setAltlikes([...altlikes, { _id: auth.user?.userid }]);
-          setLikestate(true);
-          utils?.successnotify("liked");
-        }
-      })
+            setLikestate(false);
+            utils?.errornotify("disliked");
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    else {
+
+      try {
+        // like the post
+        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/like/${postId}`, {}, {
+          headers: {
+            'authorisation': `Bearer ${token}`
+          }
+        }).then((res) => {
+          if (res.data.success) {
+            setAltlikes([...altlikes, { _id: auth.user?.userid }]);
+            setLikestate(true);
+            utils?.successnotify("liked");
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      }
     }
 
   }
@@ -78,10 +86,6 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
     }
 
   }, [altlikes])
-
-  useEffect(() => {
-    console.log(comments);
-  }, [])
 
 
 

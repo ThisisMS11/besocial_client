@@ -4,6 +4,7 @@ import theme from "../../theme";
 import Autocomplete from '@mui/material/Autocomplete';
 import { getSearchUsers } from "..";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 /*  FOR TEXTFIELD CSS */
 const CssTextField = styled(TextField)({
@@ -34,7 +35,8 @@ const CssTextField = styled(TextField)({
 
 const Search = () => {
 
-  // const utils = useUtils();
+  const navigate = useNavigate();
+
 
   /* using react query to fetch all users info for search and assigning values to allusers*/
   const { status, data: allusers } = useQuery({
@@ -45,6 +47,16 @@ const Search = () => {
 
   if (status == 'loading') return <div>loading...</div>
 
+  const handleSelectUser = (event: any, value: any) => {
+    // Assuming each user object has a unique ID
+    const selectedUser = allusers.find((user: any) => user.name === value);
+
+    /* ok i have got the user */
+    console.log(selectedUser._id);
+    navigate(`/user/${selectedUser._id}`);
+  };
+
+
   return (
     <>
       <Autocomplete
@@ -54,6 +66,7 @@ const Search = () => {
           display: 'inline-block',
           width: '100%',
         }}
+        onChange={handleSelectUser}
         disableClearable
         options={allusers.map((user: any) => user.name)}
         renderInput={(params) => (
