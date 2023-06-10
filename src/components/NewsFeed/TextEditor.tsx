@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button, Box } from '@mui/material';
 import { styled } from "@mui/material/styles";
 import theme from "../../theme";
 import Grid from '@mui/material/Grid';
 
-import { useUtils } from '..';
+import { useUtils, CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc } from '..';
 
 /* FilePond Imports */
 import { FilePond, registerPlugin } from 'react-filepond'
@@ -15,6 +15,9 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import axios from 'axios';
+import { useMutation } from '@tanstack/react-query';
+
+import { PostProp } from '../types'
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 
@@ -57,6 +60,11 @@ interface MyComponentProps {
     setOpen: (state: boolean) => void;
 }
 
+function wait(duration: number) {
+    return new Promise(resolve => setTimeout(resolve, duration));
+}
+
+
 const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     const classes = useStyles();
     const [content, setContent] = React.useState('');
@@ -70,14 +78,54 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
 
     const utils = useUtils();
 
+
+    /* images data */
+    const Formimages = new FormData();
+    const FormVideos = new FormData();
+    let i: number = 0;
+    let v: number = 0;
+
+
+    /* Post Creation Mutation */
+
+    const CreatePostMutation = useMutation({
+        mutationFn: (content: string) => CreatePostFunc(content),
+        mutationKey: ["CreatePostMutation"],
+
+        onSuccess: (data: any) => {
+            const postId = data.data.data.id
+            console.log(data);
+            if (i > 0) {
+                console.log("image uploading taking place");
+                UploadPostImagesMutation.mutate({ Formimages, postId })
+            }
+        }
+    })
+
+    /* Post Images Upload Mutation */
+    const UploadPostImagesMutation = useMutation({
+        mutationFn: (mutationData: { Formimages: any; postId: string }) =>
+            UploadPostImagesFunc(mutationData.Formimages, mutationData.postId),
+
+        mutationKey: ["UploadPostImagesMutation"],
+        onSuccess: (data: any) => {
+            console.log(data.data)
+            const postId = data.data.data.id
+            if (v > 0) {
+                console.log('videos uploading is taking place');
+                UploadPostVideosMutation.mutate({ FormVideos, postId });
+            }
+        }
+    })
+
+    /* Post Videos Upload Mutation */
+    const UploadPostVideosMutation = useMutation({
+        mutationFn: (mutationData: { FormVideos: any; postId: string }) =>
+            UploadPostVideosFunc(mutationData.FormVideos, mutationData.postId),
+        mutationKey: ["UploadPostVideosMutation"]
+    })
+
     const handleSubmit = async () => {
-
-        let i: number = 0;
-        let v: number = 0;
-
-        /* images data */
-        const Formimages = new FormData();
-        const FormVideos = new FormData();
 
         if (files) {
 
@@ -100,53 +148,23 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
             });
         }
 
-        const token = localStorage.getItem('token');
 
-        utils?.setLoading(true);
+        // utils?.setLoading(true);
 
-        try {
-            /* Closing the Modal */
-            setOpen(false);
+        setOpen(false);
 
-            /* Creating Post record first */
-            const post = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/`, { PostString: content }, {
-                headers: {
-                    'authorisation': `Bearer ${token}`
-                }
-            })
-
-            /* if images exists */
-            if (i > 0 && post) {
-
-                const imageuploadRes = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/uploadImages/${post.data.data.id}`, Formimages, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'authorisation': `Bearer ${token}`
-                    }
-                })
-                console.log('Image upload response : ', imageuploadRes.data);
-            }
-
-            /* if videos exists */
-            if (v > 0 && post) {
-                const videoUplodRes = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/uploadVideos/${post.data.data.id}`, FormVideos, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'authorisation': `Bearer ${token}`
-                    }
-                })
-                console.log('Videos upload response : ', videoUplodRes.data);
-            }
-
-            utils?.successnotify("Post Successfully Added");
-        } catch (error: any) {
-            console.log('upload error : ', error);
-            utils?.errornotify(error.message);
-        }
-
-        utils?.setLoading(false);
-
+        /* calling mutation */
+        CreatePostMutation.mutate(content);
     };
+
+
+    useEffect(() => {
+        const { status, error, data } = CreatePostMutation;
+        console.log({ status, error, data });
+
+    }, [CreatePostMutation.status])
+
+
 
 
     return (

@@ -30,6 +30,8 @@ export { fetchPosts } from './api/NewsFeed'
 export { fetchUserInfo, fetchUserPosts } from './api/UserProfile'
 export { fetchOtherProfileInfo ,fetchOtherProfilePosts} from './api/Others'
 export { LoginFunc ,RegisterFunc} from './api/Auth'
+export { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc } from './api/Post'
+
 
 
 

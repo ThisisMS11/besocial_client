@@ -63,6 +63,8 @@ const Login = () => {
     useEffect(() => {
         const { status, data, error } = loginMutation;
 
+        console.log({ status, data, error })
+
         if (status === 'success') {
             utils?.successnotify("Login Successful");
             localStorage.setItem('token', data);
