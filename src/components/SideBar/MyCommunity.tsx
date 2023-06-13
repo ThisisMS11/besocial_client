@@ -17,7 +17,7 @@ export default function MyCommunity() {
 
   return (
     <>
-      <Typography variant="h6" fontWeight={"bold"} color="text.secondary">My Community</Typography>
+      <Typography variant="h6" component={'span'} fontWeight={"bold"} color="text.secondary">My Community</Typography>
       <List sx={{ bgcolor: "background.black" }} >
         <ListItem alignItems="flex-start" className={classes.listitem}>
           <ListItemAvatar>

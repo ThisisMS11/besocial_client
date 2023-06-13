@@ -117,10 +117,10 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
 
       {images && <Box sx={{ height: 'fit-content' }}>
         <Carousel>
-          {images.map((e: any) => {
-            return (<>
-              <img src={e.url} alt="image not found" className='w-1/2 object-fill mx-auto' />
-            </>)
+          {images.map((e: any, index: number) => {
+            return (
+              <img key={index} src={e.url} alt="image not found" className='w-1/2 object-fill mx-auto' />
+            )
           })}
 
         </Carousel>

@@ -18,7 +18,7 @@ export default function RecentChats() {
 
   return (
     <>
-      <Typography variant="h6" fontWeight={"bold"} color="text.secondary">Recent Chats</Typography>
+      <Typography variant="h6" component={'span'} fontWeight={"bold"} color="text.secondary">Recent Chats</Typography>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.black" }}>
         <ListItem alignItems="flex-start" className={classes.listitem}>
           <ListItemAvatar>
@@ -41,7 +41,7 @@ export default function RecentChats() {
             }
           />
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider variant="inset" component="span" />
 
         <ListItem alignItems="flex-start" className={classes.listitem}>
           <ListItemAvatar>
@@ -64,7 +64,7 @@ export default function RecentChats() {
             }
           />
         </ListItem>
-        <Divider variant="inset" component="li" />
+        <Divider variant="inset" component="span" />
       </List>
     </>
   );

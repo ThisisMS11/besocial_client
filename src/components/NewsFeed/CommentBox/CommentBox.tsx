@@ -30,12 +30,12 @@ const CommentBox: React.FC<MyComponentProps> = ({ postId, comments }) => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Comments</Typography>
+          <Typography component="span">Comments</Typography>
         </AccordionSummary>
 
         <AccordionDetails>
-          {comments[0].content.map((comment: any) => {
-            return <Box sx={{ marginTop: '0px' }}><Comment name={comment.user.name} imageUrl={comment.user.profilePic.url} commentContent={comment.comment} /> </Box>
+          {comments[0].content.map((comment: any, index: number) => {
+            return <Box sx={{ marginTop: '0px' }} key={index}><Comment name={comment.user.name} imageUrl={comment.user.profilePic.url} commentContent={comment.comment} /> </Box>
           })}
         </AccordionDetails>
 

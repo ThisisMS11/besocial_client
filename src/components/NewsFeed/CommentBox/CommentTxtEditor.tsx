@@ -81,7 +81,7 @@ const CommentTxtEditor: React.FC<MyComponentProps> = ({ postId }) => {
 
     return (
         <div>
-            <Box component="div" sx={{ padding: 3 }}>
+            <Box component="span" sx={{ padding: 3 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }} >
                     <Box sx={{ display: 'flex', width: '90%', alignItems: 'center' }}>
                         <Avatar src={image}> </Avatar>

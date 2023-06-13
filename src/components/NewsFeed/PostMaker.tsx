@@ -19,7 +19,7 @@ const PostMaker: React.FC = () => {
 
   return (
     <div>
-      <Box component="div" className={classes.PostMaker}>
+      <Box className={classes.PostMaker}>
         <Box className={classes.PostMakerInner}>
           <Avatar src={image}> </Avatar>
 

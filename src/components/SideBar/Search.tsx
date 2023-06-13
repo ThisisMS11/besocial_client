@@ -45,10 +45,11 @@ const Search = () => {
   })
 
 
-  if (status == 'loading') return <div>loading...</div>
+  if (status == 'loading') return <div>mohit...</div>
 
   const handleSelectUser = (event: any, value: any) => {
     // Assuming each user object has a unique ID
+    console.log(event.target.value);
     const selectedUser = allusers.find((user: any) => user.name === value);
 
     /* ok i have got the user */

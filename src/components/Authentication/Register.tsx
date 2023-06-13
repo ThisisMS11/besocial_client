@@ -101,7 +101,7 @@ const Register = () => {
     }, [newuserinfo.username, newuserinfo.email, newuserinfo.password, stateSignUp, newuserinfo.confirmpassword])
 
     useEffect(() => {
-        const { data, status, error } = RegisterMut;
+        const { status, error } = RegisterMut;
 
         if (status === 'success') {
             utils?.setAlertState(true);
@@ -112,7 +112,8 @@ const Register = () => {
 
         if (error) {
             utils?.setLoading(false);
-            utils?.errornotify(error.message);
+            // utils?.errornotify(error.message);
+            console.log(error);
         }
     }, [RegisterMut.status])
 

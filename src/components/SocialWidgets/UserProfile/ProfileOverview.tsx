@@ -55,6 +55,7 @@ export default function ProfileOverview(props: MyComponentProps) {
     const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+        console.log(event.target);
         setValue(newValue);
     };
 
@@ -83,7 +84,7 @@ export default function ProfileOverview(props: MyComponentProps) {
 
             <TabPanel value={value} index={0}>
                 {userposts && userposts.map((post) => {
-                    return <Post images={post.photos} PostContent={post.PostString} user={post.user} likes={post.likes} postId={post.id} createdAt={post.createdAt} comments={post.comments} />
+                    return <Post key={post.id} images={post.photos} PostContent={post.PostString} user={post.user} likes={post.likes} postId={post.id} createdAt={post.createdAt} comments={post.comments} />
 
                 })}
 

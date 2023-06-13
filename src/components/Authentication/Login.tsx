@@ -74,8 +74,7 @@ const Login = () => {
 
         if (error) {
             utils?.setLoading(false);
-            const message:string=error.message;
-            utils?.errornotify(message);
+            console.log(error);
         }
     }, [loginMutation.status]);
 

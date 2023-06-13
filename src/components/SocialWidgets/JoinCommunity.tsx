@@ -17,10 +17,10 @@ export default function JoinCommunity() {
 
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
+                    <Typography gutterBottom variant="h5" component="span">
                         Lizard
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="body2" color="text.secondary" component={'span'}>
                         Lizards are a widespread group of squamate reptiles.
                     </Typography>
                 </CardContent>

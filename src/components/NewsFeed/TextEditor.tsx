@@ -5,7 +5,7 @@ import { styled } from "@mui/material/styles";
 import theme from "../../theme";
 import Grid from '@mui/material/Grid';
 
-import { useUtils, CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc } from '..';
+import { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc } from '..';
 
 /* FilePond Imports */
 import { FilePond, registerPlugin } from 'react-filepond'
@@ -14,10 +14,8 @@ import 'filepond/dist/filepond.min.css'
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 
-import { PostProp } from '../types'
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
 
@@ -60,23 +58,19 @@ interface MyComponentProps {
     setOpen: (state: boolean) => void;
 }
 
-function wait(duration: number) {
-    return new Promise(resolve => setTimeout(resolve, duration));
-}
-
 
 const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     const classes = useStyles();
     const [content, setContent] = React.useState('');
 
     /* //! Solve this type using typescript. */
-    const [files, setFiles] = useState<File[] | null>(null);
+    const [files, setFiles] = useState<any | null>(null);
 
     const handleContentChange = (event: any) => {
         setContent(event.target.value);
     };
 
-    const utils = useUtils();
+    // const utils = useUtils();
 
 
     /* images data */

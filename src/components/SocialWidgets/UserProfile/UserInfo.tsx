@@ -18,18 +18,18 @@ const UserInfo = (props: User) => {
         <>
 
             <Item elevation={2} sx={{ margin: '10px 0px' }}>
-                <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>Name </Typography>
-                <Typography variant="h6" >{name}</Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}component={'span'}>Name </Typography>
+                <Typography variant="h6" component={'span'}>{name}</Typography>
             </Item>
 
             <Item elevation={2} sx={{ margin: '10px 0px' }}>
-                <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>Email </Typography>
-                <Typography variant="h6" >{email}</Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}component={'span'}>Email </Typography>
+                <Typography variant="h6"component={'span'} >{email}</Typography>
             </Item>
 
             <Item elevation={2} sx={{ margin: '10px 0px' }}>
-                <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}>Joined </Typography>
-                <Typography variant="h6" >{createdAt ? createdAt.split('T')[0] : 'date not available'}</Typography>
+                <Typography variant="body1" color="text.secondary" sx={{ marginBottom: 1 }}component={'span'}>Joined </Typography>
+                <Typography variant="h6" component={'span'} >{createdAt ? createdAt.split('T')[0] : 'date not available'}</Typography>
             </Item>
 
         </>
