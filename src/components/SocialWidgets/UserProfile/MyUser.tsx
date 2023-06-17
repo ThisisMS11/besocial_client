@@ -3,12 +3,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import React from "react";
 import axios from "axios";
-import { useUtils } from "../..";
+import { useUtils, useAuth } from "../..";
 import { User } from '../../types'
 
-const MyUser: React.FC<User> = ({ name, profilePic, isVerified, unVerfiedEmail }) => {
+const MyUser: React.FC<User> = ({ name, profilePic, isVerified, unVerfiedEmail, _id }) => {
 
     const utils = useUtils();
+    const auth = useAuth();
 
     const VerifyEmail = async () => {
         /* api call for email verification to come here */
@@ -27,10 +28,9 @@ const MyUser: React.FC<User> = ({ name, profilePic, isVerified, unVerfiedEmail }
                 utils?.setLoading(false);
             }
         }).catch((error) => {
-            console.log('axios error : ', error);
+            console.log('axios error : ', error)
         })
     }
-
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -42,11 +42,26 @@ const MyUser: React.FC<User> = ({ name, profilePic, isVerified, unVerfiedEmail }
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                {!isVerified ? <Button variant="contained" startIcon={<CheckIcon />} color="secondary" sx={{ marginRight: 2 }} onClick={VerifyEmail}>Verify Email</Button> : null}
-                <Button variant="contained" startIcon={<EditIcon />} color="secondary">Edit Profile</Button>
+
+                {
+                    auth.user?.userid === _id && (
+                        <>
+                            {!isVerified && (
+                                <Button variant="contained" startIcon={<CheckIcon />} color="secondary" sx={{ marginRight: 2 }} onClick={VerifyEmail}>
+                                    Verify Email
+                                </Button>
+                            )}
+                            <Button variant="contained" startIcon={<EditIcon />} color="secondary">
+                                Edit Profile
+                            </Button>
+                        </>
+                    )
+                }
+
+
             </Box>
 
-        </Box>
+        </Box >
     )
 }
 

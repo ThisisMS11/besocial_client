@@ -1,5 +1,5 @@
 import axios from "axios";
-import { UserInfo, PostResponse } from '../types'
+import { UserInfo, PostResponse, getNotificationsResponse } from '../types'
 /* axios call to fetch userinfo using token */
 
 
@@ -49,5 +49,59 @@ export async function fetchUserPosts() {
     }
 }
 
+export async function fetchUserNotifications() {
+    const token = localStorage.getItem('token');
 
+    return await axios.get<getNotificationsResponse>(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/notification/getnotifications`, {
+        headers: {
+            'authorisation': `Bearer ${token}`
+        }
+    })
+}
+
+// function to accept a notification 
+export async function acceptNotification(notificationId: string) {
+    const token = localStorage.getItem('token');
+
+    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/notification/accept/${notificationId}`, {}, {
+        headers: {
+            'authorisation': `Bearer ${token}`
+        }
+    })
+}
+
+// function to decline a notification
+export async function rejectNotification(notificationId: string) {
+    const token = localStorage.getItem('token');
+
+    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/notification/reject/${notificationId}`, {}, {
+        headers: {
+            'authorisation': `Bearer ${token}`
+        }
+    })
+}
+
+
+/* make a follow request */
+export async function followRequest(userId: string) {
+    const token = localStorage.getItem('token');
+
+    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/follow/${userId}`, {}, {
+        headers: {
+            'authorisation': `Bearer ${token}`
+        }
+    })
+}
+
+
+/* unfollow a user */
+export async function unfollowUser(userId: string) {
+    const token = localStorage.getItem('token');
+
+    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/unfollow/${userId}`, {}, {
+        headers: {
+            'authorisation': `Bearer ${token}`
+        }
+    })
+}
 

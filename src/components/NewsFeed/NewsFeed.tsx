@@ -17,7 +17,7 @@ const NewsFeed = () => {
     return <div>loading...</div>
   }
 
-  if (error) console.log(error)
+  if (error) console.log(error);
 
   return (
     <>
@@ -25,7 +25,7 @@ const NewsFeed = () => {
 
       {/* for api call */}
       {posts.length > 0 ? posts.map((post: any) => {
-        return <Post key={post.id} images={post.photos} PostContent={post.PostString} user={post.user} likes={post.likes} postId={post.id} createdAt={post.createdAt} comments={post.comments} />
+        return <Post key={post.id} photos={post.photos} PostString={post.PostString} user={post.user} likes={post.likes} id={post.id} createdAt={post.createdAt} comments={post.comments} />
       }) : <div>No Posts found </div>}
     </>
   );

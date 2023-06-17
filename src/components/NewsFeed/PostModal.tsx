@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import { MyComponentProps } from './PropTypes/UtilityProps';
 import TextEditor from './TextEditor';
 import theme from '../../theme';
 
@@ -19,6 +18,10 @@ const style = {
     color: 'black',
     borderRadius: 4
 };
+
+interface MyComponentProps {
+    openModalref: React.RefObject<HTMLButtonElement>;
+}
 
 const PostModal: React.FC<MyComponentProps> = ({ openModalref }) => {
 

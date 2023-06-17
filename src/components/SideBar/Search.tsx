@@ -45,7 +45,7 @@ const Search = () => {
   })
 
 
-  if (status == 'loading') return <div>mohit...</div>
+  if (status == 'loading') return <div>loading...</div>
 
   const handleSelectUser = (event: any, value: any) => {
     // Assuming each user object has a unique ID

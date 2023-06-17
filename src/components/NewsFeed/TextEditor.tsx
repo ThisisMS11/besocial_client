@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button, Box } from '@mui/material';
 import { styled } from "@mui/material/styles";
 import theme from "../../theme";
 import Grid from '@mui/material/Grid';
 
-import { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc } from '..';
+import { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc, useUtils } from '..';
 
 /* FilePond Imports */
 import { FilePond, registerPlugin } from 'react-filepond'
@@ -61,7 +61,8 @@ interface MyComponentProps {
 
 const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     const classes = useStyles();
-    const [content, setContent] = React.useState('');
+    const [content, setContent] = React.useState<string>('');
+    const utils = useUtils();
 
     /* //! Solve this type using typescript. */
     const [files, setFiles] = useState<any | null>(null);
@@ -70,56 +71,7 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
         setContent(event.target.value);
     };
 
-    // const utils = useUtils();
-
-
-    /* images data */
-    const Formimages = new FormData();
-    const FormVideos = new FormData();
-    let i: number = 0;
-    let v: number = 0;
-
-
-    /* Post Creation Mutation */
-
-    const CreatePostMutation = useMutation({
-        mutationFn: (content: string) => CreatePostFunc(content),
-        mutationKey: ["CreatePostMutation"],
-
-        onSuccess: (data: any) => {
-            const postId = data.data.data.id
-            console.log(data);
-            if (i > 0) {
-                console.log("image uploading taking place");
-                UploadPostImagesMutation.mutate({ Formimages, postId })
-            }
-        }
-    })
-
-    /* Post Images Upload Mutation */
-    const UploadPostImagesMutation = useMutation({
-        mutationFn: (mutationData: { Formimages: any; postId: string }) =>
-            UploadPostImagesFunc(mutationData.Formimages, mutationData.postId),
-
-        mutationKey: ["UploadPostImagesMutation"],
-        onSuccess: (data: any) => {
-            console.log(data.data)
-            const postId = data.data.data.id
-            if (v > 0) {
-                console.log('videos uploading is taking place');
-                UploadPostVideosMutation.mutate({ FormVideos, postId });
-            }
-        }
-    })
-
-    /* Post Videos Upload Mutation */
-    const UploadPostVideosMutation = useMutation({
-        mutationFn: (mutationData: { FormVideos: any; postId: string }) =>
-            UploadPostVideosFunc(mutationData.FormVideos, mutationData.postId),
-        mutationKey: ["UploadPostVideosMutation"]
-    })
-
-    const handleSubmit = async () => {
+    const filterMedia = async () => {
 
         if (files) {
 
@@ -142,21 +94,83 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
             });
         }
 
-
-        // utils?.setLoading(true);
-
         setOpen(false);
-
-        /* calling mutation */
-        CreatePostMutation.mutate(content);
     };
 
 
-    useEffect(() => {
-        const { status, error, data } = CreatePostMutation;
-        console.log({ status, error, data });
+    // const utils = useUtils();
 
-    }, [CreatePostMutation.status])
+
+    /* images data */
+    const Formimages = new FormData();
+    const FormVideos = new FormData();
+    let i: number = 0;
+    let v: number = 0;
+
+
+    /* Post Creation Mutation */
+
+    const CreatePostMutation = useMutation({
+        mutationFn: (content: string) => CreatePostFunc(content),
+        mutationKey: ["CreatePostMutation"],
+
+        onSuccess: (data: any) => {
+
+            setOpen(false);
+
+            console.log(data.id);
+            filterMedia();
+
+            utils?.setLoading(true);
+            UploadPostImagesMutation.mutate({ Formimages, postId: data.id })
+        }
+    })
+
+    /* Post Images Upload Mutation */
+    const UploadPostImagesMutation = useMutation({
+        mutationFn: (mutationData: { Formimages: any; postId: string }) =>
+            UploadPostImagesFunc(mutationData.Formimages, mutationData.postId),
+
+        mutationKey: ["UploadPostImagesMutation"],
+        onSuccess: (data: any) => {
+            // console.log(data.data)
+            const postId = data.data.data.id;
+
+            utils?.setLoading(false);
+
+            if (v > 0) {
+                utils?.setLoading(true);
+                console.log('videos uploading is taking place');
+                UploadPostVideosMutation.mutate({ FormVideos, postId });
+            }
+        }
+    })
+
+
+    /* Post Videos Upload Mutation */
+    const UploadPostVideosMutation = useMutation({
+        mutationFn: (mutationData: { FormVideos: any; postId: string }) =>
+            UploadPostVideosFunc(mutationData.FormVideos, mutationData.postId),
+        mutationKey: ["UploadPostVideosMutation"],
+        onSuccess: (data: any) => {
+            console.log(data.data);
+            utils?.setLoading(false);
+        }
+    })
+
+
+
+    useEffect(() => {
+
+        // CreatePostMutation.mutate(); // Trigger the mutation
+        const { status: status1, error: error1, data: data1, isLoading: isLoading1 } = CreatePostMutation;
+
+        console.log({ status1, error1, data1, isLoading1 });
+
+        /* if any of the mutations are loading then set the loading state to true */
+        utils?.setLoading(isLoading1);
+
+    }, [CreatePostMutation.status, UploadPostImagesMutation.status])
 
 
 
@@ -177,14 +191,17 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
 
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
-                        <Button variant="contained" color="primary" onClick={handleSubmit} >
+                        <Button variant="contained" color="primary" onClick={() =>
+                            CreatePostMutation.mutate(content)
+                        } >
                             Post
                         </Button>
-                        <Button variant="contained" color="primary" onClick={handleSubmit} >
+                        <Button variant="contained" color="primary" onClick={filterMedia} >
                             Save Draft
                         </Button>
 
                     </Box>
+
                 </Grid>
                 <Grid item xs={5} >
 
@@ -201,7 +218,8 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
 
             </Grid>
 
-        </div>
+
+        </div >
     );
 };
 

@@ -11,6 +11,7 @@ const useStyles = makeStyles({
     width: "50px",
     height: "50px",
     marginRight: "10px",
+    cursor:"pointer"
   },
   logoheading: {
     fontSize: "",

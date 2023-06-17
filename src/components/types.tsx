@@ -6,13 +6,15 @@ export interface media {
 }
 
 export interface User {
-    _id?: string;
+    _id: string;
     name: string;
     email?: string;
     profilePic?: media;
     isVerified?: boolean | undefined;
     unVerfiedEmail?: string;
     createdAt?: string;
+    following?: string[];
+    followers?: string[];
     __v?: number;
 }
 
@@ -57,10 +59,25 @@ export interface PostResponse {
     data: PostProp[];
 }
 
+export interface notification {
+    _id: string;
+    requestFrom: User;
+    requestTo: string;
+    status: string;
+    createdAt: string;
+    __v: number;
+    id: string;
+}
+
+export interface getNotificationsResponse {
+    success: boolean;
+    data: notification[];
+}
+
 
 
 /* Auth interface */
-export interface LoginType{
-    email:string,
-    password:string
+export interface LoginType {
+    email: string,
+    password: string
 }

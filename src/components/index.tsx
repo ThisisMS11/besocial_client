@@ -27,10 +27,10 @@ export { useToast } from './context/ToastNotifcation';
 /* api exports */
 export { getSearchUsers } from './api/Sidebar'
 export { fetchPosts } from './api/NewsFeed'
-export { fetchUserInfo, fetchUserPosts } from './api/UserProfile'
-export { fetchOtherProfileInfo ,fetchOtherProfilePosts} from './api/Others'
-export { LoginFunc ,RegisterFunc} from './api/Auth'
-export { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc } from './api/Post'
+export { fetchUserInfo, fetchUserPosts, fetchUserNotifications, acceptNotification, rejectNotification, followRequest,unfollowUser } from './api/UserProfile'
+export { fetchOtherProfileInfo, fetchOtherProfilePosts } from './api/Others'
+export { LoginFunc, RegisterFunc } from './api/Auth'
+export { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc ,CommentOnPostFunc} from './api/Post'
 
 
 

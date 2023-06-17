@@ -17,7 +17,7 @@ export async function LoginFunc(userinfo: LoginType) {
 export async function RegisterFunc(Userform: any) {
     try {
         const RegisterRes = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/register`, Userform);
-        
+
         if (RegisterRes.data.success) {
             return RegisterRes.data.token;
         }

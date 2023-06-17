@@ -7,23 +7,27 @@ import ShareIcon from "@mui/icons-material/Share";
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentBox from "./CommentBox/CommentBox";
 
-import PostProps from "./PropTypes/PostProps";
 import Carousel from 'react-material-ui-carousel';
 import Badge from '@mui/material/Badge';
+import Button from '@mui/material/Button';
 
-import { useAuth } from "..";
+import { followRequest, useAuth, useUtils, unfollowUser } from "..";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { PostProp } from '../types'
+import { useQueryClient } from "@tanstack/react-query";
 
-import { useUtils } from "..";
+const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, createdAt, comments }) => {
 
-const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, createdAt, comments }) => {
+  /* here user is the user who created the post and not the the one who is signed in so let's be clear on that first */
 
   const classes = useStyles();
   const utils = useUtils();
   const auth = useAuth();
 
-  const [altlikes, setAltlikes] = useState(likes);
+  const [altlikes, setAltlikes] = useState<{ _id: string }[]>(likes);
+
   const [likestate, setLikestate] = useState<Boolean>(false);
 
   const handleLike = async () => {
@@ -35,7 +39,7 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
       // dislike the post
 
       try {
-        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/dislike/${postId}`, {}, {
+        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/dislike/${id}`, {}, {
           headers: {
             'authorisation': `Bearer ${token}`
           }
@@ -58,13 +62,13 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
 
       try {
         // like the post
-        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/like/${postId}`, {}, {
+        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/like/${id}`, {}, {
           headers: {
             'authorisation': `Bearer ${token}`
           }
         }).then((res) => {
           if (res.data.success) {
-            setAltlikes([...altlikes, { _id: auth.user?.userid }]);
+            setAltlikes([...altlikes, { _id: auth.user?.userid as string }]);
             setLikestate(true);
             utils?.successnotify("liked");
           }
@@ -76,6 +80,32 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
 
   }
 
+  const queryClient = useQueryClient();
+
+  const [followbuttonstate, setFollowbuttonstate] = useState<boolean>(false);
+
+  /* follow mutation */
+  const followmutation = useMutation({
+    mutationFn: () => followRequest(user._id),
+    mutationKey: ['followRequest', user._id],
+    onSuccess: (data: any) => {
+      // console.log(data.data);
+      setFollowbuttonstate(true);
+    }
+  })
+
+  /* unfollow mutation */
+  const unfollowmutation = useMutation({
+    mutationFn: () => unfollowUser(user._id),
+    mutationKey: ['unfollowRequest', user._id],
+    onSuccess: (data: any) => {
+      /* if i invalidate all the posts then each post will be refetched again */
+      queryClient.invalidateQueries(['allposts']);
+      console.log(data.data);
+    }
+  })
+
+
   useEffect(() => {
 
     const matching = altlikes.some((item: any) => item._id === auth.user?.userid);
@@ -85,7 +115,19 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
       setLikestate(false);
     }
 
-  }, [altlikes])
+    const { status, data, isLoading, error } = followmutation;
+
+    console.log({ status, data, isLoading, error });
+    if (error) {
+      const myerr = error as AxiosError;
+      utils?.errornotify(myerr.message);
+    }
+
+    if (status == "success") {
+      utils?.successnotify("Follow request Send");
+    }
+
+  }, [altlikes, followmutation.status])
 
 
 
@@ -93,38 +135,73 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
 
   return (
     <Box className={classes.Post}>
-      <Box sx={{ display: "flex", padding: 2, alignItems: "center" }}>
-        <Avatar src={user.profilePic.url}> </Avatar>
-        <Box sx={{ marginLeft: 2 }}>
-          <Typography>{user.name}</Typography>
-          <Typography
-            fontWeight="light"
-            color="text.secondary"
-            variant="subtitle2"
-          >
-            {utils?.getTimeDifference(createdAt).date + " " + utils?.getTimeDifference(createdAt).time}
-          </Typography>
+      <Box sx={{ display: "flex", padding: 2, alignItems: "center", justifyContent: 'space-between' }}>
+
+        <Box sx={{ display: 'flex' }}>
+          <Avatar src={user.profilePic?.url}> </Avatar>
+          <Box sx={{ marginLeft: 1 }}>
+            <Typography>{user.name}</Typography>
+            <Typography
+              fontWeight="light"
+              color="text.secondary"
+              variant="subtitle2"
+            >
+              {utils?.getTimeDifference(createdAt).date + " " + utils?.getTimeDifference(createdAt).time}
+            </Typography>
+          </Box>
         </Box>
+
+
+        {/* for not showing follow button on self posts and to config follow/unfollow button for other user posts  by checking whether the user who created the post has our logged in user in his/her followers list. if not then follow otherwise unfollow.  */}
+        {auth.user?.userid !== user._id && (
+          <>
+
+            {followbuttonstate ? <Box>
+              <Button variant="outlined" disabled>
+                Pending..
+              </Button>
+            </Box> : <>
+              {!user.followers?.includes(auth.user?.userid as string) ? (
+                <Box>
+                  <Button variant="outlined" onClick={() => followmutation.mutate()}>
+                    Follow +
+                  </Button>
+                </Box>
+              ) : (
+                <Box>
+                  <Button variant="outlined" onClick={() => unfollowmutation.mutate()}>
+                    Unfollow
+                  </Button>
+                </Box>
+              )}
+            </>}
+          </>
+        )}
+
+
+
       </Box>
 
       <Box>
-        <Typography sx={{ padding: 1, fontSize: 15 }} fontWeight="semibold">
-          {PostContent}
+        <Typography sx={{ padding: 1, fontSize: 15, marginLeft: 1 }} fontWeight="semibold">
+          {PostString}
         </Typography>
       </Box>
 
       {/* Media Box */}
 
-      {images && <Box sx={{ height: 'fit-content' }}>
-        <Carousel>
-          {images.map((e: any, index: number) => {
-            return (
-              <img key={index} src={e.url} alt="image not found" className='w-1/2 object-fill mx-auto' />
-            )
-          })}
+      {
+        photos && <Box sx={{ height: 'fit-content' }}>
+          <Carousel>
+            {photos.map((e: any, index: number) => {
+              return (
+                <img key={index} src={e.url} alt="image not found" className='w-1/2 object-fill mx-auto' />
+              )
+            })}
 
-        </Carousel>
-      </Box>}
+          </Carousel>
+        </Box>
+      }
 
 
 
@@ -172,10 +249,10 @@ const Post: React.FC<PostProps> = ({ images, PostContent, user, likes, postId, c
         </Grid>
 
         <Box>
-          <CommentBox postId={postId} comments={comments} />
+          <CommentBox postId={id} comments={comments} />
         </Box>
       </Box>
-    </Box>
+    </Box >
   );
 };
 

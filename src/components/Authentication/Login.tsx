@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUtils, useToast, LoginFunc } from '..'
 import { LoginType } from './../types'
 import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 
 const Login = () => {
@@ -33,7 +34,7 @@ const Login = () => {
         setUserinfo({ ...userinfo, [e.target.name]: e.target.value })
     }
 
-    /* avoid double rendering of dashboard component */ 
+    /* avoid double rendering of dashboard component */
 
     const [isMounted, setIsMounted] = useState<Boolean>(false);
 
@@ -73,8 +74,11 @@ const Login = () => {
         }
 
         if (error) {
+
+            const myerr = error as AxiosError
             utils?.setLoading(false);
-            console.log(error);
+            // console.log(error.message);
+            utils?.errornotify(myerr.message)
         }
     }, [loginMutation.status]);
 

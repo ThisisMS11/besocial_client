@@ -6,6 +6,7 @@ import Search from "./Search";
 import MyCommunity from "./MyCommunity";
 import RecentChats from "./RecentChats";
 import Divider from "@mui/material/Divider";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = () => {
   const itemstyle = {
@@ -13,6 +14,8 @@ const SideBar = () => {
   };
 
   const classes = useStyles();
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -22,9 +25,9 @@ const SideBar = () => {
         direction={"column"}
         justifyContent="space-between"
       >
-        <Grid item sx={itemstyle} className={classes.logocontainer} md={1}>
-          <img src={logo} alt="logo not found" className={classes.logo} />
-          <Typography variant="h4">BeSocial</Typography>
+        <Grid item sx={itemstyle} className={classes.logocontainer} md={1} >
+          <img src={logo} alt="logo not found" className={classes.logo} onClick={() => navigate('/')} />
+          <Typography variant="h4">FlashByte</Typography>
         </Grid>
 
         <Grid item sx={itemstyle} className={classes.search} md={2}>

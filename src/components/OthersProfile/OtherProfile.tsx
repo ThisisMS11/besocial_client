@@ -52,7 +52,7 @@ const OtherProfile = () => {
         <Box className="h-full" sx={{ backgroundColor: theme.palette.MyBackgroundColors.bg2, padding: 2, borderRadius: '10px', marginTop: 1 }}>
             {userinfo && userposts && (
                 <>
-                    <MyUser name={userinfo.name} profilePic={userinfo.profilePic} isVerified={userinfo.isVerified} unVerfiedEmail={userinfo.unVerfiedEmail} />
+                    <MyUser name={userinfo.name} profilePic={userinfo.profilePic} isVerified={userinfo.isVerified} unVerfiedEmail={userinfo.unVerfiedEmail} _id={userinfo._id} />
 
                     {/* i will send userid and other userinfo as prop to this and based on the tab requirement i'll make the successive api calls in the efficient manner */}
 
