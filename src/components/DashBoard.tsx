@@ -10,7 +10,7 @@ interface ParentComponentProps {
 
 const DashBoard: React.FC<ParentComponentProps> = ({ childComponent }) => {
     const classes = useStyles();
-    
+
     return (
         <Box sx={{ position: 'relative', borderRadius: 4 }}>
             <Grid container spacing={1}>

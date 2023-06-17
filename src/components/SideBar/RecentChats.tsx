@@ -13,14 +13,16 @@ import { useStyles } from "../styles/SideBar";
 import image1 from '../../assets/fakeimages/5.jpg'
 import image2 from '../../assets/fakeimages/6.jpg'
 
-export default function RecentChats() {
+
+export default function RecentChats({ setTemp }: { setTemp: any }) {
   const classes = useStyles();
 
   return (
     <>
       <Typography variant="h6" component={'span'} fontWeight={"bold"} color="text.secondary">Recent Chats</Typography>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.black" }}>
-        <ListItem alignItems="flex-start" className={classes.listitem}>
+
+        <ListItem alignItems="flex-start" className={classes.listitem} onClick={() => setTemp(crypto.randomUUID())}>
           <ListItemAvatar>
             <Avatar alt="Remy Sharp" src={image1} />
           </ListItemAvatar>
@@ -41,9 +43,11 @@ export default function RecentChats() {
             }
           />
         </ListItem>
+
+
         <Divider variant="inset" component="span" />
 
-        <ListItem alignItems="flex-start" className={classes.listitem}>
+        <ListItem alignItems="flex-start" className={classes.listitem} onClick={() => setTemp(crypto.randomUUID())}>
           <ListItemAvatar>
             <Avatar alt="Travis Howard" src={image2} />
           </ListItemAvatar>

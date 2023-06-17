@@ -1,22 +1,15 @@
 import theme from "./theme";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import Login from "./components/Authentication/Login";
-import DashBoard from "./components/DashBoard";
-
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Route, Routes } from 'react-router'
-
 /* Authentication Imports */
 import { AuthRequireLogin } from "./auth/authrequire";
-import Register from "./components/Authentication/Register";
 import { useEffect } from "react";
 import { useAuth } from "./auth/auth";
 import axios from "axios";
-import UserProfile from "./components/SocialWidgets/UserProfile/UserProfile";
 import Spinner from "./components/utils/Spinner";
-import { MyAlert, NewsFeed, OtherProfile } from "./components";
-
+import { MyAlert, NewsFeed, OtherProfile, Chatroom, UserProfile, Login, Register, DashBoard } from "./components";
 
 /* overiding palette Schema */
 declare module "@mui/material/styles" {
@@ -95,7 +88,7 @@ function App() {
         <Route path="/user/:id" element={<AuthRequireLogin><DashBoard childComponent={<OtherProfile />} /></AuthRequireLogin>} />
 
         {/* ends  */}
-
+        <Route path="/chatroom" element={<><Chatroom /></>} />
         <Route path="/login" element={<><Login /></>} />
         <Route path="/register" element={<><Register /></>} />
       </Routes>

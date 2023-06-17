@@ -8,6 +8,7 @@ import { useAuth } from '../../auth/auth';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '../context/ToastNotifcation';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import MessageIcon from '@mui/icons-material/Message';
 import Badge from '@mui/material/Badge';
 import NotificationModal from './NotificationModal';
 import { useRef } from "react";
@@ -73,6 +74,13 @@ export default function UserProfile() {
         <div>
             {/* notification icon  */}
             <Box sx={{ display: 'flex' }}>
+
+                <IconButton onClick={() => navigate('/chatroom')}>
+                    <Badge badgeContent={0} color="error">
+                        <MessageIcon />
+                    </Badge>
+                </IconButton>
+
                 <IconButton onClick={openModal} sx={{ marginRight: 1 }}>
                     <Badge badgeContent={data.data.data.length} color="error">
                         <NotificationsIcon />
