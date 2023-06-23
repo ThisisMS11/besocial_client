@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, Button, Box } from '@mui/material';
 import { styled } from "@mui/material/styles";
@@ -15,6 +15,7 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import { useMutation } from '@tanstack/react-query';
+import { useQueryClient } from "@tanstack/react-query";
 
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
@@ -63,6 +64,7 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     const classes = useStyles();
     const [content, setContent] = React.useState<string>('');
     const utils = useUtils();
+    const queryClient = useQueryClient();
 
     /* //! Solve this type using typescript. */
     const [files, setFiles] = useState<any | null>(null);
@@ -70,6 +72,16 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     const handleContentChange = (event: any) => {
         setContent(event.target.value);
     };
+
+
+    /* images data */
+    const Formimages = new FormData();
+    const FormVideos = new FormData();
+    let i: number = 0;
+    let v: number = 0;
+
+    console.log(i,v);
+
 
     const filterMedia = async () => {
 
@@ -101,12 +113,6 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     // const utils = useUtils();
 
 
-    /* images data */
-    const Formimages = new FormData();
-    const FormVideos = new FormData();
-    let i: number = 0;
-    let v: number = 0;
-
 
     /* Post Creation Mutation */
 
@@ -118,7 +124,7 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
 
             setOpen(false);
 
-            console.log(data.id);
+            // console.log(data.id);
             filterMedia();
 
             utils?.setLoading(true);
@@ -137,6 +143,8 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
             const postId = data.data.data.id;
 
             utils?.setLoading(false);
+
+            queryClient.invalidateQueries(['allposts']);
 
             if (v > 0) {
                 utils?.setLoading(true);
@@ -210,7 +218,6 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
                         onupdatefiles={setFiles}
                         allowMultiple={true}
                         maxFiles={3}
-                        server="/api"
                         name="files"
                         labelIdle='Drag & Drop your files or <span class="filepond--label-action">Browse</span>'
                     />

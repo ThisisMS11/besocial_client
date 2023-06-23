@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <UtilsProvider>
               <ToastProvider>
                 <App />
-                {/* <ReactQueryDevtools /> */}
+                <ReactQueryDevtools />
               </ToastProvider>
             </UtilsProvider>
           </GoogleOAuthProvider>

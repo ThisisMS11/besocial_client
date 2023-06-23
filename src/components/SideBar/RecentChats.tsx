@@ -1,74 +1,60 @@
 import * as React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import Divider from "@mui/material/Divider";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
+import { List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar, Typography } from '../imports/Muiimports'
 import { useStyles } from "../styles/SideBar";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAllMessages } from "..";
 
 
-//import fake images here
-import image1 from '../../assets/fakeimages/5.jpg'
-import image2 from '../../assets/fakeimages/6.jpg'
-
-
-export default function RecentChats({ setTemp }: { setTemp: any }) {
+export default function RecentChats() {
   const classes = useStyles();
+
+  const { error, data: myMessages } = useQuery({
+    queryFn: fetchAllMessages,
+    queryKey: ['messages']
+  })
+
+  if (error) console.log(error);
+  if (!myMessages) return <div> loading...</div>
+
 
   return (
     <>
       <Typography variant="h6" component={'span'} fontWeight={"bold"} color="text.secondary">Recent Chats</Typography>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.black" }}>
 
-        <ListItem alignItems="flex-start" className={classes.listitem} onClick={() => setTemp(crypto.randomUUID())}>
-          <ListItemAvatar>
-            <Avatar alt="Remy Sharp" src={image1} />
-          </ListItemAvatar>
-          <ListItemText
-            primary="Brunch this weekend?"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  Ali Connors
-                </Typography>
-                {" — I'll be in your neighborhood doing errands this…"}
-              </React.Fragment>
-            }
-          />
-        </ListItem>
 
+        {myMessages.data.data.map((message: any) => {
 
-        <Divider variant="inset" component="span" />
+          return <>
+            <ListItem alignItems="flex-start" className={classes.listitem} >
+              <ListItemAvatar>
+                <Avatar alt="Remy Sharp" src={message.receiver.profilePic?.url} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={message.receiver.name}
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: "inline" }}
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {message.name}
+                    </Typography>
+                    {message.message}
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
 
-        <ListItem alignItems="flex-start" className={classes.listitem} onClick={() => setTemp(crypto.randomUUID())}>
-          <ListItemAvatar>
-            <Avatar alt="Travis Howard" src={image2} />
-          </ListItemAvatar>
-          <ListItemText
-            primary="Summer BBQ"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  sx={{ display: "inline" }}
-                  component="span"
-                  variant="body2"
-                  color="text.primary"
-                >
-                  to Scott, Alex, Jennifer
-                </Typography>
-                {" — Wish I could come, but I'm out of town this…"}
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-        <Divider variant="inset" component="span" />
+    
+
+            <Divider variant="inset" component="span" />
+          </>
+        })
+
+        }
       </List>
     </>
   );

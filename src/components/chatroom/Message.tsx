@@ -1,37 +1,42 @@
 import { Box, Typography } from "@mui/material"
 import theme from "../../theme"
-import { useState } from "react"
-// import { useAuth } from ".."
-const Message = () => {
-    // const auth = useAuth();
+import { MessageType } from "../types"
+import { useUtils, useAuth } from ".."
 
+const Message = ({ message }: { message: MessageType }) => {
+    const auth = useAuth()
 
-    // const [position, setPosition] = useState<string>(message.user.id === auth.user?.userid ? 'end' : 'start');
+    console.log(auth.user?.userid)
+    console.log(message.sender)
 
-    const [position, setPosition] = useState('start')
+    const position = message.sender === auth.user?.userid ? 'end' : 'start'
+    console.log(position)
 
+    const utils = useUtils();
+
+    // Construct the class name based on the position value
+
+    const end = {
+        display: 'flex',
+        justifyContent: 'flex-end',
+    }
+
+    const start = {
+        display: 'flex',
+        justifyContent: 'flex-start',
+    }
 
     return (
         <>
-            <Box className={`border-red-600 mx-2 my-2 flex justify-${position}`}>
-                <Box className='max-w-xl p-3 rounded-xl' bgcolor={theme.palette.MyBackgroundColors.bg3}>
-                    <Typography>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat, deserunt corporis. Fugiat provident eligendi ut ex dolores? Culpa, ipsam sed.
-                    </Typography>
+            <Box className='border-red-600 mx-2 my-2' sx={position === 'end' ? end : start}
+            >
+                <Box className="max-w-xl p-3 rounded-xl" bgcolor={theme.palette.MyBackgroundColors.bg3}>
+                    <Typography>{message.message}</Typography>
 
                     <Typography component={'span'} variant="caption" color="text.secondary">
-                        26/11/23 5:00PM
-                    </Typography>
-                </Box>
-            </Box>
-            <Box className={`border-red-600 mx-2 my-2 flex justify-end`}>
-                <Box className='max-w-xl p-3 rounded-xl' bgcolor={theme.palette.MyBackgroundColors.bg3}>
-                    <Typography>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat, deserunt corporis. Fugiat provident eligendi ut ex dolores? Culpa, ipsam sed.
-                    </Typography>
-
-                    <Typography component={'span'} variant="caption" color="text.secondary">
-                        26/11/23 5:00PM
+                        {utils?.getTimeDifference(message.createdAt).date +
+                            " " +
+                            utils?.getTimeDifference(message.createdAt).time}
                     </Typography>
                 </Box>
             </Box>

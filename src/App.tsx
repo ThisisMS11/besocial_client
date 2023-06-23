@@ -6,9 +6,9 @@ import { Route, Routes } from 'react-router'
 /* Authentication Imports */
 import { AuthRequireLogin } from "./auth/authrequire";
 import { useEffect } from "react";
-import { useAuth } from "./auth/auth";
 import axios from "axios";
 import Spinner from "./components/utils/Spinner";
+import { useAuth } from "./components";
 import { MyAlert, NewsFeed, OtherProfile, Chatroom, UserProfile, Login, Register, DashBoard } from "./components";
 
 /* overiding palette Schema */
@@ -55,6 +55,7 @@ function App() {
         let { success, data } = userinfo.data;
 
         if (success) {
+          localStorage.setItem('userId', data._id);
           auth.setUser({ userid: data._id, profilePicUrl: data.profilePic.url, loggedIn: true });
         }
       }
@@ -88,7 +89,11 @@ function App() {
         <Route path="/user/:id" element={<AuthRequireLogin><DashBoard childComponent={<OtherProfile />} /></AuthRequireLogin>} />
 
         {/* ends  */}
+
+        {/* chatroom routes  */}
         <Route path="/chatroom" element={<><Chatroom /></>} />
+        {/* <Route path="/chatroom/chat/:userId" element={<><Chatroom /></>} /> */}
+
         <Route path="/login" element={<><Login /></>} />
         <Route path="/register" element={<><Register /></>} />
       </Routes>

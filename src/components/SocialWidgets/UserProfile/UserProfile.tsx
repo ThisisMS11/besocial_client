@@ -13,7 +13,7 @@ const UserProfile = () => {
         error: Error | null
         data: User | undefined
     } = useQuery({
-        queryKey: ["alluserinfo"],
+        queryKey: ["userinfo"],
         queryFn: fetchUserInfo
     })
 
