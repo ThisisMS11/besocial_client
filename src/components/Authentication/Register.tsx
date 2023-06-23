@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Grid from '@mui/material/Grid';
-
+import { Link } from 'react-router-dom';
 /*Import React FilePond */
 import { FilePond, registerPlugin } from 'react-filepond'
 /* Import FilePond styles */
@@ -269,11 +269,12 @@ const Register = () => {
 
                                         <span className="text-md font-light mt-2 pt-1 mb-0 flex justify-center items-center   p-4 ">
                                             <div className='mx-4  '>Already a user?</div>
-                                            <a
-                                                href="/login"
-                                                className="text-blue-500 underline hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out mr-6  "
-                                            >Login</a
-                                            >
+
+                                            <Link to="/login" className="text-blue-500 underline hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out mr-6">
+                                                Login
+                                            </Link>
+
+
                                         </span>
                                     </div>
                                 </div>

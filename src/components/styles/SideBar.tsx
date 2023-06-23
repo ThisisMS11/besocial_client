@@ -30,12 +30,11 @@ const useStyles = makeStyles({
   /* My Community Section */
 
   listitem:{
-    margin:'4px 0px',
+    margin:'2px 0px',
     padding: "2px",
     cursor: "pointer",
     backgroundColor: theme.palette.MyBackgroundColors.bg4,
     borderRadius: "6px",
-    // color: "white",
   }
 });
 

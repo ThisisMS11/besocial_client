@@ -1,4 +1,5 @@
 import { AlertColor } from '@mui/material';
+import { AxiosError } from 'axios';
 import { createContext, useContext, ReactNode, useState } from 'react'
 import { toast } from 'react-toastify';
 
@@ -17,6 +18,7 @@ interface AuthContextValue {
     errornotify: (message: string) => void;
     warnnotify: (message: string) => void;
     getTimeDifference: (timeString: string) => any;
+    GetErrorMessage: (error: AxiosError) => string;
 }
 
 
@@ -47,6 +49,15 @@ export const UtilsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         return { date, time };
     }
 
+    function GetErrorMessage(error : AxiosError) {
+        const regex = /<pre>(.+)<\/pre>/;
+        const match = (error.response?.data as string).match(regex)?.toString();
+        
+        const errorMessage = match?.split('<br>')[0].split(':')[1].trim() || "Something went wrong" as string;
+
+        return errorMessage;
+    }
+
 
 
     let value = {
@@ -54,7 +65,7 @@ export const UtilsProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         alertState, setAlertState,
         alertmessage, setAlertmessage,
         severity, setSeverity,
-        successnotify, errornotify, warnnotify, getTimeDifference
+        successnotify, errornotify, warnnotify, getTimeDifference,GetErrorMessage
     }
 
     return (

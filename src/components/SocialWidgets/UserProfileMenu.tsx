@@ -1,31 +1,23 @@
-import * as React from 'react';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { Avatar, IconButton } from '@mui/material';
+import { useEffect,MouseEvent,useState } from 'react';
+import {Menu,MenuItem,Avatar,IconButton,Badge,NotificationsIcon,MessageIcon,Box} from '../imports/Muiimports'
 import useStyles from '../styles/UserProfile';
 import '../styles/strict/Userprofile.css'
-import { useAuth } from '../../auth/auth';
 import { Link, useNavigate } from 'react-router-dom';
-import { useToast } from '../context/ToastNotifcation';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MessageIcon from '@mui/icons-material/Message';
-import Badge from '@mui/material/Badge';
 import NotificationModal from './NotificationModal';
 import { useRef } from "react";
-import Box from '@mui/material/Box';
 import { useQuery } from '@tanstack/react-query';
-import { fetchUserNotifications } from '..';
+import { fetchUserNotifications,useToast,useAuth } from '..';
 import { AxiosError } from 'axios';
 
-export default function UserProfile() {
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+const UserProfileMenu = () => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
 
     const auth = useAuth();
     const navigate = useNavigate();
     const toaster = useToast();
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
@@ -35,6 +27,7 @@ export default function UserProfile() {
     const handlelogout = () => {
         handleClose();
         localStorage.removeItem('token');
+        localStorage.removeItem('userId');
         toaster?.successnotify("Logout Successfull");
         navigate('/')
     }
@@ -52,14 +45,14 @@ export default function UserProfile() {
     }
 
     /* making react query request  here */
-    const { data, isLoading, error, status } = useQuery({
+    const { data, error, status } = useQuery({
         queryFn: fetchUserNotifications,
         queryKey: ['follownotifications', auth.user?.userid],
         refetchOnWindowFocus: false
     })
 
 
-    React.useEffect(() => {
+    useEffect(() => {
         // console.log({ data: data?.data.data, isLoading, status });
     }, [status])
 
@@ -124,3 +117,5 @@ export default function UserProfile() {
         </div>
     );
 }
+
+export default UserProfileMenu as React.FC;

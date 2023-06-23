@@ -50,7 +50,7 @@ interface MyComponentProps {
 
 export default function ProfileOverview(props: MyComponentProps) {
 
-    let { name, email, createdAt, userposts } = props;
+    let { name, email, createdAt, userposts} = props;
 
     const [value, setValue] = React.useState(0);
 
@@ -84,7 +84,7 @@ export default function ProfileOverview(props: MyComponentProps) {
 
             <TabPanel value={value} index={0}>
                 {userposts && userposts.map((post) => {
-                    return <Post key={post.id} images={post.photos} PostContent={post.PostString} user={post.user} likes={post.likes} postId={post.id} createdAt={post.createdAt} comments={post.comments} />
+                    return <Post key={post.id} photos={post.photos} PostString={post.PostString} user={post.user} likes={post.likes} id={post.id} createdAt={post.createdAt} comments={post.comments} />
 
                 })}
 

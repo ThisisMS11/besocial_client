@@ -1,18 +1,18 @@
-import { RecentChats, Search } from ".."
-import Grid from '@mui/material/Grid';
-import { Box } from "@mui/material";
+import ChatroomSearch from "./ChatroomSearch";
+import { Grid, Box, Typography } from '../imports/Muiimports'
 import ChatBox from "./ChatBox";
 import logo from "../../assets/logo.png";
-import { useNavigate } from "react-router-dom";
-import { Typography } from "@mui/material";
 import { useStyles } from "../styles/SideBar";
-import { useState } from "react";
+import { useState, useNavigate } from "../imports/Reactimports";
+import { User } from '../types'
+import { RecentChats } from "..";
+
 const Main = () => {
     const navigate = useNavigate();
 
     const classes = useStyles();
 
-    const [temp, setTemp] = useState(crypto.randomUUID());
+    const [chatuser, setChatuser] = useState<User | null>(null);
 
 
     return (
@@ -25,15 +25,17 @@ const Main = () => {
                         <Typography variant="h4">FlashByte</Typography>
                     </Box>
                     <Box className='my-2 ml-2'>
-                        <Search />
+                        <ChatroomSearch setChatuser={setChatuser} />
                     </Box>
                     <Box className='ml-2'>
-                        <RecentChats setTemp={setTemp} />
+                        <RecentChats />
                     </Box>
                 </Grid>
-                <Grid item xs={9} className="h-[100vh]" >
-                    <ChatBox temp={temp} />
-                </Grid>
+                {chatuser ? <Grid item xs={9} className="h-[100vh]" >
+                    <ChatBox chatuser={chatuser} />
+                </Grid> : <Grid item xs={9} className="h-[100vh] flex items-center justify-center" >
+                    <Typography> No chats</Typography>
+                </Grid>}
             </Grid>
 
         </>

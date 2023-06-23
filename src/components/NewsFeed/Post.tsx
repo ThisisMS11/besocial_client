@@ -30,6 +30,8 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
 
   const [likestate, setLikestate] = useState<Boolean>(false);
 
+  const userId = localStorage.getItem('userId');
+
   const handleLike = async () => {
 
     const token = localStorage.getItem('token');
@@ -86,17 +88,17 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
 
   /* follow mutation */
   const followmutation = useMutation({
-    mutationFn: () => followRequest(user._id),
+    mutationFn: () => followRequest(user._id as string),
     mutationKey: ['followRequest', user._id],
-    onSuccess: (data: any) => {
-      // console.log(data.data);
+    onSuccess: (data:any) => {
+      console.log(data.data);
       setFollowbuttonstate(true);
     }
   })
 
   /* unfollow mutation */
   const unfollowmutation = useMutation({
-    mutationFn: () => unfollowUser(user._id),
+    mutationFn: () => unfollowUser(user._id as string),
     mutationKey: ['unfollowRequest', user._id],
     onSuccess: (data: any) => {
       /* if i invalidate all the posts then each post will be refetched again */
@@ -153,7 +155,7 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
 
 
         {/* for not showing follow button on self posts and to config follow/unfollow button for other user posts  by checking whether the user who created the post has our logged in user in his/her followers list. if not then follow otherwise unfollow.  */}
-        {auth.user?.userid !== user._id && (
+        {userId !== user._id && (
           <>
 
             {followbuttonstate ? <Box>
@@ -161,7 +163,7 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
                 Pending..
               </Button>
             </Box> : <>
-              {!user.followers?.includes(auth.user?.userid as string) ? (
+              {!user.followers?.includes(userId as any) ? (
                 <Box>
                   <Button variant="outlined" onClick={() => followmutation.mutate()}>
                     Follow +

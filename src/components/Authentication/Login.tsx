@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 import { useUtils, useToast, LoginFunc } from '..'
 import { LoginType } from './../types'
 import { useMutation } from '@tanstack/react-query';
@@ -74,11 +74,12 @@ const Login = () => {
         }
 
         if (error) {
+            const myerr = error as AxiosError;
+            const errorMessage = utils?.GetErrorMessage(myerr) as string;
 
-            const myerr = error as AxiosError
             utils?.setLoading(false);
             // console.log(error.message);
-            utils?.errornotify(myerr.message)
+            utils?.errornotify(errorMessage)
         }
     }, [loginMutation.status]);
 
@@ -147,15 +148,16 @@ const Login = () => {
                                     </button>
                                     <span className="text-md font-light mt-2 pt-1 mb-0 flex justify-center items-center  border-white p-4 ">
                                         <div className='mx-4  border-white'>New User?</div>
-                                        <a
-                                            href="/register"
-                                            className="text-blue-500 underline hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out mr-6  border-white"
-                                        > Signup</a
-                                        >
+
+                                        <Link to="/register" className="text-blue-500 underline hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out mr-6 border-white">
+                                            Signup
+                                        </Link>
                                     </span>
                                 </div>
                             </form>
 
+                            <div>Demo Email : mailtomohit2002@gmail.com </div>
+                            <div>Demo Password : Mohit123* </div>
                         </div>
                     </div>
                 </div>

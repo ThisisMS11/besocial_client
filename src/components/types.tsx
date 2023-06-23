@@ -6,15 +6,15 @@ export interface media {
 }
 
 export interface User {
-    _id: string;
+    _id?: string;
     name: string;
     email?: string;
     profilePic?: media;
     isVerified?: boolean | undefined;
     unVerfiedEmail?: string;
     createdAt?: string;
-    following?: string[];
-    followers?: string[];
+    following?: string[] | User[];
+    followers?: string[] | User[];
     __v?: number;
 }
 
@@ -80,4 +80,16 @@ export interface getNotificationsResponse {
 export interface LoginType {
     email: string,
     password: string
+}
+
+
+/* Chatroom types */
+export interface MessageType {
+    _id: string,
+    message: string,
+    sender: string,
+    receiver: string,
+    createdAt: string,
+    updatedAt: string,
+    __v?: number
 }

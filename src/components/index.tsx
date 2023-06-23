@@ -41,6 +41,7 @@ export { fetchUserInfo, fetchUserPosts, fetchUserNotifications, acceptNotificati
 export { fetchOtherProfileInfo, fetchOtherProfilePosts } from './api/Others'
 export { LoginFunc, RegisterFunc } from './api/Auth'
 export { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc, CommentOnPostFunc } from './api/Post'
+export { fetchMessages,PostMessage ,fetchAllMessages} from './api/Message'
 
 
 
