@@ -38,6 +38,8 @@ const UserProfile = () => {
     if (error2) console.log(error2)
 
 
+    console.log(userinfo);
+
     return (
         <Box className="h-full" sx={{ backgroundColor: theme.palette.MyBackgroundColors.bg2, padding: 2, borderRadius: '10px', marginTop: 1 }}>
             {userinfo && userposts && (
@@ -46,7 +48,7 @@ const UserProfile = () => {
 
                     {/* i will send userid and other userinfo as prop to this and based on the tab requirement i'll make the successive api calls in the efficient manner */}
 
-                    <ProfileOverview name={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} userposts={userposts} />
+                    <ProfileOverview name={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} userposts={userposts} followers={userinfo.followers as User[]} following={userinfo.following as User[]} />
                 </>
             )}
 

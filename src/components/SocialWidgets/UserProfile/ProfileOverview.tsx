@@ -7,7 +7,7 @@ import PhotoSizeSelectActualIcon from '@mui/icons-material/PhotoSizeSelectActual
 import VideoCameraBackIcon from '@mui/icons-material/VideoCameraBack';
 import InfoIcon from '@mui/icons-material/Info';
 import theme from '../../../theme';
-
+import { User } from '../../types'
 /* to remove section */
 import { Post, UserInfo } from '../..';
 
@@ -45,12 +45,14 @@ interface MyComponentProps {
     email?: string;
     createdAt?: string;
     userposts?: PostProp[];
+    following: User[];
+    followers: User[];
 }
 
 
 export default function ProfileOverview(props: MyComponentProps) {
 
-    let { name, email, createdAt, userposts} = props;
+    let { name, email, createdAt, userposts, followers, following } = props;
 
     const [value, setValue] = React.useState(0);
 
@@ -58,6 +60,7 @@ export default function ProfileOverview(props: MyComponentProps) {
         console.log(event.target);
         setValue(newValue);
     };
+
 
     return (
 
@@ -97,12 +100,10 @@ export default function ProfileOverview(props: MyComponentProps) {
             </TabPanel>
 
             <TabPanel value={value} index={3}>
-                <UserInfo name={name} email={email} createdAt={createdAt} />
+                <UserInfo name={name} email={email} createdAt={createdAt} followers={followers} following={following} />
             </TabPanel>
 
             {/* corresponding  tab panels ends  */}
-
-
 
         </Box >
 

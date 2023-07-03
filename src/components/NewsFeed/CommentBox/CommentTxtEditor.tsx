@@ -1,18 +1,9 @@
-import { Box, TextField } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
 import image from "../../../assets/fakeimages/5.jpg";
-import SendIcon from "@mui/icons-material/Send";
-import { styled } from "@mui/material/styles";
 import theme from "../../../theme";
-import IconButton from '@mui/material/IconButton';
 import { useUtils, CommentOnPostFunc } from "../..";
 import { useEffect, useState } from "react";
 import Comment from "./Comment";
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, AccordionDetails, AccordionSummary, TextField, Box, Avatar, SendIcon, styled, IconButton, Typography, ExpandMoreIcon } from '../../imports/Muiimports'
 import { useMutation } from "@tanstack/react-query";
 
 

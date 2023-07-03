@@ -1,16 +1,7 @@
-import { Avatar, Box, Grid, IconButton, Typography } from "@mui/material";
 import { useStyles } from "../styles/NewsFeed";
-
-import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ShareIcon from "@mui/icons-material/Share";
-import CommentIcon from "@mui/icons-material/Comment";
+import {Avatar,Box,Grid,IconButton,Typography,Badge,Button,ThumbUpIcon,ThumbUpOffAltIcon,ShareIcon,CommentIcon} from '../imports/Muiimports'
 import CommentBox from "./CommentBox/CommentBox";
-
 import Carousel from 'react-material-ui-carousel';
-import Badge from '@mui/material/Badge';
-import Button from '@mui/material/Button';
-
 import { followRequest, useAuth, useUtils, unfollowUser } from "..";
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";

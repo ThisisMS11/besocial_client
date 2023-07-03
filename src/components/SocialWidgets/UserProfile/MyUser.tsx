@@ -9,6 +9,7 @@ import ProfileImageUpdateModal from './ProfileImageUpdateModal';
 
 const MyUser: React.FC<User> = ({ name, profilePic, isVerified, unVerfiedEmail, _id, email }) => {
 
+
     const utils = useUtils();
     const auth = useAuth();
     const openModalref = useRef<HTMLButtonElement>(null);
