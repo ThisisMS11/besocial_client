@@ -64,7 +64,7 @@ const Login = () => {
     useEffect(() => {
         const { status, data, error } = loginMutation;
 
-        console.log({ status, data, error })
+        console.log({ status, data })
 
         if (status === 'success') {
             utils?.successnotify("Login Successful");

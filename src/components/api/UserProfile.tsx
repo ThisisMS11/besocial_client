@@ -105,3 +105,35 @@ export async function unfollowUser(userId: string) {
     })
 }
 
+
+/* Edit User Information */
+export async function updateUserInfo(name: string, email: string) {
+    const token = localStorage.getItem('token');
+
+    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/updateinfo/`, {
+        name: name,
+        email: email
+    }, {
+        headers: {
+            'authorisation': `Bearer ${token}`
+        }
+    })
+}
+
+
+/* Update the profile image here */
+export async function updateProfileImage(image: any) {
+    const data = Object.fromEntries(image.entries());
+    console.log(data);
+
+    const token = localStorage.getItem('token');
+
+    const config = {
+        headers: {
+            'authorisation': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+
+    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/updateProfilePic/`, image, config)
+}
