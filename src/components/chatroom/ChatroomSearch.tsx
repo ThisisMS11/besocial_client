@@ -1,5 +1,6 @@
 import theme from "../../theme";
-import {TextField,styled,Autocomplete} from '../imports/Muiimports'
+
+import { TextField, styled, Autocomplete } from '../imports/Muiimports'
 import { useState, useEffect } from "../imports/Reactimports";
 import { fetchUserInfo } from "..";
 import { useQuery } from "@tanstack/react-query";
@@ -34,10 +35,6 @@ const CssTextField = styled(TextField)({
 
 const ChatroomSearch = ({ setChatuser }: { setChatuser: React.Dispatch<React.SetStateAction<User | null>> }) => {
 
-    // const navigate = useNavigate();
-
-
-
     const { status, data: userinfo } = useQuery({
         queryKey: ["userinfo"],
         queryFn: fetchUserInfo
@@ -56,12 +53,16 @@ const ChatroomSearch = ({ setChatuser }: { setChatuser: React.Dispatch<React.Set
 
     useEffect(() => {
         if (status === 'success') {
-            const following = userinfo?.following as User[]
-            const followers = userinfo?.followers as User[]
+            const following = userinfo?.following as User[];
+            const followers = userinfo?.followers as User[];
 
-            const allFriends2 = following.concat(...followers);
+            const allFriends2: User[] = [];
 
-            console.log(allFriends2);
+            following.concat(followers).forEach((user: User) => {
+                if (!allFriends2.some((friend) => friend._id === user._id)) {
+                    allFriends2.push(user);
+                }
+            });
 
             setAllFriends(allFriends2);
         }

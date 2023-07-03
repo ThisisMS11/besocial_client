@@ -37,7 +37,7 @@ export { default as Search } from './SideBar/Search';
 /* api exports */
 export { getSearchUsers } from './api/Sidebar'
 export { fetchPosts } from './api/NewsFeed'
-export { fetchUserInfo, fetchUserPosts, fetchUserNotifications, acceptNotification, rejectNotification, followRequest, unfollowUser } from './api/UserProfile'
+export { fetchUserInfo, fetchUserPosts, fetchUserNotifications, acceptNotification, rejectNotification, followRequest, unfollowUser,updateUserInfo,updateProfileImage } from './api/UserProfile'
 export { fetchOtherProfileInfo, fetchOtherProfilePosts } from './api/Others'
 export { LoginFunc, RegisterFunc } from './api/Auth'
 export { CreatePostFunc, UploadPostImagesFunc, UploadPostVideosFunc, CommentOnPostFunc } from './api/Post'
