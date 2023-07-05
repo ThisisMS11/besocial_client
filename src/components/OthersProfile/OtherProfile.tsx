@@ -56,7 +56,7 @@ const OtherProfile = () => {
 
                     {/* i will send userid and other userinfo as prop to this and based on the tab requirement i'll make the successive api calls in the efficient manner */}
 
-                    <ProfileOverview name={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} userposts={userposts} />
+                    <ProfileOverview name={userinfo.name} email={userinfo.email} createdAt={userinfo.createdAt} userposts={userposts} followers={userinfo.followers as User[]} following={userinfo.following as User[]}/>
                 </>
             )}
 

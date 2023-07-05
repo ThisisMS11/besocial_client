@@ -1,6 +1,5 @@
-import image from "../../../assets/fakeimages/5.jpg";
 import theme from "../../../theme";
-import { useUtils, CommentOnPostFunc } from "../..";
+import { useUtils, CommentOnPostFunc, useAuth } from "../..";
 import { useEffect, useState } from "react";
 import Comment from "./Comment";
 import { Accordion, AccordionDetails, AccordionSummary, TextField, Box, Avatar, SendIcon, styled, IconButton, Typography, ExpandMoreIcon } from '../../imports/Muiimports'
@@ -44,6 +43,8 @@ interface MyComponentProps {
 const CommentTxtEditor: React.FC<MyComponentProps> = ({ postId, comments }) => {
 
     const utils = useUtils();
+
+    const auth = useAuth();
 
     const [userComment, setUserComment] = useState<mycomment>({ comment: "" });
     const [tempComments, setTempComments] = useState(comments[0].content);
@@ -90,16 +91,16 @@ const CommentTxtEditor: React.FC<MyComponentProps> = ({ postId, comments }) => {
     return (
         <div>
             <Box component="span" sx={{ padding: 3 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }} >
+                <Box sx={{ display: 'flex', justifyContent: 'space-around' }} >
                     <Box sx={{ display: 'flex', width: '90%', alignItems: 'center' }}>
-                        <Avatar src={image}> </Avatar>
+                        <Avatar src={auth.user?.profilePicUrl as string} sx={{marginLeft:2}}> </Avatar>
                         <CssTextField
                             label="Say something..."
                             id="custom-css-outlined-input"
                             InputLabelProps={{
                                 style: { color: "#fff" },
                             }}
-                            sx={{ width: "90%", marginLeft: 2, backgroundColor: theme.palette.MyBackgroundColors.bg3 }}
+                            sx={{ width: "90%", marginLeft: 4, backgroundColor: theme.palette.MyBackgroundColors.bg3 }}
                             variant="filled"
                             value={userComment.comment}
                             onChange={(e) => setUserComment({ comment: e.target.value })}
