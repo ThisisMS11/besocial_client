@@ -53,6 +53,7 @@ const CssTextField = styled(TextField)({
             fontStyle: "italic",
         },
     },
+    width:"310px"
 });
 
 interface MyComponentProps {
@@ -80,7 +81,7 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
     let i: number = 0;
     let v: number = 0;
 
-    console.log(i,v);
+    console.log(i, v);
 
 
     const filterMedia = async () => {
@@ -190,23 +191,26 @@ const TextEditor: React.FC<MyComponentProps> = ({ setOpen }) => {
                     <CssTextField
                         label="Post Content"
                         multiline
-                        rows={8}
+                        rows={12}
+                        color='success'
                         // variant="outlined"
                         value={content}
                         onChange={handleContentChange}
-                        sx={{ marginBottom: 4 }}
+                        sx={{ marginBottom: 4,width:'full' }}
                     />
 
                     <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
 
                         <Button variant="contained" color="primary" onClick={() =>
                             CreatePostMutation.mutate(content)
-                        } >
-                            Post
+                        }
+                            disabled={CreatePostMutation.isLoading}
+                        >
+                            {CreatePostMutation.isLoading ? 'Posting...' : 'Post'}
                         </Button>
-                        <Button variant="contained" color="primary" onClick={filterMedia} >
+                        {/* <Button variant="contained" color="primary" onClick={filterMedia} >
                             Save Draft
-                        </Button>
+                        </Button> */}
 
                     </Box>
 

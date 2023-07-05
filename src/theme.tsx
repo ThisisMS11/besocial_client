@@ -1,6 +1,8 @@
 import { createTheme } from "@mui/material";
-
 const theme = createTheme({
+  typography: {
+    fontFamily: 'Sans'
+  },
   palette: {
     mode: 'dark',
     background: {
@@ -20,6 +22,8 @@ const theme = createTheme({
       bg4: "#282a2f"
     },
   },
-});
+}
+
+);
 
 export default theme;

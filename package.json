@@ -15,7 +15,6 @@
     "@faker-js/faker": "^8.0.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
-    "@react-oauth/google": "^0.11.0",
     "@tanstack/react-query": "^4.29.12",
     "@types/socket.io-client": "^3.0.0",
     "axios": "^1.4.0",

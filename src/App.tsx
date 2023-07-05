@@ -10,6 +10,7 @@ import axios from "axios";
 import Spinner from "./components/utils/Spinner";
 import { useAuth } from "./components";
 import { MyAlert, NewsFeed, OtherProfile, Chatroom, UserProfile, Login, Register, DashBoard } from "./components";
+import Box from "@mui/material";
 
 /* overiding palette Schema */
 declare module "@mui/material/styles" {
@@ -71,6 +72,9 @@ function App() {
 
 
       <CssBaseline />
+
+
+
 
       <ToastContainer
         position='top-center'
