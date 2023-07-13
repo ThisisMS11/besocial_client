@@ -94,7 +94,7 @@ function App() {
         {/* ends  */}
 
         {/* chatroom routes  */}
-        <Route path="/chatroom" element={<><Chatroom /></>} />
+        <Route path="/chatroom" element={<AuthRequireLogin><Chatroom /> </AuthRequireLogin>} />
         {/* <Route path="/chatroom/chat/:userId" element={<><Chatroom /></>} /> */}
 
         <Route path="/login" element={<><Login /></>} />

@@ -1,20 +1,36 @@
 import * as React from "react";
-import { List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar, Typography } from '../imports/Muiimports'
+import { List, ListItem, Divider, ListItemText, ListItemAvatar, Avatar, Typography, Skeleton } from '../imports/Muiimports'
 import { useStyles } from "../styles/SideBar";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAllMessages } from "..";
+import { useState, useEffect } from "../imports/Reactimports";
 
 
 export default function RecentChats() {
   const classes = useStyles();
 
-  const { error, data: myMessages } = useQuery({
+  const [myMessages, setMyMessages] = useState([]);
+
+
+  const fetchMyMessageQuery = useQuery({
     queryFn: fetchAllMessages,
-    queryKey: ['messages']
+    queryKey: ['messages'],
+    onSuccess: (data) => {
+      setMyMessages(data.data.data)
+    }
   })
 
-  if (error) console.log(error);
-  if (!myMessages) return <div> loading...</div>
+  if (!myMessages) return <Skeleton variant="rectangular" width={350} height={60} />
+
+  useEffect(() => {
+    const { error } = fetchMyMessageQuery;
+
+    if (error) {
+      console.log(error);
+    }
+
+  }, [fetchMyMessageQuery.status])
+
 
 
   return (
@@ -23,38 +39,42 @@ export default function RecentChats() {
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.black" }}>
 
 
-        {myMessages.data.data.map((message: any) => {
+        {
+          fetchMyMessageQuery.status === 'loading' ? <Skeleton variant="rectangular" width={350} height={60} /> :
 
-          return <>
-            <ListItem alignItems="flex-start" className={classes.listitem} >
-              <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={message.receiver.profilePic?.url} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={message.receiver.name}
-                secondary={
-                  <React.Fragment>
-                    <Typography
-                      sx={{ display: "inline" }}
-                      component="span"
-                      variant="body2"
-                      color="text.primary"
-                    >
-                      {message.name}
-                    </Typography>
-                    {message.message}
-                  </React.Fragment>
-                }
-              />
-            </ListItem>
 
-    
+            myMessages.map((message: any) => {
 
-            <Divider variant="inset" component="span" />
-          </>
-        })
+              return <>
+                <ListItem alignItems="flex-start" className={classes.listitem} >
+                  <ListItemAvatar>
+                    <Avatar alt="Remy Sharp" src={message.receiver.profilePic?.url} />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={message.receiver.name}
+                    secondary={
+                      <React.Fragment>
+                        <Typography
+                          sx={{ display: "inline" }}
+                          component="span"
+                          variant="body2"
+                          color="text.primary"
+                        >
+                          {message.name}
+                        </Typography>
+                        {message.message}
+                      </React.Fragment>
+                    }
+                  />
+                </ListItem>
+
+                <Divider variant="inset" component="span" />
+              </>
+            })
 
         }
+
+
       </List>
     </>
   );

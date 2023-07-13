@@ -5,7 +5,8 @@ import { UserInfo, PostResponse, getNotificationsResponse } from '../types'
 
 export async function fetchUserInfo() {
     try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token'); 
+        console.log(token);
 
         if (token) {
             const config = {

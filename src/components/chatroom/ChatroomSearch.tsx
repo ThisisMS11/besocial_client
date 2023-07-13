@@ -1,10 +1,10 @@
 import theme from "../../theme";
 
-import { TextField, styled, Autocomplete } from '../imports/Muiimports'
+import { TextField, styled, Autocomplete,Skeleton } from '../imports/Muiimports'
 import { useState, useEffect } from "../imports/Reactimports";
-import { fetchUserInfo } from "..";
 import { useQuery } from "@tanstack/react-query";
 import { User } from '../types'
+import { fetchUserInfo } from "..";
 
 /*  FOR TEXTFIELD CSS */
 const CssTextField = styled(TextField)({
@@ -35,8 +35,10 @@ const CssTextField = styled(TextField)({
 
 const ChatroomSearch = ({ setChatuser }: { setChatuser: React.Dispatch<React.SetStateAction<User | null>> }) => {
 
-    const { status, data: userinfo } = useQuery({
-        queryKey: ["userinfo"],
+    const [myself, setMyself] = useState<User>()
+
+    const fetchMyselfQuery = useQuery({
+        queryKey: ["myself"],
         queryFn: fetchUserInfo
     })
 
@@ -45,16 +47,23 @@ const ChatroomSearch = ({ setChatuser }: { setChatuser: React.Dispatch<React.Set
     const handleSelectUser = (event: any, value: any) => {
         console.log(event.target.value);
 
-        if (userinfo?.following && userinfo?.followers) {
+        if (myself?.following && myself?.followers) {
             const selectedUser = (allFriends as any).find((user: any) => user.name === value);
             setChatuser(selectedUser);
         }
     };
 
     useEffect(() => {
+
+        const { status,error,data:me } = fetchMyselfQuery;
+
+        if(error) console.log(error);
+
         if (status === 'success') {
-            const following = userinfo?.following as User[];
-            const followers = userinfo?.followers as User[];
+            setMyself(me);
+
+            const following = me?.following as User[];
+            const followers = me?.followers as User[];
 
             const allFriends2: User[] = [];
 
@@ -66,14 +75,15 @@ const ChatroomSearch = ({ setChatuser }: { setChatuser: React.Dispatch<React.Set
 
             setAllFriends(allFriends2);
         }
-    }, [])
+    }, [fetchMyselfQuery.status])
 
-    if (status == 'loading') return <div>Loading...</div>;
+    if (fetchMyselfQuery.status == 'loading') return <Skeleton variant="rectangular" width={350} height={60} />
+
 
     return (
         <>
 
-            {userinfo && <Autocomplete
+            {myself && <Autocomplete
                 freeSolo
                 id="free-solo-2-demo"
                 sx={{

@@ -1,4 +1,4 @@
-import { Box, TextField, Typography, Avatar, styled, Grid, IconButton, SendIcon } from "../imports/Muiimports"
+import { Box, Typography, Avatar, IconButton, SendIcon } from "../imports/Muiimports"
 import theme from "../../theme";
 import ShowMessages from "./ShowMessages";
 import { io, Socket } from 'socket.io-client'
@@ -8,35 +8,10 @@ import { useAuth, fetchMessages } from "..";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { MessageType } from "../types";
+import ChatSkelton from "./ChatSkelton";
 
 
 const MemoizedShowMessages = React.memo(ShowMessages);
-/* TextField CSS */
-const CssTextField = styled(TextField)({
-    "& label.Mui-focused": {
-        color: "white",
-    },
-    "& .MuiInput-underline:after": {
-        borderBottomColor: theme.palette.secondary.light,
-    },
-    "& .MuiOutlinedInput-root": {
-        "& fieldset": {
-            borderColor: theme.palette.secondary.light,
-        },
-        "&:hover fieldset": {
-            borderColor: theme.palette.secondary.light,
-        },
-        "&.Mui-focused fieldset": {
-            borderColor: theme.palette.secondary.light,
-        },
-    },
-    input: {
-        "&::placeholder": {
-            fontStyle: "italic",
-            borderRadius: 20,
-        },
-    },
-});
 
 const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
@@ -48,7 +23,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     const [messages, setMessages] = useState<MessageType[]>([]);
 
     /* FetchMessages Query */
-    const fetchPostsQuery = useQuery({
+    const fetchMessagesQuery = useQuery({
         queryFn: () => fetchMessages(chatuser?._id as string),
         queryKey: ['fetchMessages', chatuser?._id],
         onSuccess: (data) => {
@@ -101,7 +76,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
     /* Getting user messages Here */
     useEffect(() => {
-        const { status, data, error } = fetchPostsQuery;
+        const { status, data, error } = fetchMessagesQuery;
 
         console.log({ status, data: data?.data.data, error });
         if (status == 'success') {
@@ -110,7 +85,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
         if (error) console.log(error);
 
-    }, [fetchPostsQuery.status, messages]);
+    }, [fetchMessagesQuery.status, messages]);
 
 
 
@@ -130,59 +105,60 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     return (
         <>
 
-            <Grid container direction={'column'} className=" border-red-800">
+            <Box className="h-[100vh] relative">
 
-                <Grid item md={2} className=" border-green-600 ">
+                {/* showing the user info i am chatting with here  */}
+                <Box className=" border-green-600 ">
                     <Box className='mt-2 p-2 rounded-full' bgcolor={theme.palette.MyBackgroundColors.bg3}>
                         <Box className='flex items-center '>
                             <Avatar src={chatuser.profilePic?.url} className="mr-2"> </Avatar>
                             <Typography className='ml-2 ' component={'span'} variant="subtitle1">{chatuser.name}</Typography>
                         </Box>
                     </Box>
-                </Grid>
+                </Box>
 
-                <Grid item md={5} className="  border-pink-600" >
-                    {messages ? <MemoizedShowMessages messages={messages} /> : <div>loading...</div>}
-                </Grid>
+                {/*showing my chat here  */}
 
+                <Box className="  border-pink-600" >
+                    {/* {messages ? } */}
+                    {
+                        fetchMessagesQuery.status === 'loading' ? <ChatSkelton /> : <MemoizedShowMessages messages={messages} />
+                    }
 
-                <Grid item md={5} className=" border-orange-600" bgcolor={theme.palette.MyBackgroundColors.bg4}>
-
-                    <Box component="span" sx={{ padding: 3 }} >
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }} >
-                            <Box sx={{ display: 'flex', width: '90%', alignItems: 'center' }}>
-                                <Avatar src={auth.user?.profilePicUrl as string}> </Avatar>
-                                <CssTextField
-                                    label="Say something..."
-                                    id="custom-css-outlined-input"
-                                    InputLabelProps={{
-                                        style: { color: "#fff" },
-                                    }}
-                                    sx={{ width: "90%", marginLeft: 2, backgroundColor: theme.palette.MyBackgroundColors.bg3 }}
-                                    variant="filled"
-                                    value={userMessage.comment}
-                                    onChange={(e) => setUserMessage({ comment: e.target.value })}
-                                    onKeyDown={handleKeyDown}
-                                />
-                            </Box>
+                </Box>
 
 
-                            <IconButton color="primary" aria-label="add an alarm"
-                                onClick={handleSendMessage}
-                            >
-                                <SendIcon />
-                            </IconButton>
+                {/* chat box textfield  */}
+                {/* bgcolor={theme.palette.MyBackgroundColors.bg4} */}
+                <Box className="absolute  bottom-6 w-full flex  border-red-900 items-center" >
+
+                    <Box className='opacity-80 bg-[#282a2f] flex justify-between  w-full mx-2 rounded-3xl'>
+
+                        <Box className='flex items-center w-[95%]'>
+
+                            <img src={auth.user?.profilePicUrl as string} alt="avatar not found" className="w-10 h-10 rounded-full mx-2" />
+
+                            <input type="text" className=" bg-[#282a2f] text-white h-14 w-full  text-sm p-2 outline-0 "
+                                onChange={(e) => setUserMessage({ comment: e.target.value })}
+                                placeholder="Say something..."
+                                value={userMessage.comment}
+                                onKeyDown={handleKeyDown}
+                            />
                         </Box>
+
+
+                        <IconButton color="primary" aria-label="add an alarm"
+                            onClick={handleSendMessage}
+                            className="mr-4"
+                        >
+                            <SendIcon />
+                        </IconButton>
                     </Box>
 
-                </Grid>
 
-            </Grid>
+                </Box>
 
-
-
-
-
+            </Box>
 
 
         </>
