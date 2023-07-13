@@ -1,10 +1,9 @@
-import { TextField } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import theme from "../../theme";
-import Autocomplete from '@mui/material/Autocomplete';
+import { TextField, styled, Autocomplete, Skeleton } from '../imports/Muiimports'
 import { getSearchUsers } from "..";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+
 
 /*  FOR TEXTFIELD CSS */
 const CssTextField = styled(TextField)({
@@ -45,7 +44,7 @@ const Search = () => {
   })
 
 
-  if (status == 'loading') return <div>loading...</div>
+  if (status == 'loading') return <Skeleton variant="rectangular" width={350} height={60} />
 
   const handleSelectUser = (event: any, value: any) => {
     // Assuming each user object has a unique ID

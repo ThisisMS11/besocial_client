@@ -1,11 +1,10 @@
-import { Box } from "@mui/material";
+import { Box,Skeleton } from "@mui/material";
 import theme from "../../../theme";
 import { useQuery, QueryStatus } from "@tanstack/react-query";
-import { useUtils, MyUser, ProfileOverview, fetchUserInfo, fetchUserPosts } from '../..';
+import {  MyUser, ProfileOverview, fetchUserInfo, fetchUserPosts } from '../..';
 import { User, PostProp } from '../../types'
 
 const UserProfile = () => {
-    const utils = useUtils();
 
     /* for fetching user information */
     const { status: status1, error: error1, data: userinfo }: {
@@ -28,10 +27,7 @@ const UserProfile = () => {
     })
 
     if (status1 == 'loading' || status2 == 'loading') {
-        utils?.setLoading(true);
-        return <div>Loading...</div>;
-    } else {
-        utils?.setLoading(false);
+        return <Skeleton variant="rectangular" width={900} height={850} sx={{borderRadius:2}}/>
     }
 
     if (error1) console.log(error1)

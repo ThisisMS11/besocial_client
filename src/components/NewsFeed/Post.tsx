@@ -1,5 +1,5 @@
 import { useStyles } from "../styles/NewsFeed";
-import {Avatar,Box,Grid,IconButton,Typography,Badge,Button,ThumbUpIcon,ThumbUpOffAltIcon,ShareIcon,CommentIcon} from '../imports/Muiimports'
+import { Avatar, Box, Grid, IconButton, Typography, Badge, Button, ThumbUpIcon, ThumbUpOffAltIcon, ShareIcon, CommentIcon } from '../imports/Muiimports'
 import CommentBox from "./CommentBox/CommentBox";
 import Carousel from 'react-material-ui-carousel';
 import { followRequest, useAuth, useUtils, unfollowUser } from "..";
@@ -81,7 +81,7 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
   const followmutation = useMutation({
     mutationFn: () => followRequest(user._id as string),
     mutationKey: ['followRequest', user._id],
-    onSuccess: (data:any) => {
+    onSuccess: (data: any) => {
       console.log(data.data);
       setFollowbuttonstate(true);
     }
@@ -175,11 +175,6 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
 
       </Box>
 
-      <Box>
-        <Typography sx={{ padding: 1, fontSize: 15, marginLeft: 1 }} fontWeight="semibold">
-          {PostString}
-        </Typography>
-      </Box>
 
       {/* Media Box */}
 
@@ -195,6 +190,14 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
           </Carousel>
         </Box>
       }
+
+
+
+      <Box>
+        <Typography sx={{ padding: 1, fontSize: 15, marginLeft: 1 }} fontWeight="semibold">
+          {PostString}
+        </Typography>
+      </Box>
 
 
 

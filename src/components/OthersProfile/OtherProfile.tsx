@@ -1,13 +1,12 @@
-import { Box } from "@mui/material";
+import { Box ,Skeleton} from "@mui/material";
 import theme from "../../theme";
 import { useQuery, QueryStatus } from "@tanstack/react-query";
-import { useUtils, MyUser, ProfileOverview, fetchOtherProfileInfo, fetchOtherProfilePosts } from '..';
+import {  MyUser, ProfileOverview, fetchOtherProfileInfo, fetchOtherProfilePosts } from '..';
 import { User, PostProp } from '../types'
 import { useParams } from "react-router";
 
 
 const OtherProfile = () => {
-    const utils = useUtils();
 
     /* fetching the user id from params */
     const { id: userId } = useParams<{ id: string }>();
@@ -38,10 +37,7 @@ const OtherProfile = () => {
 
 
     if (isLoading1 || isLoading2) {
-        utils?.setLoading(true);
-        return <div>Loading..</div>
-    } else {
-        utils?.setLoading(false);
+        return  <Skeleton variant="rectangular" width={900} height={850} sx={{borderRadius:2}}/>
     }
 
     if (error1) console.log(error1);
