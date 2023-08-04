@@ -6,6 +6,7 @@ import { PostProp } from '../types'
 import { useState, useEffect } from '../imports/Reactimports'
 import { AxiosError } from "axios";
 import PostSkelton from "./PostSkelton";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const NewsFeed = () => {
   const utils = useUtils();
@@ -13,6 +14,8 @@ const NewsFeed = () => {
   const [allposts, setAllposts] = useState<PostProp[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchTimeout, setSearchTimeout] = useState<any>(null);
+
+  const [parent, enableAnimations] = useAutoAnimate()
 
 
 
@@ -69,7 +72,7 @@ const NewsFeed = () => {
 
 
   return (
-    <>
+    <div ref={parent}>
       <PostMaker />
 
       {/* Skeleton vs posts  */}
@@ -83,7 +86,7 @@ const NewsFeed = () => {
         fetchPostsQuery.status === 'loading' ? (<>
           <PostSkelton />
           <PostSkelton />
-          </>) :
+        </>) :
 
           allposts.length > 0 ? allposts.map((post: any) => {
             return <Post key={post.id} photos={post.photos} PostString={post.PostString} user={post.user} likes={post.likes} id={post.id} createdAt={post.createdAt} comments={post.comments} />
@@ -91,7 +94,7 @@ const NewsFeed = () => {
 
       }
 
-    </>
+    </div>
   );
 };
 
