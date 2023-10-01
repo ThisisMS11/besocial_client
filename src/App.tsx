@@ -10,6 +10,7 @@ import axios from "axios";
 import Spinner from "./components/utils/Spinner";
 import { useAuth } from "./components";
 import { MyAlert, NewsFeed, OtherProfile, Chatroom, UserProfile, Login, Register, DashBoard } from "./components";
+import Verified from "./components/utils/Verified";
 
 /* overiding palette Schema */
 declare module "@mui/material/styles" {
@@ -99,6 +100,10 @@ function App() {
 
         <Route path="/login" element={<><Login /></>} />
         <Route path="/register" element={<><Register /></>} />
+
+        {/* verification  */}
+        <Route path="/verify" element={<Verified/>} />
+
       </Routes>
 
     </ThemeProvider >
