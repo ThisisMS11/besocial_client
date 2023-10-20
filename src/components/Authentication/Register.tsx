@@ -246,9 +246,6 @@ const Register = () => {
                                                     />
                                                 </div>
 
-
-                                                <button  >Upload Now</button>
-
                                             </div>
                                         </Grid>
 

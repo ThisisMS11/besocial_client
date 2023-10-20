@@ -20,6 +20,7 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
   const [altlikes, setAltlikes] = useState<{ _id: string }[]>(likes);
 
   const [likestate, setLikestate] = useState<Boolean>(false);
+  const [showless, setShowless] = useState<Boolean>(true);
 
   const userId = localStorage.getItem('userId');
 
@@ -97,6 +98,11 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
       console.log(data.data);
     }
   })
+
+  /* Handle Read More */
+  const handleReadMore = () => {
+    console.log("Read More is been clicked")
+  }
 
 
   useEffect(() => {
@@ -195,9 +201,27 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
 
       <Box>
         <Typography sx={{ padding: 1, fontSize: 15, marginLeft: 1 }} fontWeight="semibold">
-          {PostString}
+          {/* if the length of the paragraph is more than 200 characters then we will restrict the para to first 200 characters only and give user the option whether one is interested in reading more or not  */}
+          {
+            PostString.length > 200 ? (
+              showless ? (
+                <div>
+                  {PostString.substring(0, 200)}
+                  <a className="text-blue-400 underline cursor-pointer underline-offset-2" onClick={() => setShowless(false)}>Read More...</a>
+                </div>
+              ) : (
+                <div>
+                  {PostString}
+                  <a className="text-blue-400 underline cursor-pointer underline-offset-2" onClick={() => setShowless(true)}>Show Less</a>
+                </div>
+              )
+            ) : (
+              PostString
+            )
+          }
         </Typography>
       </Box>
+
 
 
 
