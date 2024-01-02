@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function getSearchUsers() {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/allusers`, {
+        const response = await axios.get(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/allusers`, {
             headers: {
                 "authorisation": `Bearer ${localStorage.getItem("token")}`
             }

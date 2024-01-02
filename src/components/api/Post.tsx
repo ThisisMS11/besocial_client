@@ -5,7 +5,7 @@ export async function CreatePostFunc(PostString: string) {
     const token = localStorage.getItem('token');
 
     try {
-        const PostResponse = await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/`, { PostString: PostString }, {
+        const PostResponse = await axios.post(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/`, { PostString: PostString }, {
             headers: {
                 'authorisation': `Bearer ${token}`
             }
@@ -17,7 +17,7 @@ export async function CreatePostFunc(PostString: string) {
         throw error;
     }
 
-    // return await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/`, { PostString: PostString }, {
+    // return await axios.post(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/`, { PostString: PostString }, {
     //     headers: {
     //         'authorisation': `Bearer ${token}`
     //     }
@@ -29,7 +29,7 @@ export async function UploadPostImagesFunc(Formimages: any, postId: string) {
 
     const token = localStorage.getItem('token');
 
-    return await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/uploadImages/${postId}`, Formimages, {
+    return await axios.post(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/uploadImages/${postId}`, Formimages, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'authorisation': `Bearer ${token}`
@@ -42,7 +42,7 @@ export async function UploadPostVideosFunc(FormVideos: any, postId: string) {
 
     const token = localStorage.getItem('token');
 
-    return await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/uploadImages/${postId}`, FormVideos, {
+    return await axios.post(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/uploadImages/${postId}`, FormVideos, {
         headers: {
             'Content-Type': 'multipart/form-data',
             'authorisation': `Bearer ${token}`
@@ -58,7 +58,7 @@ export async function CommentOnPostFunc(postId: string, comment: string) {
 
     const token = localStorage.getItem('token');
 
-    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/comment/${postId}`, { comment: comment }, {
+    return await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/comment/${postId}`, { comment: comment }, {
         headers: {
             'authorisation': `Bearer ${token}`
         }

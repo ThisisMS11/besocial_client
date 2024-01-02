@@ -4,7 +4,7 @@ import axios from "axios";
 export async function fetchMessages(userId: string) {
     const token = localStorage.getItem('token');
 
-    return await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/message/${userId}`, {
+    return await axios.get(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/message/${userId}`, {
         headers: {
             'authorisation': `Bearer ${token}`
         }
@@ -21,7 +21,7 @@ export async function PostMessage(userId: string, message: string) {
         }
     }
 
-    return await axios.post(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/message/${userId}`, { message }, config);
+    return await axios.post(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/message/${userId}`, { message }, config);
 }
 
 
@@ -29,7 +29,7 @@ export async function PostMessage(userId: string, message: string) {
 export async function fetchAllMessages() {
     const token = localStorage.getItem('token');
 
-    return await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/message/`, {
+    return await axios.get(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/message/`, {
         headers: {
             'authorisation': `Bearer ${token}`
         }

@@ -6,7 +6,6 @@ import { UserInfo, PostResponse, getNotificationsResponse } from '../types'
 export async function fetchUserInfo() {
     try {
         const token = localStorage.getItem('token'); 
-        console.log(token);
 
         if (token) {
             const config = {
@@ -15,7 +14,7 @@ export async function fetchUserInfo() {
                 }
             }
             /* for fetching user information */
-            const response = await axios.get<UserInfo>(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/`, config);
+            const response = await axios.get<UserInfo>(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/`, config);
 
             if (response.data.success) {
                 return response.data.data;
@@ -37,7 +36,7 @@ export async function fetchUserPosts() {
                 'authorisation': `Bearer ${token}`
             }
         }
-        const response = await axios.get<PostResponse>(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/posts`, config)
+        const response = await axios.get<PostResponse>(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/posts`, config)
 
         console.log(response.data);
         if (response.data.success) {
@@ -53,7 +52,7 @@ export async function fetchUserPosts() {
 export async function fetchUserNotifications() {
     const token = localStorage.getItem('token');
 
-    return await axios.get<getNotificationsResponse>(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/notification/getnotifications`, {
+    return await axios.get<getNotificationsResponse>(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/notification/getnotifications`, {
         headers: {
             'authorisation': `Bearer ${token}`
         }
@@ -64,7 +63,7 @@ export async function fetchUserNotifications() {
 export async function acceptNotification(notificationId: string) {
     const token = localStorage.getItem('token');
 
-    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/notification/accept/${notificationId}`, {}, {
+    return await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/notification/accept/${notificationId}`, {}, {
         headers: {
             'authorisation': `Bearer ${token}`
         }
@@ -75,7 +74,7 @@ export async function acceptNotification(notificationId: string) {
 export async function rejectNotification(notificationId: string) {
     const token = localStorage.getItem('token');
 
-    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/notification/reject/${notificationId}`, {}, {
+    return await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/notification/reject/${notificationId}`, {}, {
         headers: {
             'authorisation': `Bearer ${token}`
         }
@@ -87,7 +86,7 @@ export async function rejectNotification(notificationId: string) {
 export async function followRequest(userId: string) {
     const token = localStorage.getItem('token');
 
-    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/follow/${userId}`, {}, {
+    return await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/follow/${userId}`, {}, {
         headers: {
             'authorisation': `Bearer ${token}`
         }
@@ -99,7 +98,7 @@ export async function followRequest(userId: string) {
 export async function unfollowUser(userId: string) {
     const token = localStorage.getItem('token');
 
-    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/unfollow/${userId}`, {}, {
+    return await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/unfollow/${userId}`, {}, {
         headers: {
             'authorisation': `Bearer ${token}`
         }
@@ -111,7 +110,7 @@ export async function unfollowUser(userId: string) {
 export async function updateUserInfo(name: string, email: string) {
     const token = localStorage.getItem('token');
 
-    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/updateinfo/`, {
+    return await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/updateinfo/`, {
         name: name,
         email: email
     }, {
@@ -136,5 +135,5 @@ export async function updateProfileImage(image: any) {
         }
     }
 
-    return await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/updateProfilePic/`, image, config)
+    return await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/updateProfilePic/`, image, config)
 }

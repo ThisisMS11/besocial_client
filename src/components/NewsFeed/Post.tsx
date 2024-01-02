@@ -33,7 +33,7 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
       // dislike the post
 
       try {
-        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/dislike/${id}`, {}, {
+        await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/dislike/${id}`, {}, {
           headers: {
             'authorisation': `Bearer ${token}`
           }
@@ -56,7 +56,7 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
 
       try {
         // like the post
-        await axios.put(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/like/${id}`, {}, {
+        await axios.put(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/like/${id}`, {}, {
           headers: {
             'authorisation': `Bearer ${token}`
           }

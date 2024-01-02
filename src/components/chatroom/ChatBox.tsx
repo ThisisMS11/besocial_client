@@ -5,10 +5,11 @@ import { io, Socket } from 'socket.io-client'
 import { User } from '../types'
 import { useEffect, useState } from "../imports/Reactimports";
 import { useAuth, fetchMessages } from "..";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { MessageType } from "../types";
 import ChatSkelton from "./ChatSkelton";
+import { v4 as uuidv4 } from 'uuid';
 
 
 const MemoizedShowMessages = React.memo(ShowMessages);
@@ -18,9 +19,12 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     const [userMessage, setUserMessage] = useState({ comment: "" });
     const auth = useAuth();
     const [socket, setSocket] = useState<Socket | null>(null);
-    const queryclient = useQueryClient();
 
     const [messages, setMessages] = useState<MessageType[]>([]);
+
+    const getCurrentTimestamp = () => {
+        return new Date().toISOString(); // This returns the current timestamp in ISO format
+    };
 
     /* FetchMessages Query */
     const fetchMessagesQuery = useQuery({
@@ -41,11 +45,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     /* connecting the socket io here */
     useEffect(() => {
 
-        const END_POINT = import.meta.env.VITE_APP_URL_LOCAL;
-
-        const userId = localStorage.getItem('userId');
-        console.log('userId : ', userId);
-        console.log('auth.user.userid : ', auth.user?.userid);
+        const END_POINT = import.meta.env.VITE_APP_SERVER_URL_LOCAL;
 
         const s = (io as any).connect(END_POINT, {
             query: { userId: localStorage.getItem('userId') }
@@ -64,28 +64,37 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
     const handleSendMessage = () => {
         if (userMessage.comment.trim() !== '') {
-            const data = { receiver: chatuser?._id as string, message: userMessage.comment }
+
+            const data: MessageType = {
+                _id: uuidv4(),
+                message: userMessage.comment,
+                sender: auth.user?.userid as string,
+                receiver: chatuser?._id as string,
+                createdAt: getCurrentTimestamp(),
+                updatedAt: getCurrentTimestamp(),
+            };
+
+            setMessages([...messages, data])
+
             /* sending the message to the server */
             socket?.emit('send-message', data);
-            queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
+            // queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
             setUserMessage({ comment: '' });
         }
     };
-
-
 
     /* Getting user messages Here */
     useEffect(() => {
         const { status, data, error } = fetchMessagesQuery;
 
-        console.log({ status, data: data?.data.data, error });
+        // console.log({ status, data: data?.data.data, error });
         if (status == 'success') {
             setMessages(data.data.data);
         }
 
         if (error) console.log(error);
 
-    }, [fetchMessagesQuery.status, messages]);
+    }, [fetchMessagesQuery.status]);
 
 
 
@@ -93,9 +102,9 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
         /* here i am receiving the message send by the other user */
         socket?.on('receive-message', (data: any) => {
-            console.log(data);
+            // queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
+
             /* set the messages here */
-            queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
             setMessages(prevMessages => [...prevMessages, data]);
         })
     }, [socket])
@@ -124,7 +133,6 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
                     {
                         fetchMessagesQuery.status === 'loading' ? <ChatSkelton /> : <MemoizedShowMessages messages={messages} />
                     }
-
                 </Box>
 
 

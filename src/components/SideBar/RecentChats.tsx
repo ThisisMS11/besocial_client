@@ -43,9 +43,9 @@ export default function RecentChats() {
           fetchMyMessageQuery.status === 'loading' ? <Skeleton variant="rectangular" width={350} height={60} /> :
 
 
-            myMessages.map((message: any) => {
+            myMessages.map((message: any,index:number) => {
 
-              return <>
+              return <div key={index}>
                 <ListItem alignItems="flex-start" className={classes.listitem} >
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={message.receiver.profilePic?.url} />
@@ -69,7 +69,7 @@ export default function RecentChats() {
                 </ListItem>
 
                 <Divider variant="inset" component="span" />
-              </>
+              </div>
             })
 
         }

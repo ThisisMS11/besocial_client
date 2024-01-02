@@ -48,7 +48,7 @@ function App() {
       if (token && !auth.user?.loggedIn) {
         // console.log("it is still calling the api");
 
-        const userinfo = await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/user/`, {
+        const userinfo = await axios.get(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/user/`, {
           headers: {
             authorisation: `Bearer ${localStorage.getItem('token')}`
           }

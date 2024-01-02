@@ -3,7 +3,7 @@ import axios from "axios";
 export async function fetchPosts() {
     try {
         const token = localStorage.getItem('token');
-        return await axios.get(`${import.meta.env.VITE_APP_URL_LOCAL}/api/v1/post/`, {
+        return await axios.get(`${import.meta.env.VITE_APP_SERVER_URL_LOCAL}/api/v1/post/`, {
             headers: {
                 'authorisation': `Bearer ${token}`
             }

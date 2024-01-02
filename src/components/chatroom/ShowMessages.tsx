@@ -12,7 +12,7 @@ const ShowMessages = ({ messages }: { messages: any }) => {
 
     useEffect(() => {
         setTempmessages(messages);
-        console.log(tempmessages);
+        // console.log(tempmessages);
     }, [messages])
 
     if (!tempmessages) return <div> loading... </div>

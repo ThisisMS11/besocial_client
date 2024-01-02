@@ -6,11 +6,10 @@ import { useUtils, useAuth } from ".."
 const Message = ({ message }: { message: MessageType }) => {
     const auth = useAuth()
 
-    console.log(auth.user?.userid)
-    console.log(message.sender)
+    // console.log(auth.user?.userid)
+    // console.log(message.sender)
 
     const position = message.sender === auth.user?.userid ? 'end' : 'start'
-    console.log(position)
 
     const utils = useUtils();
 
