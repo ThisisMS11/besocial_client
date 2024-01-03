@@ -3,14 +3,16 @@ import theme from "../../theme";
 import ShowMessages from "./ShowMessages";
 import { io, Socket } from 'socket.io-client'
 import { User } from '../types'
-import { useEffect, useState } from "../imports/Reactimports";
+import { useEffect, useState, useRef } from "../imports/Reactimports";
 import { useAuth, fetchMessages } from "..";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { MessageType } from "../types";
 import ChatSkelton from "./ChatSkelton";
 import { v4 as uuidv4 } from 'uuid';
-
+import VideoCallIcon from '@mui/icons-material/VideoCall';
+import VideoCallBox from "./VideoCallBox";
+import { Peer } from "peerjs";
 
 const MemoizedShowMessages = React.memo(ShowMessages);
 
@@ -19,8 +21,13 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     const [userMessage, setUserMessage] = useState({ comment: "" });
     const auth = useAuth();
     const [socket, setSocket] = useState<Socket | null>(null);
-
+    const videocallref = useRef<HTMLButtonElement>(null);
     const [messages, setMessages] = useState<MessageType[]>([]);
+    const [mypeer, setMypeer] = useState<any>(null);
+    const [chatuserPeerId, setChatuserPeerId] = useState<String | null>(null);
+
+    const [streams, setStreams] = useState<MediaStream[]>([]);
+
 
     const getCurrentTimestamp = () => {
         return new Date().toISOString(); // This returns the current timestamp in ISO format
@@ -42,7 +49,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
         }
     };
 
-    /* connecting the socket io here */
+    /* connecting the socket here and also setting up the environment for video call initiation by initiating a peer*/
     useEffect(() => {
 
         const END_POINT = import.meta.env.VITE_APP_SERVER_URL_LOCAL;
@@ -54,6 +61,20 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
         s.on('connect', () => {
             console.log('connected');
         })
+
+        if (!mypeer) {
+            try {
+                const peer = new Peer();
+                setMypeer(peer);
+                /* give the peer id to the server for storing in the map */
+                peer.on('open', (userId) => {
+                    s.emit('video-call-setup', { peerId: userId, id: auth.user?.userid })
+                })
+            } catch (error) {
+                console.error('Error creating Peer instance:', error);
+                // Handle the error as needed
+            }
+        }
 
         setSocket(s);
 
@@ -83,6 +104,13 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
         }
     };
 
+    const handleVideoCall = () => {
+        videocallref.current?.click();
+        /* now ask for the peer id for the chatuser */
+        socket?.emit('give-peer-id', chatuser?._id);
+
+    }
+
     /* Getting user messages Here */
     useEffect(() => {
         const { status, data, error } = fetchMessagesQuery;
@@ -99,7 +127,6 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
 
     useEffect(() => {
-
         /* here i am receiving the message send by the other user */
         socket?.on('receive-message', (data: any) => {
             // queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
@@ -107,7 +134,79 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
             /* set the messages here */
             setMessages(prevMessages => [...prevMessages, data]);
         })
+
+        /* listen to the recieve peer id event here */
+        socket?.on('receive-peer-id', (data: string) => {
+            if (data === "Peer Not Found") {
+                alert("Peer is not available Online");
+            } else {
+                setChatuserPeerId(data);
+            }
+        })
     }, [socket])
+
+    useEffect(() => {
+        /* only set the peer if already not set */
+
+        mypeer?.on('call', (conn: any) => {
+
+            videocallref.current?.click();
+
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            }).then((stream: MediaStream) => {
+
+                conn.answer(stream);
+
+                /* adding user stream here */
+                conn.on('stream', (stream: MediaStream) => {
+                    setStreams((prevStreams) => [...prevStreams, stream]);
+                })
+
+                // Handle connection closing
+                conn.on('close', () => {
+                    console.log("PEER DISCONNECTED : B")
+                    setStreams([]);
+                });
+            });
+        })
+
+
+        return () => {
+            console.log(`${auth.user?.name} is terminated .`)
+            mypeer?.destroy();
+        }
+    }, [mypeer]);
+
+
+    /* connect to the peer */
+    useEffect(() => {
+        if (chatuserPeerId) {
+
+            /* getting my own stream */
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            }).then((stream: MediaStream) => {
+
+                const conn = mypeer.call(chatuserPeerId, stream);
+
+                conn.on('stream', (stream: any) => {
+                    setStreams((prevStreams) => [...prevStreams, stream]);
+                });
+
+                // Handle connection closing
+                conn.on('close', () => {
+                    console.log("PEER DISCONNECTED : A")
+                    setStreams([]);
+                });
+            });
+
+        }
+    }, [chatuserPeerId, mypeer]);
+
+
 
     if (!chatuser) return <div>No chats</div>;
 
@@ -118,13 +217,23 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
                 {/* showing the user info i am chatting with here  */}
                 <Box className=" border-green-600 ">
-                    <Box className='mt-2 p-2 rounded-full' bgcolor={theme.palette.MyBackgroundColors.bg3}>
+                    <Box className='mt-2 p-2 rounded-full flex justify-between' bgcolor={theme.palette.MyBackgroundColors.bg3}>
                         <Box className='flex items-center '>
                             <Avatar src={chatuser.profilePic?.url} className="mr-2"> </Avatar>
                             <Typography className='ml-2 ' component={'span'} variant="subtitle1">{chatuser.name}</Typography>
+
+
                         </Box>
+                        <IconButton color="primary" aria-label="add an alarm"
+                            onClick={handleVideoCall}
+                            className="mr-4"
+                        >
+                            <VideoCallIcon />
+                        </IconButton>
                     </Box>
                 </Box>
+
+                <VideoCallBox myref={videocallref} streams={streams} />
 
                 {/*showing my chat here  */}
 

@@ -57,7 +57,7 @@ function App() {
 
         if (success) {
           localStorage.setItem('userId', data._id);
-          auth.setUser({ userid: data._id, profilePicUrl: data.profilePic.url, loggedIn: true });
+          auth.setUser({ userid: data._id, name: data.name, profilePicUrl: data.profilePic.url, loggedIn: true });
         }
       }
     }
@@ -102,7 +102,7 @@ function App() {
         <Route path="/register" element={<><Register /></>} />
 
         {/* verification  */}
-        <Route path="/verify" element={<Verified/>} />
+        <Route path="/verify" element={<Verified />} />
 
       </Routes>
 

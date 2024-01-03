@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
+import VideoElement from './VideoElement';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -17,12 +18,18 @@ const style = {
     borderRadius: 4,
     boxShadow: 24,
     p: 4,
+    display: 'flex',
+    justifyContent: 'space-between'
 };
 
 export default function VideoCallBox({
     myref,
+    // videoGridRef,
+    streams
 }: {
-    myref: React.RefObject<HTMLButtonElement>
+    myref: React.RefObject<HTMLButtonElement>,
+    // videoGridRef: React.RefObject<HTMLDivElement>,
+    streams: MediaStream[] | null
 }) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -34,6 +41,7 @@ export default function VideoCallBox({
             <Button onClick={handleOpen} ref={myref} sx={{ display: 'none' }}>
                 Open modal
             </Button>
+            
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -49,12 +57,12 @@ export default function VideoCallBox({
             >
                 <Fade in={open}>
                     <Box sx={style}>
-                        <Typography id="transition-modal-title" variant="h6" component="h2">
-                            Text in a modal
-                        </Typography>
-                        <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                            the place to build your rturn
-                        </Typography>
+                        {/* <div ref={videoGridRef}></div> */}
+
+                        {streams?.map((stream: MediaStream, index: number) => {
+                            return <VideoElement key={index} stream={stream} />
+                        })}
+
                     </Box>
                 </Fade>
             </Modal>
