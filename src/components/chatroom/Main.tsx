@@ -1,5 +1,5 @@
 import ChatroomSearch from "./ChatroomSearch";
-import {  Box, Typography } from '../imports/Muiimports'
+import { Box, Typography } from '../imports/Muiimports'
 import ChatBox from "./ChatBox";
 import logo from "../../assets/logo.png";
 import { useStyles } from "../styles/SideBar";
@@ -37,6 +37,7 @@ const Main = () => {
                 </Box> : <Box className=" w-3/4 flex items-center justify-center" >
                     <Typography> No chats</Typography>
                 </Box>}
+                
             </Box>
 
         </>

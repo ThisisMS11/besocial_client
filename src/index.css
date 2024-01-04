@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.bb {
+    @apply border-2 border-white;
+}
 body{
     overflow-y: hidden;
 }

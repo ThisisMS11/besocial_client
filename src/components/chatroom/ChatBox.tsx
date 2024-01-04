@@ -3,7 +3,7 @@ import theme from "../../theme";
 import ShowMessages from "./ShowMessages";
 import { io, Socket } from 'socket.io-client'
 import { User } from '../types'
-import { useEffect, useState, useRef } from "../imports/Reactimports";
+import { useEffect, useState } from "../imports/Reactimports";
 import { useAuth, fetchMessages } from "..";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
@@ -11,8 +11,9 @@ import { MessageType } from "../types";
 import ChatSkelton from "./ChatSkelton";
 import { v4 as uuidv4 } from 'uuid';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
-import VideoCallBox from "./VideoCallBox";
+import VideoCallArea from "./VideoCallArea";
 import { Peer } from "peerjs";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 const MemoizedShowMessages = React.memo(ShowMessages);
 
@@ -21,12 +22,16 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     const [userMessage, setUserMessage] = useState({ comment: "" });
     const auth = useAuth();
     const [socket, setSocket] = useState<Socket | null>(null);
-    const videocallref = useRef<HTMLButtonElement>(null);
     const [messages, setMessages] = useState<MessageType[]>([]);
     const [mypeer, setMypeer] = useState<any>(null);
     const [chatuserPeerId, setChatuserPeerId] = useState<String | null>(null);
+    const [callConnection, setCallConnection] = useState<any>(null);
 
     const [streams, setStreams] = useState<MediaStream[]>([]);
+
+    const [showVideo, setShowVideo] = useState(false);
+
+    const [parent, enableAnimations] = useAutoAnimate()
 
 
     const getCurrentTimestamp = () => {
@@ -104,11 +109,29 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
         }
     };
 
+    /* all the video calling related events to appear here */
+    const handleVideoClose = () => {
+        setShowVideo(false);
+
+        callConnection?.close();
+
+
+        // Stop camera tracks
+        // const localStream = conn.stream;
+        // if (localStream) {
+        //     localStream.getTracks().forEach((track: MediaStreamTrack) => {
+        //         track.stop();
+        //     });
+        // }
+
+        setCallConnection(null);
+        mypeer?.destroy();
+    }
+
     const handleVideoCall = () => {
-        videocallref.current?.click();
         /* now ask for the peer id for the chatuser */
         socket?.emit('give-peer-id', chatuser?._id);
-
+        setShowVideo(true)
     }
 
     /* Getting user messages Here */
@@ -150,7 +173,8 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
         mypeer?.on('call', (conn: any) => {
 
-            videocallref.current?.click();
+            setCallConnection(conn);
+            setShowVideo(true);
 
             navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -166,8 +190,8 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
                 // Handle connection closing
                 conn.on('close', () => {
-                    console.log("PEER DISCONNECTED : B")
-                    setStreams([]);
+                    alert(`${chatuser?.name} DISCONNECTED`)
+                    handleVideoClose();
                 });
             });
         })
@@ -177,13 +201,13 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
             console.log(`${auth.user?.name} is terminated .`)
             mypeer?.destroy();
         }
-    }, [mypeer]);
+    }, [mypeer, callConnection]);
 
 
     /* connect to the peer */
     useEffect(() => {
         if (chatuserPeerId) {
-
+            
             /* getting my own stream */
             navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -198,8 +222,9 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
                 // Handle connection closing
                 conn.on('close', () => {
-                    console.log("PEER DISCONNECTED : A")
-                    setStreams([]);
+                    alert(`${chatuser?.name} DISCONNECTED`)
+                    setChatuserPeerId(null);
+                    handleVideoClose();
                 });
             });
 
@@ -213,70 +238,76 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     return (
         <>
 
-            <Box className="h-[100vh] relative">
+            <Box className={`h-[100vh] relative ${showVideo ? 'grid grid-cols-6' : 'flex w-full'} `} ref={parent}>
 
-                {/* showing the user info i am chatting with here  */}
-                <Box className=" border-green-600 ">
-                    <Box className='mt-2 p-2 rounded-full flex justify-between' bgcolor={theme.palette.MyBackgroundColors.bg3}>
-                        <Box className='flex items-center '>
-                            <Avatar src={chatuser.profilePic?.url} className="mr-2"> </Avatar>
-                            <Typography className='ml-2 ' component={'span'} variant="subtitle1">{chatuser.name}</Typography>
+                <Box className={showVideo ? `relative col-span-3 ` :
+                    'relative w-full'}>
+                    {/* showing the user info i am chatting with here  */}
+                    <Box className=" border-green-600 ">
+                        <Box className='mt-2 p-2 rounded-xl flex justify-between' bgcolor={theme.palette.MyBackgroundColors.bg3}>
+                            <Box className='flex items-center '>
+                                <Avatar src={chatuser.profilePic?.url} className="mr-2"> </Avatar>
+                                <Typography className='ml-2 ' component={'span'} variant="subtitle1">{chatuser.name}</Typography>
 
 
+                            </Box>
+                            {!showVideo &&
+                                <IconButton color="primary" aria-label="add an alarm"
+                                    onClick={handleVideoCall}
+                                    className={`mr-4 `}
+                                >
+                                    <VideoCallIcon />
+                                </IconButton>}
                         </Box>
-                        <IconButton color="primary" aria-label="add an alarm"
-                            onClick={handleVideoCall}
-                            className="mr-4"
-                        >
-                            <VideoCallIcon />
-                        </IconButton>
-                    </Box>
-                </Box>
-
-                <VideoCallBox myref={videocallref} streams={streams} />
-
-                {/*showing my chat here  */}
-
-                <Box className="  border-pink-600" >
-                    {/* {messages ? } */}
-                    {
-                        fetchMessagesQuery.status === 'loading' ? <ChatSkelton /> : <MemoizedShowMessages messages={messages} />
-                    }
-                </Box>
-
-
-                {/* chat box textfield  */}
-                {/* bgcolor={theme.palette.MyBackgroundColors.bg4} */}
-                <Box className="absolute  bottom-6 w-full flex  border-red-900 items-center" >
-
-                    <Box className='opacity-80 bg-[#282a2f] flex justify-between  w-full mx-2 rounded-3xl'>
-
-                        <Box className='flex items-center w-[95%]'>
-
-                            <img src={auth.user?.profilePicUrl as string} alt="avatar not found" className="w-10 h-10 rounded-full mx-2" />
-
-                            <input type="text" className=" bg-[#282a2f] text-white h-14 w-full  text-sm p-2 outline-0 "
-                                onChange={(e) => setUserMessage({ comment: e.target.value })}
-                                placeholder="Say something..."
-                                value={userMessage.comment}
-                                onKeyDown={handleKeyDown}
-                            />
-                        </Box>
-
-
-                        <IconButton color="primary" aria-label="add an alarm"
-                            onClick={handleSendMessage}
-                            className="mr-4"
-                        >
-                            <SendIcon />
-                        </IconButton>
                     </Box>
 
 
+                    {/*showing my chat here  */}
+
+                    <Box className=" border-pink-600" >
+                        {
+                            fetchMessagesQuery.status === 'loading' ? <ChatSkelton /> : <MemoizedShowMessages messages={messages} />
+                        }
+                    </Box>
+
+
+                    {/* chat box textfield  */}
+                    {/* bgcolor={theme.palette.MyBackgroundColors.bg4} */}
+                    <Box className="absolute  bottom-6 w-full flex  border-red-900 items-center" >
+
+                        <Box className='opacity-80 bg-[#282a2f] flex justify-between  w-full mx-2 rounded-3xl'>
+
+                            <Box className='flex items-center'>
+
+                                <img src={auth.user?.profilePicUrl as string} alt="avatar not found" className="w-10 h-10 rounded-full mx-2" />
+
+                                <input type="text" className=" bg-[#282a2f] text-white h-14 w-full  text-sm p-2 outline-0 "
+                                    onChange={(e) => setUserMessage({ comment: e.target.value })}
+                                    placeholder="Say something..."
+                                    value={userMessage.comment}
+                                    onKeyDown={handleKeyDown}
+                                />
+                            </Box>
+
+
+                            <IconButton color="primary" aria-label="add an alarm"
+                                onClick={handleSendMessage}
+                                className="mr-4"
+                            >
+                                <SendIcon />
+                            </IconButton>
+                        </Box>
+
+                    </Box>
+
                 </Box>
 
+                {showVideo &&
+                    (<Box className={`col-span-3 `}>
+                        <VideoCallArea streams={streams} handleVideoClose={handleVideoClose} />
+                    </Box>)
+                }
             </Box>
-
 
         </>
     )
