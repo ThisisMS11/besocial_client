@@ -1,12 +1,12 @@
 import VideoElement from "./VideoElement"
 import { IconButton } from '../imports/Muiimports'
 import CloseIcon from '@mui/icons-material/Close';
+import { useEffect } from "react";
 const VideoCallArea = ({ streams, handleVideoClose }:
     {
         streams: MediaStream[] | null,
         handleVideoClose: () => void;
     }) => {
-
 
     return (
         <div className='p-2 h-full'>

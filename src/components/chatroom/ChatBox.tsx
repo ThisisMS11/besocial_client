@@ -54,6 +54,32 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
         }
     };
 
+    const handleSendMessage = () => {
+        if (userMessage.comment.trim() !== '') {
+
+            const data: MessageType = {
+                _id: uuidv4(),
+                message: userMessage.comment,
+                sender: auth.user?.userid as string,
+                receiver: chatuser?._id as string,
+                createdAt: getCurrentTimestamp(),
+                updatedAt: getCurrentTimestamp(),
+            };
+
+            setMessages([...messages, data])
+
+            /* sending the message to the server */
+            socket?.emit('send-message', data);
+            // queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
+            setUserMessage({ comment: '' });
+        }
+    };
+
+    const handleVideoCall = () => {
+        /* now ask for the peer id for the chatuser */
+        socket?.emit('give-peer-id', chatuser?._id);
+    }
+
     /* connecting the socket here and also setting up the environment for video call initiation by initiating a peer*/
     useEffect(() => {
 
@@ -84,54 +110,19 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
         setSocket(s);
 
         return () => {
+            s?.emit('remove-peer-id', { userId: auth.user?.userid });
+            mypeer?.destroy();
             s.disconnect();
         }
     }, [])
 
-    const handleSendMessage = () => {
-        if (userMessage.comment.trim() !== '') {
-
-            const data: MessageType = {
-                _id: uuidv4(),
-                message: userMessage.comment,
-                sender: auth.user?.userid as string,
-                receiver: chatuser?._id as string,
-                createdAt: getCurrentTimestamp(),
-                updatedAt: getCurrentTimestamp(),
-            };
-
-            setMessages([...messages, data])
-
-            /* sending the message to the server */
-            socket?.emit('send-message', data);
-            // queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
-            setUserMessage({ comment: '' });
-        }
-    };
 
     /* all the video calling related events to appear here */
     const handleVideoClose = () => {
-        setShowVideo(false);
 
         callConnection?.close();
-
-
-        // Stop camera tracks
-        // const localStream = conn.stream;
-        // if (localStream) {
-        //     localStream.getTracks().forEach((track: MediaStreamTrack) => {
-        //         track.stop();
-        //     });
-        // }
-
+        setShowVideo(false);
         setCallConnection(null);
-        mypeer?.destroy();
-    }
-
-    const handleVideoCall = () => {
-        /* now ask for the peer id for the chatuser */
-        socket?.emit('give-peer-id', chatuser?._id);
-        setShowVideo(true)
     }
 
     /* Getting user messages Here */
@@ -152,27 +143,27 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
     useEffect(() => {
         /* here i am receiving the message send by the other user */
         socket?.on('receive-message', (data: any) => {
-            // queryclient.invalidateQueries(['fetchMessages', chatuser?._id]);
-
             /* set the messages here */
             setMessages(prevMessages => [...prevMessages, data]);
         })
 
         /* listen to the recieve peer id event here */
         socket?.on('receive-peer-id', (data: string) => {
-            if (data === "Peer Not Found") {
+            if (data === "Peer Not Found" || data == null) {
                 alert("Peer is not available Online");
+                setShowVideo(false)
+                return;
             } else {
+                alert(`on calling : ${data}`)
                 setChatuserPeerId(data);
+                setShowVideo(true)
             }
         })
     }, [socket])
 
+    /* FOR RECEIVING CALL */
     useEffect(() => {
-        /* only set the peer if already not set */
-
         mypeer?.on('call', (conn: any) => {
-
             setCallConnection(conn);
             setShowVideo(true);
 
@@ -180,56 +171,73 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
                 video: true,
                 audio: true
             }).then((stream: MediaStream) => {
-
                 conn.answer(stream);
 
                 /* adding user stream here */
                 conn.on('stream', (stream: MediaStream) => {
                     setStreams((prevStreams) => [...prevStreams, stream]);
-                })
+                });
 
                 // Handle connection closing
                 conn.on('close', () => {
-                    alert(`${chatuser?.name} DISCONNECTED`)
+                    conn.close();
+                    alert(`${chatuser?.name} DISCONNECTED`);
+                    handleVideoClose();
+                });
+
+                // Handle call cancellation
+                conn.on('error', () => {
+                    alert(`Call with ${chatuser?.name} CANCELLED`);
                     handleVideoClose();
                 });
             });
-        })
-
+        });
 
         return () => {
-            console.log(`${auth.user?.name} is terminated .`)
-            mypeer?.destroy();
-        }
-    }, [mypeer, callConnection]);
+            callConnection?.close();
+            setCallConnection(null);
+        };
+    }, [mypeer]);
 
 
-    /* connect to the peer */
+    /* FOR CALLING PEER */
     useEffect(() => {
         if (chatuserPeerId) {
-            
             /* getting my own stream */
             navigator.mediaDevices.getUserMedia({
                 video: true,
                 audio: true
             }).then((stream: MediaStream) => {
-
                 const conn = mypeer.call(chatuserPeerId, stream);
 
-                conn.on('stream', (stream: any) => {
+                setCallConnection(conn);
+
+                conn?.on('stream', (stream: any) => {
                     setStreams((prevStreams) => [...prevStreams, stream]);
                 });
 
                 // Handle connection closing
-                conn.on('close', () => {
-                    alert(`${chatuser?.name} DISCONNECTED`)
+                conn?.on('close', () => {
+                    alert(`${chatuser?.name} DISCONNECTED`);
+                    conn.close();
                     setChatuserPeerId(null);
                     handleVideoClose();
                 });
-            });
 
+                // Handle call cancellation
+                conn?.on('error', () => {
+                    alert(`Call with ${chatuser?.name} CANCELLED`);
+                    handleVideoClose();
+                });
+            });
         }
+
+        return () => {
+            callConnection?.close();
+            setCallConnection(null);
+        };
     }, [chatuserPeerId, mypeer]);
+
 
 
 
