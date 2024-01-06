@@ -99,12 +99,6 @@ const Post: React.FC<PostProp> = ({ photos, PostString, user, likes, id, created
     }
   })
 
-  /* Handle Read More */
-  const handleReadMore = () => {
-    console.log("Read More is been clicked")
-  }
-
-
   useEffect(() => {
 
     const matching = altlikes.some((item: any) => item._id === auth.user?.userid);

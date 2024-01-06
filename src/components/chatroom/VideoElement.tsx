@@ -10,9 +10,7 @@ const VideoElement: React.FC<{ stream: MediaStream }> = ({ stream }) => {
     }, [stream]);
 
     return (
-        <div>
-            <video ref={videoRef} autoPlay className='rounded-xl my-2 h-2/4'/>
-        </div>
+        <video ref={videoRef} autoPlay className='rounded-xl h-[22rem] my-1' />
     );
 };
 

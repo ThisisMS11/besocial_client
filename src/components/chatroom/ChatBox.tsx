@@ -31,7 +31,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
     const [showVideo, setShowVideo] = useState(false);
 
-    const [parent, enableAnimations] = useAutoAnimate()
+    const [parent] = useAutoAnimate()
 
 
     const getCurrentTimestamp = () => {
@@ -123,6 +123,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
         callConnection?.close();
         setShowVideo(false);
         setCallConnection(null);
+        setStreams([]);
     }
 
     /* Getting user messages Here */
@@ -182,6 +183,8 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
                 conn.on('close', () => {
                     conn.close();
                     alert(`${chatuser?.name} DISCONNECTED`);
+                    /* for stopping camera usage */
+                    stream.getTracks().forEach(track => track.stop());
                     handleVideoClose();
                 });
 
@@ -220,6 +223,9 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
                 conn?.on('close', () => {
                     alert(`${chatuser?.name} DISCONNECTED`);
                     conn.close();
+                    /* for stopping camera usage */
+                    stream.getTracks().forEach(track => track.stop());
+
                     setChatuserPeerId(null);
                     handleVideoClose();
                 });
@@ -281,7 +287,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
                     {/* chat box textfield  */}
                     {/* bgcolor={theme.palette.MyBackgroundColors.bg4} */}
-                    <Box className="absolute  bottom-6 w-full flex  border-red-900 items-center" >
+                    <Box className="absolute bottom-6 w-full flex  border-red-900 items-center" >
 
                         <Box className='opacity-80 bg-[#282a2f] flex justify-between  w-full mx-2 rounded-3xl'>
 
@@ -289,7 +295,7 @@ const ChatBox = ({ chatuser }: { chatuser: User | null }) => {
 
                                 <img src={auth.user?.profilePicUrl as string} alt="avatar not found" className="w-10 h-10 rounded-full mx-2" />
 
-                                <input type="text" className=" bg-[#282a2f] text-white h-14 w-full  text-sm p-2 outline-0 "
+                                <input type="text" className=" bg-[#282a2f] text-white h-14 text-sm p-2 outline-0 "
                                     onChange={(e) => setUserMessage({ comment: e.target.value })}
                                     placeholder="Say something..."
                                     value={userMessage.comment}

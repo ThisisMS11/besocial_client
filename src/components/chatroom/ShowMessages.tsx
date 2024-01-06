@@ -8,7 +8,7 @@ const ShowMessages = ({ messages }: { messages: any }) => {
 
     const [tempmessages, setTempmessages] = useState<MessageType[]>(messages);
 
-    const [parent, enableAnimations] = useAutoAnimate()
+    const [parent] = useAutoAnimate()
 
     useEffect(() => {
         setTempmessages(messages);

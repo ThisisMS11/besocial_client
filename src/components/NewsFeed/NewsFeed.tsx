@@ -15,7 +15,7 @@ const NewsFeed = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [searchTimeout, setSearchTimeout] = useState<any>(null);
 
-  const [parent, enableAnimations] = useAutoAnimate()
+  const [parent] = useAutoAnimate()
 
 
 
